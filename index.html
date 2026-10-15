@@ -728,8 +728,15 @@ function drawSide(fl,o){const sw=o.walk||0,PT=o.parts,CL=o.core??1,att=o.att;
  sg('head',()=>qHead(fl,CL));
  sg('armF',()=>qArm(fl,1,a+sw*.1,o.rec,o.fire,ext,att&&EXW()==='ram'));
  sg('sh',()=>qPad(fl,att));}
-function sTip(){const fl=CAR==='flame',A=QA[fl?'f':'t'],k=UK(),d=UDIR(),b=UBASE(),a=uAim(),la=uLocal(a,d),L=A.L*1.15;return{x:b.x+d*(A.f[0]+Math.cos(la)*L)*k*QSX(),y:b.y+(A.f[1]+Math.sin(la)*L)*k};}
+function sTip(){const _s=RS();if(_s){const m=rsMz(_s),k=UK(),d=UDIR(),b=UBASE();return{x:b.x+d*m.x*k*QSX(),y:b.y+m.y*k};}const fl=CAR==='flame',A=QA[fl?'f':'t'],k=UK(),d=UDIR(),b=UBASE(),a=uAim(),la=uLocal(a,d),L=A.L*1.15;return{x:b.x+d*(A.f[0]+Math.cos(la)*L)*k*QSX(),y:b.y+(A.f[1]+Math.sin(la)*L)*k};}
 function QSX(){return .9+.1*Math.min(1,Math.abs(G.udv??1));}
+// ===== v37 robot sprites (code robot = fallback) =====
+const RSP={t:{src:'assets/robot_tank.png',mz:[2,196]},f:{src:'assets/robot_flame.png',mz:[28,182]}};
+for(const key in RSP){const s=RSP[key],im=new Image();im.onload=()=>{s.ok=1;const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const g=c.getContext('2d');g.drawImage(im,0,0);g.globalCompositeOperation='source-in';g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);s.wh=c;};im.onerror=()=>{s.ok=0;};im.src=s.src;s.im=im;}
+function RS(){const s=RSP[CAR==='flame'?'f':'t'];return s.ok?s:null;}
+const RSH=110;/* sprite height in mech units, feet at y=48 */
+function rsMz(s){const im=s.im,u=RSH/im.height;return{x:(im.width/2-s.mz[0])*u,y:48-(im.height-s.mz[1])*u};}
+function rsDraw(s,al,scl,o){const im=s.im,u=RSH/im.height,w=im.width*u,h=RSH;o=o||{};cx.save();cx.globalAlpha*=al;cx.translate(0,48);if(o.tilt)cx.rotate(o.tilt);cx.scale(-(scl||1)*(1+(o.sq||0)),(scl||1)*(1-(o.sq||0)));cx.translate(o.rec||0,0);cx.drawImage(im,-w/2,-h,w,h);if(o.fl>0){cx.globalAlpha*=o.fl;cx.drawImage(s.wh,-w/2,-h,w,h);}cx.restore();}
 // ===== v35 upright robot (side-flipping, Survivor.io style) =====
 function UK(){return P.r*2.6/76;}
 function UDIR(){const c=Math.cos(P.ang);if(G.udir==null)G.udir=c<0?-1:1;if(c>.2)G.udir=1;else if(c<-.2)G.udir=-1;return G.udir;}
@@ -738,7 +745,7 @@ function uAim(){const fl=CAR==='flame';return fl?(G.flm&&G.flm.al>0?G.flm.a:P.an
 function armTip(o){const t=sTip();return{x:t.x,y:t.y+o*1.5*UK()};}
 function uLocal(a,d){return d>0?a:Math.PI-a;}
 function drawUp(o){const k=UK(),d=UDIR(),b=UBASE();cx.fillStyle='rgba(0,0,0,.25)';cx.beginPath();cx.ellipse(b.x,b.y+48*k,24*k,6.5*k,0,0,TAU);cx.fill();
- G.udv=G.udv??d;G.udv+=Math.sign(d-G.udv)*Math.min(Math.abs(d-G.udv),(1/60)/.06);const sx=(G.udv>=0?1:-1)*QSX();cx.save();cx.translate(b.x,b.y-(o.lift||0)-(o.bob||0)*k);cx.rotate((o.tilt||0)*d);cx.scale(k*sx,k*(o.br||1));drawSide(CAR==='flame',o);cx.restore();}
+ G.udv=G.udv??d;G.udv+=Math.sign(d-G.udv)*Math.min(Math.abs(d-G.udv),(1/60)/.06);const sx=(G.udv>=0?1:-1)*QSX();cx.save();cx.translate(b.x,b.y-(o.lift||0)-(o.bob||0)*k);cx.rotate((o.tilt||0)*d);cx.scale(k*sx,k*(o.br||1));const _s=RS();if(_s){const ph=(G.wph||0);rsDraw(_s,1,1,{sq:(o.br?o.br-1:0)*-1+Math.abs(Math.sin(ph))*.015*(G.mvS||0),rec:(o.rec||0)*1.2,fl:Math.max(0,(G.flashR||0)/.35)*.8});}else drawSide(CAR==='flame',o);cx.restore();}
 function drawRobotW(){const fl=CAR==='flame',sp=Math.hypot(P.vx,P.vy);G.mvS=(G.mvS||0)+((sp>30?1:0)-(G.mvS||0))*.15;G.wph=(G.wph||0)+sp/60/(P.r*1.1);
  const mv=G.mvS,d=UDIR(),sw=Math.sin(G.wph)*mv,bob=Math.abs(Math.sin(G.wph))*1.4*mv,br=1+(1-mv)*.015*Math.sin(G.t*3);
  const a=uLocal(uAim(),d);drawUp({walk:sw,bob,tilt:sw*.035,br,aim:a,rec:G.mfl>0?3:0,fire:!fl&&G.mfl>0,att:1});
@@ -764,8 +771,8 @@ function drawAsm(){const r=G.robo,t=r.t,fl=CAR==='flame',k=UK(),z=zoom(),q=(a,b)
  let aL=Math.PI*.62,aR=Math.PI*.38;if(t>=2.3){if(fl&&t>=2.55){aL=-Math.PI*.38;aR=-Math.PI*.62;}else if(!fl){aL=aR=aw;}}
  const b=UBASE();cx.fillStyle='rgba(0,0,0,'+(.25*fa)+')';cx.beginPath();cx.ellipse(b.x,b.y+48*k,24*k,6.5*k,0,0,TAU);cx.fill();
  cx.save();cx.translate(b.x,b.y-lift);cx.scale(k*d,k);
- drawSide(fl,{parts:pl,aim:t>=2.3?(fl&&t>=2.55?-0.6:0):1.2,armExt:q(2.2,2.6),core:q(2.3,2.5),att:t>=2.3,fire:!fl&&G.mfl>0});
- if(fl&&t>=2.6){const qq=q(2.6,2.75);for(const [o,a] of[[1,-.6]]){cx.save();cx.translate(19,-13);cx.rotate(a);cx.scale(1.15,1.15);const g=cx.createLinearGradient(33,0,33+75*qq,0);g.addColorStop(0,'#FFE07A');g.addColorStop(.35,'#FF982D');g.addColorStop(.75,'#E64B24');g.addColorStop(1,'rgba(230,75,36,0)');cx.fillStyle=g;cx.beginPath();cx.moveTo(33,-3);cx.quadraticCurveTo(33+40*qq,-11,33+75*qq,0);cx.quadraticCurveTo(33+40*qq,11,33,3);cx.fill();cx.restore();}}
+ const _s=RS(),rv=_s?q(2.3,2.7):0;if(rv<1){cx.save();cx.globalAlpha*=1-rv;drawSide(fl,{parts:pl,aim:t>=2.3?(fl&&t>=2.55?-0.6:0):1.2,armExt:q(2.2,2.6),core:q(2.3,2.5),att:t>=2.3,fire:!fl&&G.mfl>0});cx.restore();}if(rv>0)rsDraw(_s,rv,.85+.15*rv,{fl:(1-rv)*.9});
+ if(fl&&t>=2.6){const qq=q(2.6,2.75);for(const [o,a] of[[1,-.6]]){cx.save();if(_s){const m=rsMz(_s);cx.translate(m.x,m.y);cx.rotate(a);cx.translate(-33,0);}else{cx.translate(19,-13);cx.rotate(a);cx.scale(1.15,1.15);}const g=cx.createLinearGradient(33,0,33+75*qq,0);g.addColorStop(0,'#FFE07A');g.addColorStop(.35,'#FF982D');g.addColorStop(.75,'#E64B24');g.addColorStop(1,'rgba(230,75,36,0)');cx.fillStyle=g;cx.beginPath();cx.moveTo(33,-3);cx.quadraticCurveTo(33+40*qq,-11,33+75*qq,0);cx.quadraticCurveTo(33+40*qq,11,33,3);cx.fill();cx.restore();}}
  cx.restore();if(G.mfl>0)G.mfl-=1/60;if(t>=2.7)drawOrb(SS((t-2.7)/.3));}
 function vehicle(){if(G.robo){drawAsm();return;}if(G.awk){drawRobotW(1);return;}vehicleCar();}
 function drawPips(L){if(WP.ram&&!HIDEB()){const w=WP.ram;cx.fillStyle='rgba(180,200,220,.25)';const a2=(G.awk?160:w.evo?140:100+5*(w.lv-1))*Math.PI/360;cx.strokeStyle='rgba(200,220,240,.45)';cx.lineWidth=3;cx.beginPath();cx.arc(0,0,L*1.6+10,-a2,a2);cx.stroke();for(let i=0;i<(w.mx||2);i++){const a=-a2+(i+.5)/(w.mx||2)*a2*2;cx.fillStyle=i<(w.ch||0)?'#8fe3ff':'rgba(60,70,80,.7)';cx.beginPath();cx.arc(Math.cos(a)*(L*1.6+10),Math.sin(a)*(L*1.6+10),4,0,TAU);cx.fill();}}}
