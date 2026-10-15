@@ -1019,4 +1019,6 @@ function showRes0(){giveAchNow();let stars=0;if(G.win){const f=G.hp/G.maxhp;star
 function giveAchNow(){if(!PLAY)return;if(G.t>=300)giveAch('surv5');if(G.lv>=18)giveAch('lv18');if(G.kills>=500)giveAch('kill500');if(G.win&&STAGE===1)giveAch('win1');}
 if(!PLAY){if(Q.has('garage'))showShop();else showMenu();}
 window.__save=()=>SAVE;
-</script></body></html>
+</script><script>(function(){if(!new URLSearchParams(location.search).has('dev'))return;const b=document.createElement('button');b.id='devLv';b.textContent='⬆ LV';b.style.cssText='position:fixed;top:calc(64px + env(safe-area-inset-top));right:8px;z-index:9999;padding:6px 10px;border-radius:10px;border:2px solid #FFC83D;background:rgba(38,49,61,.85);color:#FFC83D;font:900 13px system-ui';
+['pointerdown','touchstart','mousedown'].forEach(e=>b.addEventListener(e,ev=>ev.stopPropagation()));
+b.onclick=ev=>{ev.stopPropagation();if(typeof G==='undefined'||G.over)return;gainXpRaw(Math.max(0,G.need-G.xp)+1e-6);};document.body.appendChild(b);})();</script></body></html>
