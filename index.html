@@ -236,8 +236,8 @@ function sfxTransform(nv){const a=ac();if(!a)return;const t=a.currentTime;const 
  const n=a.createBuffer(1,a.sampleRate*.3,a.sampleRate),dd=n.getChannelData(0);for(let i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*Math.pow(1-i/dd.length,3);const ns=a.createBufferSource();ns.buffer=n;const nf=a.createBiquadFilter();nf.type='lowpass';nf.frequency.value=1800;const ng=a.createGain();ng.gain.value=.6;ns.connect(nf);nf.connect(ng);ng.connect(out);ns.start(t+.3);
  // bass hit
  const o=a.createOscillator();o.type='sine';o.frequency.setValueAtTime(nv===1?110:90,t+.3);o.frequency.exponentialRampToValueAtTime(38,t+.9);const g=a.createGain();g.gain.setValueAtTime(.0001,t+.3);g.gain.exponentialRampToValueAtTime(.9,t+.32);g.gain.exponentialRampToValueAtTime(.0001,t+1.1);o.connect(g);g.connect(out);o.start(t+.3);o.stop(t+1.15);}
-function zoom(){return zoom0()*1.84;}/* v50: Lv1 car ~12% of 390px width *//* v49: zoom in 15% from v48 (.8*1.15) *//* v46: view ~20% wider */
-function zoom0(){const vt=520;/* v50: no per-stage zoom-out */if(G.zv===undefined)G.zv=vt;const pin=G.tf?(CAR!=='flame'?camZ(G.tf.t/G.tf.D*3):G.tf.nv<=2?tfZ():G.tf.t<.12?(T42ok()?1.06:1.1):1):1;return W/G.zv*pin*(1+G.zoomPunch*.18)*(1-.08*(G.zoomOut||0))*(G.robo?asmZ(G.robo.t):1);}
+function zoom(){return zoom0();}/* v51: v37 camera *//* v50: Lv1 car ~12% of 390px width *//* v49: zoom in 15% from v48 (.8*1.15) *//* v46: view ~20% wider */
+function zoom0(){const vt=520/[1,.92,.82,.74][G.veh];if(G.zv===undefined)G.zv=vt;const pin=G.tf?(CAR!=='flame'?camZ(G.tf.t/G.tf.D*3):G.tf.nv<=2?tfZ():G.tf.t<.12?(T42ok()?1.06:1.1):1):1;return W/G.zv*pin*(1+G.zoomPunch*.18)*(1-.08*(G.zoomOut||0))*(G.robo?asmZ(G.robo.t):1);}
 // ---------- level up
 let choices=null;
 const XPK={a:22,b:1,c:1.8,s2:1.5,d:3.2,k:28,e1:.62,e:.33,e2:.6,late:1.6,burst:1,chest:.25};if(Q.get('xpe'))XPK.e=+Q.get('xpe');if(Q.get('xpm')){const q=Q.get('xpm').split(',').map(Number);XPK.e1=q[0];XPK.e=q[1];if(q[2])XPK.e2=q[2];}if(Q.get('cxp'))XPK.chest=+Q.get('cxp');if(Q.get('xpk'))XPK.k=+Q.get('xpk');if(Q.get('late'))XPK.late=+Q.get('late');if(Q.get('burst'))XPK.burst=+Q.get('burst');if(Q.get('xp')){const q=Q.get('xp').split(',').map(Number);XPK.a=q[0];XPK.b=q[1];XPK.c=q[2];XPK.s2=q[3];XPK.d=q[4]??XPK.d;}function NEED0(l){return Math.round(XPK.a+l*XPK.b+l*l*XPK.c+XPK.d*Math.min(6,Math.max(0,l-5))**3);}
@@ -401,7 +401,7 @@ function drawSkill(){const sl=skSlots();
  if(!ready){cx.fillStyle='#fff';cx.font='bold 15px system-ui';cx.textAlign='center';cx.fillText(Math.ceil(SKB.cd),0,6);}
  cx.restore();}
 function update(dt){if(G.over||G.paused||G.upause)return;if(G.roul){roulTick(dt);return;}
- {const vt=520;/* v50 */if(G.zv===undefined)G.zv=vt;G.zv+=(vt-G.zv)*Math.min(1,dt*2.5);}G.lockFx=Math.max(0,(G.lockFx||0)-dt);
+ {const vt=520/[1,.92,.82,.74][G.veh];if(G.zv===undefined)G.zv=vt;G.zv+=(vt-G.zv)*Math.min(1,dt*2.5);}G.lockFx=Math.max(0,(G.lockFx||0)-dt);
  if(G.stop>0){G.stop-=dt;return;}if(G.evA){G.evA.t+=dt;if(G.evA.t>=.6)G.evA=null;return;}if(G.tf){tfTick(dt);rfxUpd(dt);return;}if(G.robo){roboTick(dt);rfxUpd(dt);return;}if(G.rslow>0){G.rslow-=dt;dt*=.35;}rfxUpd(dt);if(G.revGlow>0)G.revGlow-=dt;if(G.slow>0){G.slow-=dt;dt*=.3;}
  G.gflash=Math.max(0,(G.gflash||0)-dt);G.zoomOut=Math.max(0,(G.zoomOut||0)-dt*2);if(G.slowT>0){G.slowT-=dt;dt*=.3;}G.spike=Math.max(0,(G.spike||0)-dt);G.shakeHold=Math.max(0,(G.shakeHold||0)-dt);
  G.bigFx=Math.max(0,(G.bigFx||0)-dt);for(const d of CRK)d.life-=dt;while(CRK.length&&CRK[0].life<=0)CRK.shift();if(TUT&&G.t>30){TUT=false;document.getElementById('skip').style.display='none';try{localStorage.setItem('ac_tut','1');}catch(e){}}G.t+=dt;G.zoomPunch=Math.max(0,G.zoomPunch-dt*1.5);G.flash=Math.max(0,G.flash-dt*2);G.flashR=Math.max(0,(G.flashR||0)-dt*2);if(!(G.shakeHold>0))G.shake=Math.max(0,G.shake-dt*30);P.inv-=dt;
@@ -786,8 +786,8 @@ function rfMz(){const u=RSH/256,m=RFR.MZ[G.rfF||0];return{x:(RFR.ax-m[0])*u,y:48
 function AW(t){return t<1?t:t<2.15?1+(t-1)*(1.3/1.15):t<2.75?2.3+(t-2.15)*.5:2.6+(t-2.75)*1.6;}
 const FE=.36;/* v46: feet line = robot feet line */
 // ===== v48 code-drawn 성전차 (rounded), part-based 3s transform; Lv15 final, Lv20 core overcharge =====
-function RTAB(){return CAR==='flame'?[22,29.7,35.2,40.7]:[22,25.5,28.5,31];}/* v50: tank hitbox up to 1.41x */
-const TKS=[1,1.3*34/48,1.6*34/60,1.9*34/72];/* v50: on-screen width 1/1.3/1.6/1.9 x Lv1 */
+function RTAB(){return [22,29.7,35.2,40.7];}/* v51: v37 hitboxes *//* v50: tank hitbox up to 1.41x */
+const TKS=[1,60/48,74/60,85/72];/* v51: match v37 car max dimension 42/60/74/85 *//* v50: on-screen width 1/1.3/1.6/1.9 x Lv1 */
 const TK={O:'#F58032',O2:'#c4601e',N:'#30465C',N2:'#1d2633',B:'#4fc3ff',
  TR:[7,8,8,11],/* turret radius per stage (Lv15 >= 1.3x Lv10) */
  PARTS:[[],['podL','podR','twin'],['trackL','trackR','engL','engR'],['batL','batR','shield','bigT']],
