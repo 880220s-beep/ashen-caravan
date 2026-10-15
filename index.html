@@ -324,7 +324,7 @@ function wUpd(dt){const cd=P.cdMul;
    for(const p of w.pos)for(const t of qT(p.x,p.y,40)){if(d2(t,p)<(t.r+11*GS('saw')*WSZ()*SZA()*(WP.saw.evo?1.4:1))**2){t.hitcd=t.hitcd||{};if(!(t.hitcd.saw>w.t)){t.hitcd.saw=w.t+.3;hit(t,(E?24:12)+L*4,156,Math.atan2(t.y-P.y,t.x-P.x),'#e8f0ff');}}}}
  }}
 const FTURN=+(Q.get('fturn')||4.7),FSL=+(Q.get('fsl')||.88),FLK=+(Q.get('flk')||1.15),FKB=+(Q.get('fkb')||1);
-function flameUpd(w,L,E,cd,dt){const R=(123+L*10.2)*WSZ()*SZB()*GS('mg')*(E?1.2:1)*(G.awk?1.24:1),arc=E?.8:.74;
+function flameUpd(w,L,E,cd,dt){const R=(123+L*10.2)*WSZ()*SZB()*GS('mg')*(E?1.2:1)*(G.awk?1.24:1.5),arc=E?.8:.74;
  const B=G.boss;let t0=(B&&!B.dead&&Math.hypot(B.x-P.x,B.y-P.y)<R+B.r+20)?B:nearest(1,R+40)[0];
  const ta=t0?Math.atan2(t0.y-P.y,t0.x-P.x):(w.aim??P.ang);let a=w.aim??ta;let dA=Math.atan2(Math.sin(ta-a),Math.cos(ta-a));const mx=FTURN*dt;a+=Math.max(-mx,Math.min(mx,dA));w.aim=a;
  if(t0)w.hold=.35;else w.hold=Math.max(0,(w.hold||0)-dt);const on=w.hold>0;w.fa=Math.max(0,Math.min(1,(w.fa||0)+(on?dt:-dt)/.2));
