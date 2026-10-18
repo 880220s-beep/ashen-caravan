@@ -1,0 +1,211 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>robots preview v82</title><style>body{margin:0;background:#26313D;color:#fff;font:14px system-ui;text-align:center}button{margin:3px;padding:8px 12px;font:700 14px system-ui;border-radius:8px;border:2px solid #FFC83D;background:#26313D;color:#FFC83D}canvas{max-width:100%}</style><div id=ui></div><canvas id=c width=420 height=520></canvas><script>const TAU=Math.PI*2;let CAR='raven';const TUNE={};const G={t:0,veh:0,tf:null,mvS:0,wph:0,flashR:0};const P={x:0,y:0,vx:0,vy:0,r:22,ang:0};const WP={mg:{mf:0}};let cx;let ZM=1;function zoom(){return ZM;}
+
+/* ===================== v82 art30: 3 hinged-part robots (Ash Raven / Ivory Mammoth / Jade Croc) ===================== */
+const RBC=['raven','mammoth','croc'];
+TUNE.rb={xp:{raven:1,mammoth:1.05,croc:1},dmgK:{raven:1,mammoth:1,croc:1}/*balance multipliers vs spec D*/,skD:6.5,cd:29,scale:1.32,
+ names:{raven:['','워커 변신!','정찰형 변신!','흑익 기사 완성!'],mammoth:['','포탑 전개!','중장 포격형!','켄타우로스 거상 완성!'],croc:['','보행 변신!','칼날 비늘!','비취 전사 완성!']},
+ skill:{raven:'흑익 대처형!',mammoth:'상아 대진군!',croc:'비취 대탐식!'},climax:{raven:5.4,mammoth:5.5,croc:5.2},awkDur:{raven:.8,mammoth:1.0,croc:1.0}};
+const RBE=x=>x<=0?0:x>=1?1:x*x*(3-2*x);const RBCL=(x,a,b)=>x<a?a:x>b?b:x;const D2R=Math.PI/180;
+/* parameter tables: P[name]=[Lv1,Lv5,Lv10,Lv15]; S[k][name]=[t0,t1] motion window inside the 3s transform to stage k; A[name]=[delta,t0,t1] awakening */
+const RBD={
+raven:{P:{fanSpin:[1,0,0,0],hatch:[0,4,4,4],thighA:[0,90,90,90],shinL:[0,10,10,10],footA:[0,90,90,90],bodyY:[0,-10,-10,-10],podA:[0,70,70,70],
+  fanA:[0,0,90,90],wingA:[0,0,90,-20],gunX:[0,0,4,4],tailA:[0,0,20,140],
+  cockA:[0,0,0,-100],neckL:[0,0,0,6],coverA:[0,0,0,180],foreL:[0,0,0,6],wingO:[0,0,0,60],f0:[0,0,0,1],f1:[0,0,0,1],f2:[0,0,0,1],f3:[0,0,0,1],f4:[0,0,0,1],thighL:[0,0,0,6],shinA:[0,0,0,25],
+  chestO:[0,0,0,0],wingX:[0,0,0,0],crestS:[40,40,40,40],visor:[0,0,0,0],lensX:[0,0,0,0]},
+ S:[null,{fanSpin:[.3,.7],hatch:[.7,1.1],thighA:[.7,1.1],shinL:[1.1,1.6],footA:[1.1,1.6],bodyY:[1.1,1.6],podA:[1.4,1.9]},
+  {fanA:[.3,.7],wingA:[.7,1.3],gunX:[1.3,1.9],tailA:[1.9,2.5]},
+  {cockA:[.3,.8],neckL:[.3,.8],coverA:[.8,1.3],foreL:[.8,1.3],wingA:[1.3,1.9],wingO:[1.3,1.9],f0:[1.3,1.6],f1:[1.36,1.66],f2:[1.42,1.72],f3:[1.48,1.78],f4:[1.54,1.84],thighL:[1.9,2.3],shinA:[1.9,2.3],tailA:[2.3,2.6]}],
+ L:[null,['thighA','shinL','footA','podA'],['fanA','wingA','gunX','tailA'],['cockA','coverA','wingA','thighL','tailA']],
+ A:{chestO:[3,0,.35],wingX:[1,.15,.55],crestS:[80,.3,.65],visor:[1,.5,.68],lensX:[3,.68,.8]}},
+mammoth:{P:{legF:[0,1,1,1],legB:[0,1,1,1],domeO:[0,6,6,6],domeM:[0,90,90,90],drumY:[0,-4,-4,-4],drumA:[0,90,90,180],t0:[55,6,6,-20],t1:[60,4,4,8],t2:[65,2,2,6],t3:[70,0,0,4],split:[0,1,1,1],tusk:[1,1.4,1.4,1.4],
+  earA:[0,0,30,30],drumB:[0,0,1,1],belt:[0,0,1,1],barL:[0,0,5,5],waistA:[0,0,0,-70],armA:[0,0,0,140],grip:[0,0,0,1],armC:[0,0,0,25],domeF:[0,0,0,-110],tuskA:[0,0,0,-120],
+  coreO:[0,0,0,0],lift:[0,0,0,0],flare:[0,0,0,0]},
+ S:[null,{legF:[.3,.6],legB:[.5,.8],domeO:[.8,1.3],domeM:[.8,1.3],drumY:[1.3,1.8],drumA:[1.3,1.8],t0:[1.6,1.9],t1:[1.7,2.0],t2:[1.8,2.1],t3:[1.9,2.2],split:[2.0,2.2],tusk:[2.2,2.5]},
+  {earA:[.3,.8],drumB:[.8,1.3],belt:[1.3,1.9],barL:[1.9,2.5]},
+  {waistA:[.3,1.0],armA:[1.0,1.5],grip:[1.0,1.5],t0:[1.5,1.9],t1:[1.5,1.9],t2:[1.5,1.9],t3:[1.5,1.9],armC:[1.5,1.9],domeF:[1.7,2.2],drumA:[1.7,2.2],tuskA:[2.2,2.5]}],
+ L:[null,['legF','legB','domeM','drumA','t3','tusk'],['earA','drumB','barL'],['waistA','armA','armC','domeF','tuskA']],
+ A:{coreO:[4,0,.4],earA:[40,.2,.6],tusk:[.35,.3,.7],lift:[45,.4,.8],flare:[20,.65,1.0]}},
+croc:{P:{flegA:[0,90,90,-30],fanA:[0,90,90,90],skirtA:[0,90,90,90],headA:[0,-30,-30,-30],s0:[0,0,45,45],s1:[0,0,45,45],s2:[0,0,45,45],s3:[0,0,45,45],s4:[0,0,45,45],s5:[0,0,45,45],tailS:[0,0,2,2],blade:[0,0,4,4],
+  tailT:[0,0,0,1],hipA:[0,0,0,-80],blegA:[0,0,0,80],claw:[0,0,0,1],ujA:[0,0,0,-150],ljA:[0,0,0,160],skirtR:[0,0,0,1],
+  coreO:[0,0,0,0],jawX:[0,0,0,0],teeth:[0,0,0,0],scK:[1,1,1,1],prong:[0,0,0,0],sink:[0,0,0,0]},
+ S:[null,{flegA:[.3,.8],fanA:[.3,.8],skirtA:[.6,1.1],headA:[1.0,1.5]},
+  {s0:[.3,.7],s1:[.38,.78],s2:[.46,.86],s3:[.54,.94],s4:[.62,1.02],s5:[.7,1.1],tailS:[1.1,1.6],blade:[1.6,2.2]},
+  {tailT:[.3,.8],hipA:[.5,1.2],blegA:[.5,1.2],flegA:[1.0,1.5],claw:[1.0,1.5],ujA:[1.4,2.0],ljA:[1.4,2.0],skirtR:[1.9,2.3]}],
+ L:[null,['flegA','skirtA','headA'],['s0','s2','s4','blade'],['tailT','hipA','flegA','ujA','skirtR']],
+ A:{coreO:[1,0,.4],jawX:[6,.2,.5],teeth:[3,.3,.5],scK:[.5,.3,.6],prong:[25,.4,.7],sink:[1,.7,1.0]}}};
+/* lock-click schedule: listed parts click in turn between 2.5 and 2.85 */
+for(const c of RBC){const D=RBD[c];D.LT=[null];for(let k=1;k<=3;k++){const m={},l=D.L[k];l.forEach((n,i)=>m[n]=2.5+i*(.29/Math.max(1,l.length-1)));D.LT.push(m);}}
+function rbAwkP(car){/* awakening-form progress per part: forward while the skill runs, reverse (folded back) in the 1.0s after it ends */
+ const A=RB.st;if(!A)return null;const AD=TUNE.rb.awkDur[car];let r;if(A.on){r=G.t-A.t0;}else{const e=G.t-A.end;if(e>=1)return null;r=AD*(1-e/1);}return r;}
+function rbVals(car,st,tt){const D=RBD[car],o={};for(const k in D.P){const a=D.P[k];let v=a[st];
+  if(tt!=null&&st<3){const to=a[st+1];if(to!==v){const w=D.S[st+1][k]||[.3,2.5],u=RBE((tt-w[0])/(w[1]-w[0]));let val=v+(to-v)*u;const lt=D.LT[st+1][k];if(lt!=null&&tt>=lt&&tt<lt+.06){{const d=Math.abs(to-v);val+=(d<=1.5?.08:d>=20?4:2)*Math.sign(to-v)*(1-(tt-lt)/.06);}}v=val;}}
+  o[k]=v;}
+ const r=rbAwkP(car);if(r!=null)for(const k in D.A){const [dv,t0,t1]=D.A[k];o[k]+=dv*RBE((r-t0)/(t1-t0));}
+ return o;}
+const RB={st:null,face:1};
+function rbOL(){return 1/(Math.max(.3,zoom())*TUNE.rb.scale);}
+function rbP(pts,f,ol){cx.beginPath();cx.moveTo(pts[0],pts[1]);for(let i=2;i<pts.length;i+=2)cx.lineTo(pts[i],pts[i+1]);cx.closePath();cx.fillStyle=f;cx.fill();cx.lineWidth=rbOL();cx.strokeStyle=ol||'#142233';cx.stroke();}
+function rbR(x,y,w,h,r,f,ol){cx.beginPath();cx.roundRect(x,y,w,h,Math.max(0,Math.min(r,Math.abs(w)/2,Math.abs(h)/2)));cx.fillStyle=f;cx.fill();cx.lineWidth=rbOL();cx.strokeStyle=ol||'#142233';cx.stroke();}
+function rbEl(x,y,rx,ry,f,ol,a){cx.beginPath();cx.ellipse(x,y,Math.max(.1,rx),Math.max(.1,ry),a||0,0,TAU);cx.fillStyle=f;cx.fill();if(ol!==0){cx.lineWidth=rbOL();cx.strokeStyle=ol||'#142233';cx.stroke();}}
+function rbJ(x,y,deg,fn){cx.save();cx.translate(x,y);cx.rotate(deg*D2R);fn();cx.restore();}
+function rbPin(x,y,c){rbEl(x,y,1.1,1.1,c||'#C9A04A',0);}
+function rbLn(x0,y0,x1,y1,c,w){cx.beginPath();cx.moveTo(x0,y0);cx.lineTo(x1,y1);cx.strokeStyle=c;cx.lineWidth=(w||1)*rbOL();cx.stroke();}
+/* main entry: draws the current robot (normal, transforming, or awakening) at P */
+function rbDraw(){const car=CAR,tf=G.tf&&!G.tf.l20?G.tf:null,st=G.veh|0,tt=tf?tf.t:null,v=rbVals(car,st,tt);
+ const sp=Math.hypot(P.vx,P.vy);G.mvS=(G.mvS||0)+((sp>30&&!tf?1:0)-(G.mvS||0))*.15;G.wph=(G.wph||0)+(sp>30&&!tf?TAU/(.5*60):0);
+ if(Math.abs(P.vx)>25&&!tf&&!(RB.st&&RB.st.on))RB.fT=P.vx>0?1:-1;RB.fT=RB.fT||1;RB.face+=RBCL(RB.fT-RB.face,-.14,.14);
+ const S=TUNE.rb.scale;let dip=0,eye=1;if(tt!=null){dip=tt<.3?3*Math.sin(Math.PI*tt/.3*.5):tt<.6?3*(1-RBE((tt-.3)/.3)):0;eye=tt<2.85?.35+.65*(1-RBE(tt/.3)):1+.8*(1-(tt-2.85)/.15);if(tt>=2.85&&!tf._puff){tf._puff=1;RB.puff=G.t;}}
+ const A=RB.st,ar=rbAwkP(car);let lift=0;if(A&&A.on&&car==='raven'){const e=G.t-A.t0;lift=-8*RBE(e/.8)*(e<5.6?1:1-RBE((e-5.6)/.9));}
+ cx.save();cx.translate(P.x,P.y);
+ const fl=G.flashR>0&&(G.t*20|0)%2;
+ /* shadow */cx.fillStyle='rgba(0,0,0,.22)';cx.beginPath();cx.ellipse(0,18*S,24*S,6*S,0,0,TAU);cx.fill();
+ cx.scale(S*RB.face,S);if(fl)cx.globalAlpha=.65;
+ const bob=(st===0||car==='raven'&&v.thighA<45)&&!tf?Math.sin(G.t*4)*1.2:Math.abs(Math.sin(G.wph))*1.4*G.mvS;
+ cx.translate(0,dip-bob+lift);
+ ({raven:rbRaven,mammoth:rbMammoth,croc:rbCroc})[car](v,eye,tt);
+ cx.restore();
+ if(RB.puff!=null){const e=G.t-RB.puff;if(e<.7){for(const o of[-1,1]){const k=e/.7;cx.fillStyle='rgba(235,238,242,'+(.55*(1-k))+')';cx.beginPath();cx.arc(P.x+o*(10+14*k)*S,P.y-(6+16*k)*S,(2.5+3*k)*S,0,TAU);cx.fill();}}else RB.puff=null;}
+ if(typeof drawPips==='function'){cx.save();cx.translate(P.x,P.y);cx.rotate(P.ang);drawPips(P.r);cx.restore();}}
+
+function rbRaven(v,eye,tt){const M='#2D2B2E',SH='#131217',BN='#E9E1CE',BR='#C9A04A',LN='#55515A',ol='#142233';
+ const mv=G.mvS||0,walk=v.thighA>45?Math.sin(G.wph||0)*14*mv:0,by=v.bodyY;
+ cx.translate(0,by);
+ /* legs (skids -> thighs, shins, feet); far leg first */
+ const leg=(side)=>{const w=side*walk,c=side<0?SH:M;rbJ(5+side*-1.5,6,180-v.thighA+w,()=>{const tl=9+v.thighL;rbR(0,-2,tl,4,2,c);rbPin(0,0);
+   rbJ(tl,0,-90+v.shinA-w*.6,()=>{/* shin: folded along thigh at Lv1, straight down when deployed */const sl=5+v.shinL;rbR(-1.5,0,3,sl,1.5,c);rbPin(0,0);
+     rbJ(0,sl,-v.footA,()=>{rbP([-1.5,0,1.5,0,1.2,7,-1.2,7],side<0?LN:BN);});});});};
+ leg(-1);
+ /* far arm (side pod) */
+ const arm=(side)=>{const c=side<0?SH:M;rbJ(3,1+side*-1,180-v.podA+(v.podA>35?Math.sin((G.wph||0)+Math.PI)*8*mv*side:0),()=>{const L=11+v.foreL;rbR(-2.5,-2.5,L+2.5,5,2.5,c);rbPin(0,0);
+   /* gun slides forward along the pod */rbR(L-1+v.gunX,-1,4,2,1,SH);
+   /* pod cover flips 180 about its root hinge -> pauldron */rbJ(0,-2.5,v.coverA,()=>{rbP([-1,0,7,0,6,-2.4,0,-2.6],side<0?LN:'#3A373C');});});};
+ arm(-1);
+ /* far wing */
+ const wing=(side)=>{const c=side<0?SH:M;rbJ(1+side*-1.5,-6+side*1,-120-v.wingA,()=>{const L1=17;cx.save();
+   rbP([0,-2.5,L1,-1.5,L1,1.5,0,3],c);
+   /* hidden awakening plates slide out along the trailing edge */for(let i=0;i<3;i++){const x=4+i*4.5;rbP([x,2.5,x+4,2.5,x+3,2.5+5*v.wingX,x-.5,2.5+5*v.wingX],side<0?SH:'#3A373C');}
+   rbPin(0,0,BR);
+   rbJ(L1,0,-v.wingO,()=>{const L2=13;rbP([0,-1.8,L2,-.8,L2+3,0,L2,1,0,2],c);rbPin(0,0,BR);
+     for(let i=0;i<5;i++){const fx=1.5+i*2.6;rbJ(fx,1.4,15+v['f'+i]*(14+i*9),()=>{rbP([0,-.8,9,-.4,10.5,0,9,.6,0,.9],i%2?c:(side<0?SH:'#3A373C'));rbLn(7.5,0,10.3,0,BN,.8);});}});
+   cx.restore();});};
+ wing(-1);
+ /* tail -> crest */
+ rbJ(-15,-1,v.tailA,()=>{const sp=v.crestS;for(let i=0;i<5;i++){const a=180+(i-2)*sp/4;rbJ(0,0,a,()=>{rbP([0,-1.2,11,-1,13,0,11,1,0,1.2],i===2?M:SH);rbLn(9.5,0,12.6,0,BN,.9);});}rbPin(0,0,BR);});
+ /* body */
+ rbP([-16,-3,-10,-7,6,-7,15,-4,16,1,10,6,-8,6,-16,2],M);
+ rbLn(-9,-6.5,-9,5.5,LN);rbLn(5,-6.8,5,5.8,LN);
+ /* belly hatch: plates slide apart 4px each side */
+ rbR(-1,4.5,10,2.4,1,'#0c0b0f',0);rbR(-1-v.hatch,4.4,5,2.6,1,SH);rbR(4+v.hatch,4.4,5,2.6,1,SH);
+ /* chest plates part to show the brass core */
+ {const o=v.chestO;rbEl(9,0,2.4,2.4,BR,0);if(o>.2){cx.globalAlpha=Math.min(1,o/2);rbEl(9,0,1.2,1.2,'#FFE7A0',0);cx.globalAlpha=1;}rbP([6,-4-o,13,-3.6-o,13,-.2-o,6,-.2-o],'#3A373C');rbP([6,.2+o,13,.2+o,12.5,3.6+o,6,4+o],'#3A373C');}
+ /* duct fans at wing roots -> shoulder thrusters */
+ rbJ(1,-7,v.fanA,()=>{rbEl(0,0,6,2,SH);const s=G.t*30*v.fanSpin;cx.save();cx.beginPath();cx.ellipse(0,0,5.4,1.5,0,0,TAU);cx.clip();for(let i=0;i<3;i++){const x=Math.cos(s+i*2.1)*5;rbLn(x,-1.4,x,1.4,'#8B8792',.9);}cx.restore();rbEl(0,0,1,1,BR,0);});
+ /* neck + beak cockpit -> helmet */
+ rbJ(13,-3,0,()=>{rbR(-1.5,-1.5-v.neckL,3,3+v.neckL,1.5,SH);rbJ(0,-v.neckL,v.cockA,()=>{rbP([-2,-4,4,-4.5,13,-.5,4,2.5,-2,2.5],M);rbP([1,-3.4,6,-3.6,8.5,-1.6,1,-1.4],BN);
+   /* visor drops, lens clicks forward */rbJ(1,-3.6,v.visor*60,()=>{rbP([0,0,7,0,6,1.6,0,1.6],SH);});
+   const e=Math.min(1.8,eye);cx.globalAlpha=Math.min(1,e);rbEl(4+v.lensX,-2.4,1.1,1.1,BR,0);if(e>1){cx.globalAlpha=e-1;rbEl(4+v.lensX,-2.4,3,3,'rgba(255,220,140,.6)',0);}cx.globalAlpha=1;rbPin(0,0,BR);});});
+ wing(1);arm(1);leg(1);}
+
+function rbMammoth(v,eye,tt){const M='#ECE6D8',SH='#8F8B84',IV='#FBF7EC',DK='#2C2826',BR='#C9A04A';
+ const mv=G.mvS||0,ph=G.wph||0,up=-v.waistA/70;/* 0 quadruped .. 1 centaur */
+ const lF=8*(1+.3*v.legF),lB=8*(1+.3*v.legB),ride=-(lB-8);
+ cx.translate(0,ride);
+ /* back legs (planted) */
+ const bleg=(x,side,ph0)=>{const sw=Math.sin(ph+ph0)*10*mv;rbJ(x,5,sw,()=>{rbR(-2.6,0,5.2,lB,2,side<0?SH:M);rbR(-3,lB-2.5,6,3,1.2,DK);rbPin(0,1.5);});};
+ bleg(-15,-1,Math.PI);bleg(-8,-1,0);
+ /* drum: on the back under the dome; rises, turns into turret, locks on back, turns into backpack */
+ const drum=()=>{const dx=-8-8*v.drumB-2*up,dy=-9+v.drumY-1*up;rbJ(dx,dy,0,()=>{const a=v.drumA%180,k=Math.abs(Math.cos(a*D2R));/* side (k=1) vs end-on (k=0) */
+   rbR(-6*k-2.6*(1-k),-3,12*k+5.2*(1-k),6,2,SH);rbEl(6*k+2.6*(1-k)-.5,0,1.6*(1-k)+.8,3,DK);
+   for(let i=0;i<3;i++)rbLn(-4*k+i*4*k-1.5*(1-k)+i*1.5*(1-k),-2.6,-4*k+i*4*k-1.5*(1-k)+i*1.5*(1-k),2.6,'#5d5853',.9);
+   if(v.drumA>=170){rbR(-4,-4,8,2,1,DK);}rbPin(0,0,BR);});};
+ /* dome plates on rear back: front/back slide 6px apart, middle stands up 90, then all fold back 110 */
+ const dome=()=>{rbJ(-2,-8,0,()=>{const pl=(x,w,rot)=>rbJ(x,0,rot,()=>{rbP([0,0,w,0,w-1,-3.4,1,-3.8],M);rbLn(1,-1.5,w-1,-1.3,SH,.8);});
+   pl(-18-v.domeO,7,v.domeF);rbJ(-11,0,0,()=>pl(0,7,-v.domeM+v.domeF*.3));pl(-4+v.domeO,7,v.domeF);});};
+ /* rear half */
+ dome();drum();
+ rbP([-22,-6,-12,-9,0,-9,1,5,-20,5,-23,0],M);rbP([-21,2,1,2,1,6,-20,6],DK);rbLn(-12,-8.6,-12,5,SH,.9);
+ /* belt links slide from drum to trunk */
+ if(v.belt>0){const n=6;for(let i=0;i<n;i++){const u=Math.min(1,v.belt*1.2-i*.03);if(u<=0)continue;const x=-10+u*(i*2.4+6),y=-6+u*(1.5-i*.2);rbR(x,y,2,2,.5,BR,DK);}}
+ /* front half: rises on the waist joint */
+ rbJ(0,2,v.waistA,()=>{
+  /* far front leg -> arm */
+  const fleg=(x,side,ph0)=>{const sw=up<.5?Math.sin(ph+ph0)*10*mv:0;rbJ(x,3,sw-v.armA*.15-v.armC*.5+side*4*up,()=>{rbR(-2.6,0,5.2,lF,2,side<0?SH:M);rbPin(0,1.5);
+    /* foot splits into gripper */const g=v.grip;rbJ(0,lF-1,0,()=>{rbP([-3,0,-.2,0,-.6,3+g*1.5,-3,2.5],DK);rbJ(.2,0,-g*30,()=>rbP([0,0,3,0,3,2.5,.6,3],DK));});});};
+  fleg(12,-1,0);
+  rbP([0,-9,14,-10,21,-7,22,3,0,5],M);rbP([1,2,21,2,21,5,1,6],DK);rbLn(13,-9.6,13,2,SH,.9);
+  /* ivory core behind chest plate */rbEl(16,-1,2.6,2.6,IV);rbEl(16,-1,1.3,1.3,'#FFF6E0',0);rbJ(12.5,-4,0,()=>rbR(0,v.coreO,7,6,1.5,SH));
+  /* head */
+  rbJ(21,-6,-v.waistA*.85,()=>{rbP([0,-3,7,-4,10,0,9,6,1,7,-1,3],M);
+   /* ear plate opens */rbJ(1,-2,v.earA,()=>{rbP([0,0,-6,1,-7,8,-1,9],'#D9D2C2');rbLn(-2,2,-5,7,SH,.8);rbPin(0,0,BR);});
+   /* eye */{const e=Math.min(1.8,eye);cx.globalAlpha=Math.min(1,e);rbEl(6,-.5,1,1,DK,0);rbEl(6.2,-.7,.45,.45,'#7FD7FF',0);if(e>1){cx.globalAlpha=e-1;rbEl(6,-.5,3,3,'rgba(160,230,255,.6)',0);}cx.globalAlpha=1;}
+   /* tusks (sheathed, extend, rotate into shoulder blades) */
+   rbJ(7,5,v.tuskA,()=>{const L=6*v.tusk;cx.beginPath();cx.moveTo(0,-1.2);cx.quadraticCurveTo(L*.8,0,L,-2.5);cx.lineTo(L-.6,-1.2);cx.quadraticCurveTo(L*.6,1.6,0,1.4);cx.closePath();cx.fillStyle=IV;cx.fill();cx.lineWidth=rbOL();cx.strokeStyle='#142233';cx.stroke();rbR(-.5,-1.6,3,3.2,1,DK);});
+   /* trunk gatling: 4 joints uncurl in turn, tip splits into 3 barrels */
+   rbJ(9.5,3,-v.lift,()=>{const tr=[v.t0,v.t1,v.t2,v.t3];let d=0;const seg=i=>{if(i>=4){/* barrels */for(let b=-1;b<=1;b++){const sp=v.split*b,fa=v.flare*b;rbJ(0,sp*1.6,fa,()=>{rbR(0,-.8,4+v.barL,1.6,.6,DK);});}
+      const w=WP.mg;if(w&&w.mf>0){rbEl(5+v.barL,0,2.2,2.2,'rgba(255,240,190,.9)',0);}return;}
+     rbJ(0,0,tr[i],()=>{rbR(0,-2.2+i*.2,6-i*.3,4.4-i*.4,1.8,i%2?M:'#E2DBCB');rbPin(0,0,'#a89f8e');cx.translate(5.6-i*.3,0);seg(i+1);});};seg(0);});
+  });
+  fleg(18,1,Math.PI);
+ });
+ bleg(-15,1,0);bleg(-8,1,Math.PI);}
+
+function rbCroc(v,eye,tt){const J='#2E9A4E',SH='#1C6332',BN='#ECE6CF',DK='#0F2A20';
+ const mv=G.mvS||0,ph=G.wph||0,rise=-v.hipA/80;
+ /* jaw snap at the end of the Lv5 transform */let snap=0;if(tt!=null&&G.veh===0){snap=tt>2.55&&tt<2.85?RBE((tt-2.55)/.25)*22:tt>=2.85&&tt<2.95?22*(1-(tt-2.85)/.1):0;}
+ const sinkY=v.sink*30;cx.save();if(v.sink>0){cx.beginPath();cx.rect(-80,-80,160,80+14);cx.clip();}cx.translate(0,sinkY);
+ /* tail (attached at hip, stays on the ground; tip plants as a brace) */
+ const tail=()=>{rbJ(-12,6,-v.tailT*0,()=>{let x=0;const n=4;cx.save();for(let i=0;i<n;i++){const L=6+v.tailS,a=(i===n-1?v.tailT*35:0)+(i===0?rise*-10:0)+Math.sin(G.t*3+i)*2*(1-rise);cx.rotate(a*D2R);
+   rbP([0,-3+i*.5,-L,-2.5+i*.6,-L,2.5-i*.6,0,3-i*.5],i%2?J:SH);
+   /* edge plates slide out into blades */if(v.blade>0)rbP([-1,-2.6+i*.5,-L+1,-2.3+i*.6,-L/2,-2.4+i*.55-v.blade],BN);
+   if(i===n-1){/* awakening prongs */for(const s of[-1,1])rbJ(-L,0,180+s*v.prong/2,()=>rbP([0,-1,5,0,0,1],BN));}
+   rbPin(0,0,'#C9A04A');cx.translate(-L,0);}cx.restore();});};
+ tail();
+ /* back legs: folded along hull until Lv15, then counter-rotate to stand */
+ const bleg=side=>rbJ(-10,4,-90+v.blegA+(rise>.5?Math.sin(ph+(side>0?0:Math.PI))*10*mv:0),()=>{rbR(-2.4,0,4.8,10,2,side<0?SH:J);rbPin(0,1.5);rbJ(0,10,-v.blegA*.6,()=>{rbEl(2,0,4,1.4,DK);});});
+ bleg(-1);
+ /* hull rises 80deg on the hip pivot */
+ rbJ(-10,4,v.hipA,()=>{cx.translate(10,-4);
+  const fleg=side=>{const sw=v.flegA>45&&rise<.5?Math.sin(ph+(side>0?Math.PI:0))*10*mv:0;rbJ(8,3,-90+v.flegA+sw+245*rise,()=>{rbR(-2.4,0,4.8,9,2,side<0?SH:J);rbPin(0,1.5);
+    rbJ(0,9,90-v.flegA,()=>{/* hover fan -> sole */rbEl(0,0,4,1.3,DK,undefined,(v.fanA-90)*D2R*-1*0);for(let c=-1;c<=1;c++)if(v.claw>0)rbJ(c*1.4,0,90+c*20,()=>rbP([0,-.6,2.5*v.claw+.1,0,0,.6],BN));});});};
+  fleg(-1);
+  /* hull */
+  rbP([-14,-3,-6,-6,10,-6,16,-3,16,4,-14,5],J);rbP([-13,3,15,3,15,5,-13,5],SH);
+  /* belly armour drops to show jade core */rbEl(2,1.5,2.4,2.4,'#7CF0A0');rbR(-2,.5+v.coreO*3,8,3,1,SH);
+  /* hover fans under hull (rear stays until Lv15) */if(v.blegA<40)rbEl(-8,6.5,4,1.3,DK);if(v.fanA<45)rbEl(8,6.5,4,1.3*(1-v.fanA/90)+.2,DK);
+  /* scale plates stand up */for(let i=0;i<6;i++){const x=-11+i*4.2,k=v.scK;rbJ(x,-5.6,-v['s'+i],()=>rbP([0,0,3.4*k,0,2.4*k,-1.4*k-1.2*(v['s'+i]/45)*k,.4,-1.4*k],i%2?SH:'#3BB060'));}
+  /* front skirt folds in, later rolls to waist */rbJ(15-27*v.skirtR,3+1*v.skirtR,v.skirtA,()=>rbP([0,0,3,0,3,4,0,4],SH));
+  /* head: lifts, then jaws fold into helmet + chest plate revealing the face */
+  rbJ(15,-2,v.headA-v.hipA*.9,()=>{const fk=RBE(-v.ujA/150);
+   /* robot face (hidden behind jaws until they fold away) */rbR(-1,-4,7,7,2,'#24303A');{const e=Math.min(1.8,eye);cx.globalAlpha=fk*Math.min(1,e);rbR(1.5,-2,4,1.2,.6,'#7CF0A0',0);if(e>1){cx.globalAlpha=fk*(e-1);rbEl(3.5,-1.4,4,3,'rgba(124,240,160,.5)',0);}cx.globalAlpha=1;}
+   /* lower jaw */rbJ(0,2,v.ljA+snap,()=>{const L=16+v.jawX;rbP([0,0,L,-.5,L,1.5,0,3],SH);for(let i=0;i<5;i++)rbP([3+i*2.6,-.4,4.2+i*2.6,-.4-1.4-v.teeth*.5,5.4+i*2.6,-.4],BN,0);rbPin(0,0,'#C9A04A');});
+   /* upper jaw / snout */rbJ(0,-1,v.ujA,()=>{const L=18+v.jawX;rbP([0,-3.5,L-3,-2.5,L,0,L-1,1.5,0,2],J);for(let i=0;i<5;i++)rbP([3+i*2.8,1.6,4.2+i*2.8,1.6+1.4+v.teeth*.5,5.4+i*2.8,1.6],BN,0);
+     {const e=Math.min(1.8,eye);cx.globalAlpha=(1-fk)*Math.min(1,e);rbEl(3,-2.6,1.2,1.2,'#FFE27A');cx.globalAlpha=1;}rbPin(0,0,'#C9A04A');});});
+  fleg(1);});
+ bleg(1);
+ cx.restore();
+ /* 3 back scales stay visible above the ground while submerged */
+ if(v.sink>.6){for(let i=0;i<3;i++)rbJ(-5+i*5,14,-45,()=>rbP([0,0,5,0,3.5,-3,.4,-3],i%2?SH:'#3BB060'));rbLn(-20,14,20,14,'rgba(60,40,20,.5)',1.2);}}
+
+const cv=document.getElementById('c');cx=cv.getContext('2d');const SAND='#d9a35c';
+function bg(c,w,h){c.fillStyle=SAND;c.fillRect(0,0,w,h);c.fillStyle='rgba(185,128,63,.35)';for(let i=0;i<40;i++){const x=(i*97)%w,y=(i*61)%h;c.beginPath();c.ellipse(x,y,14,5,0,0,TAU);c.fill();}}
+/* state setter: st=stage 0..3, tt=transform time (to st+1) or null, ar=awakening time (s) or null */
+function setState(car,st,tt,ar){CAR=car;G.veh=st;G.tf=tt!=null?{t:tt,nv:st+1}:null;RB.st=ar!=null?{on:1,t0:G.t-ar}:null;RB.puff=null;}
+function drawAt(car,st,tt,ar,x,y,z){setState(car,st,tt,ar);ZM=z;cx.save();cx.translate(x,y);cx.scale(z,z);P.x=0;P.y=0;rbDraw();cx.restore();}
+window.drawAt=drawAt;window.bg=bg;
+/* live preview */
+let L={car:'raven',st:0,tt:null,ar:null,last:performance.now()};
+function ui(){document.getElementById('ui').innerHTML=RBC.map(c=>`<button onclick="L.car='${c}';L.st=0;L.tt=null;L.ar=null">${c}</button>`).join('')+'<br>'+[0,1,2,3].map(s=>`<button onclick="L.st=${s};L.tt=null;L.ar=null">Lv${[1,5,10,15][s]}</button>`).join('')+`<br><button onclick="if(L.st<3){L.tt=0}">▶ 변신</button><button onclick="L.st=3;L.ar=0">▶ 각성 폼</button><button onclick="L.auto=!L.auto">자동 반복</button><label><input type=checkbox id=slow> 느리게 x0.25</label>`;}
+window.L=L;
+function loop(n){const dt=Math.min(.05,(n-L.last)/1000)*(document.getElementById('slow')&&document.getElementById('slow').checked?.25:1);L.last=n;G.t+=dt;
+ if(L.tt!=null){L.tt+=dt;if(L.tt>=3){L.tt=null;L.st++;}}
+ if(L.ar!=null){L.ar+=dt;if(L.ar>2.2){L.ar=null;}}
+ if(L.auto&&L.tt==null&&L.ar==null){if(L.st<3)L.tt=0;else{L.st=0;}}
+ const w=cv.width,h=cv.height;bg(cx,w,h);
+ setState(L.car,L.st,L.tt,null);if(L.ar!=null){RB.st=L.ar<1.2?{on:1,t0:G.t-L.ar}:{on:0,end:G.t-(L.ar-1.2)};}
+ ZM=4;cx.save();cx.translate(w/2,h*.55);cx.scale(4,4);P.x=0;P.y=0;rbDraw();cx.restore();
+ ZM=1;cx.save();cx.translate(w-60,h-60);P.x=0;P.y=0;const keep=RB.st;rbDraw();cx.restore();
+ cx.fillStyle='#142233';cx.font='bold 16px system-ui';cx.fillText(L.car+'  Lv'+[1,5,10,15][Math.min(3,L.st)]+(L.tt!=null?'  변신 '+L.tt.toFixed(2)+'s':'')+(L.ar!=null?'  각성 '+L.ar.toFixed(2)+'s':''),12,24);cx.font='12px system-ui';cx.fillText('오른쪽 아래 = 실제 게임 크기',w-190,h-10);
+ requestAnimationFrame(loop);}
+if(!location.search.includes('static')){ui();requestAnimationFrame(loop);}
+
+</script>
