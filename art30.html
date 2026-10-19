@@ -17,7 +17,8 @@ const Q=new URLSearchParams(location.search);
 const STAR_T=[.75,.5];
 const SAVE=(()=>{let s={};try{s=JSON.parse(localStorage.getItem('ac_save')||'{}')||{};}catch(e){}return Object.assign({gold:0,up:{hp:0,dmg:0,spd:0,mag:0},cars:{tank:1},car:'tank',ach:{},stage:1,diff:0,mute:0,noads:0},s);})();
 function saveS(){try{localStorage.setItem('ac_save',JSON.stringify(SAVE));}catch(e){}}
-const PLAY=Q.has('play')||Q.has('dps');function difOpen(st,d){if(d<=0)return true;const W=SAVE.wins||{};return d===1?!!W[st+'n']:!!W[st+'h'];}{SAVE.wins=SAVE.wins||{};if(!SAVE._w81){SAVE._w81=1;const S0=SAVE.stars||{};for(const k in S0)if(S0[k]>0)SAVE.wins[k]=1;try{localStorage.setItem('ac_save',JSON.stringify(SAVE));}catch(e){}}if(SAVE.diff===true)SAVE.diff=1;}const DEVQ=Q.has('dev')?'&dev=1':'';const DIFF=Q.get('diff')==='hell'?2:Q.get('diff')==='hard'?1:0;const HELL=DIFF===2;const HELLK={hp:1.28,dmg:1.30,spawn:1.13,boss:1.15,xp:1.05};
+if(Q.has('dev')){for(const c of['tank','flame','raven','mammoth','croc'])SAVE.cars[c]=1;}/* v82: dev=1 unlocks every car */
+const PLAY=Q.has('play')||Q.has('dps');function difOpen(st,d){if(d<=0||Q.has('dev'))return true;/* v82: dev=1 unlocks every difficulty */const W=SAVE.wins||{};return d===1?!!W[st+'n']:!!W[st+'h'];}{SAVE.wins=SAVE.wins||{};if(!SAVE._w81){SAVE._w81=1;const S0=SAVE.stars||{};for(const k in S0)if(S0[k]>0)SAVE.wins[k]=1;try{localStorage.setItem('ac_save',JSON.stringify(SAVE));}catch(e){}}if(SAVE.diff===true)SAVE.diff=1;}const DEVQ=Q.has('dev')?'&dev=1':'';const DIFF=Q.get('diff')==='hell'?2:Q.get('diff')==='hard'?1:0;const HELL=DIFF===2;const HELLK={hp:1.28,dmg:1.30,spawn:1.13,boss:1.15,xp:1.05};
 /* ===================== V79 TUNING BLOCK (edit numbers here) ===================== */
 const TUNE={
  laser:{dur:3.5,tickHz:10,dpsMul:3.2/*=2.0 x1.6*/,wPx:18.2,capBoss:.04,capMini:.10,sparkMax:24},
@@ -2235,7 +2236,7 @@ function goPlay(){location.search='?play=1&stage='+SAVE.stage+(SAVE.diff===2?'&d
 const $=id=>document.getElementById(id);
 if(SAVE.dia==null){SAVE.dia=1000;}/* prototype test diamonds */
 const BLU='background:linear-gradient(#cfe3ff,#7fb0f0);border-color:#2a5aa8;box-shadow:0 5px 0 #2a5aa8;color:#10284a';
-const STG=[{n:'초원',sky:['#7ec8f0','#cdeefc'],g:['#5fae3e','#3f8a2a'],h:'#4f9a34',acc:'#2f6e22'},{n:'사막 협곡',sky:['#f2b36b','#fde3b5'],g:['#d9a35c','#b9803f'],h:'#c48b49',acc:'#8a5a2a'},{n:'화산 지대',sky:['#5a2a2a','#a8452a'],g:['#4a3a36','#2e2422'],h:'#3a2c28',acc:'#ff5a1a',lock:1}];
+const STG=[{n:'초원',sky:['#7ec8f0','#cdeefc'],g:['#5fae3e','#3f8a2a'],h:'#4f9a34',acc:'#2f6e22'},{n:'사막 협곡',sky:['#f2b36b','#fde3b5'],g:['#d9a35c','#b9803f'],h:'#c48b49',acc:'#8a5a2a'},{n:'화산 지대',sky:['#5a2a2a','#a8452a'],g:['#4a3a36','#2e2422'],h:'#3a2c28',acc:'#ff5a1a',lock:1}];if(Q.has('dev'))STG.forEach(x=>delete x.lock);/* v82: dev=1 unlocks every map */
 function carSVG(id,w){if(['raven','mammoth','croc'].includes(id))return rbIcon(id,w);if(id==='flame')return '<svg viewBox="-60 -40 130 80" width="'+w+'" height="'+(w*8/13)+'"><ellipse cx="2" cy="30" rx="50" ry="8" fill="rgba(0,0,0,.35)"/>'+
  '<path d="M34 -10 Q58 -22 70 -4 Q62 0 70 6 Q58 22 34 10 Z" fill="#ff922b" opacity=".85"/><path d="M34 -6 Q50 -12 58 0 Q50 12 34 6 Z" fill="#ffd24a"/>'+
  '<circle cx="-30" cy="-30" r="9" fill="#222"/><circle cx="-30" cy="30" r="9" fill="#222"/><circle cx="16" cy="-30" r="9" fill="#222"/><circle cx="16" cy="30" r="9" fill="#222"/>'+
