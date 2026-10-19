@@ -981,18 +981,16 @@ function barDraw(){const z=v75z(),T=TW();
 function barDim(){/* v75c: screen dim removed */}
 /* ---------- FIREBOMB POOL v75 ---------- */
 function prng(n){const x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x);}
-function drawPool2(p){const z=v75z(),R=p.r*TFS()*.85*.65,seed=Math.floor(p.x*7+p.y*13),age=p.max-p.life,ev=!!p.evo;
+function drawPool2(p){/* v82: map3-style fire pool (red-orange blob, bright yellow core, rising embers); translucent so enemies/bullets stay readable */const z=v75z(),R=p.r*TFS()*.85*.65,seed=Math.floor(p.x*7+p.y*13),age=p.max-p.life,ev=!!p.evo;
  let fs=1;if(age<.16){const k=age/.16;fs=k<.5?.55+(1.08-.55)*(k/.5):1.08-(.08)*((k-.5)/.5);}
- const fF=Math.min(1,p.life/.28),fL=Math.min(1,p.life/.40);
+ const fL=Math.min(1,p.life/.40),A=(ev?.6:.78)*fL,r0=R*.92*fs,t=G.t;
  cx.save();cx.translate(p.x,p.y);
-
- /* ember floor (radial, no edge) */const tf=(p.tick>.2)?.15:0;cx.globalAlpha=Math.max(0,Math.min(1,(1+(.08*Math.sin(G.t*TAU*2)+tf)/.55)*fL));{const er=.68*R*fs,gg=cx.createRadialGradient(0,0,0,0,0,er);gg.addColorStop(0,'rgba(163,48,15,.55)');gg.addColorStop(1,'rgba(163,48,15,0)');cx.fillStyle=gg;cx.beginPath();cx.arc(0,0,er,0,TAU);cx.fill();}
- if(age<.09){cx.globalAlpha=1-age/.09;cx.fillStyle='#FFF0C8';cx.beginPath();cx.arc(0,0,R*.8,0,TAU);cx.fill();}
- /* flames, choppy 12fps */const tq=Math.floor(G.t*12)/12,n=ev?9:7;cx.globalAlpha=1;const fsc=fs*fF;
- if(fsc>0.02)for(let i=0;i<n;i++){const a=prng(seed+20+i)*TAU,d=R*(.15+.45*prng(seed+40+i)),w=R*(.30+.10*prng(seed+60+i))*fsc,h=R*(.35+.20*prng(seed+80+i))*fsc*(1+.12*Math.sin((tq+prng(seed+i)*.35)/.35*TAU));
-  const bx=Math.cos(a)*d,by=Math.sin(a)*d*.8;const fl=(c,s)=>{cx.fillStyle=c;cx.beginPath();cx.moveTo(bx-w/2*s,by);cx.quadraticCurveTo(bx-w/2*s,by-h*.55*s,bx,by-h*s);cx.quadraticCurveTo(bx+w/2*s,by-h*.55*s,bx+w/2*s,by);cx.quadraticCurveTo(bx,by+w*.25*s,bx-w/2*s,by);cx.fill();};
-  fl('#81263D',1);fl('#E63D42',.8);fl('#FF8A3D',.6);fl('#FFD23A',.4);cx.fillStyle='#FFF0C8';cx.beginPath();cx.arc(bx,by-h*.1,w*.1,0,TAU);cx.fill();}
- /* sparks 5/s */for(let i=0;i<3;i++){const ph=(G.t*5/3+i/3+prng(seed+i))%1,a=prng(seed+100+i+Math.floor(G.t*5/3+i/3))*TAU,d=R*.5*prng(seed+200+i);cx.globalAlpha=(1-ph)*fF;cx.fillStyle='#FFD23A';cx.fillRect(Math.cos(a)*d-1.2/z,Math.sin(a)*d-R*.6*ph-1.2/z,2.4/z,2.4/z);}
+ if(age<.09){cx.globalAlpha=(1-age/.09)*.8;cx.fillStyle='#FFF0C8';cx.beginPath();cx.arc(0,0,R*.8,0,TAU);cx.fill();}
+ const blob=(rr,sq,amp)=>{cx.beginPath();for(let i=0;i<=24;i++){const a=i/24*TAU,q=rr*(1+amp*Math.sin(a*5+t*6+seed));cx.lineTo(Math.cos(a)*q,Math.sin(a)*q*sq);}cx.closePath();};
+ cx.globalAlpha=A;cx.fillStyle='#E8452C';blob(r0,.8,.08);cx.fill();cx.globalAlpha=A*.7;cx.strokeStyle='#142233';cx.lineWidth=2/z;cx.stroke();
+ cx.globalAlpha=A;cx.fillStyle='#FF8A1F';cx.beginPath();cx.ellipse(0,0,r0*.65,r0*.65*.8,0,0,TAU);cx.fill();
+ cx.globalAlpha=Math.min(1,A*1.25);cx.fillStyle='#FFB547';cx.beginPath();cx.ellipse(0,0,r0*.32,r0*.32*.8,0,0,TAU);cx.fill();
+ /* rising embers */for(let i=0;i<(ev?7:5);i++){const ph=(t*1.2+prng(seed+i))%1,a=prng(seed+50+i)*TAU,d=r0*.5*prng(seed+90+i);cx.globalAlpha=(1-ph)*.85*fL;cx.fillStyle=i%2?'#FFB547':'#FFF3C0';cx.beginPath();cx.arc(Math.cos(a)*d,Math.sin(a)*d*.8-r0*.9*ph,Math.max(1.5,r0*.06),0,TAU);cx.fill();}
  cx.restore();cx.globalAlpha=1;}
 
 const DVC=[];let _dvci=0;
