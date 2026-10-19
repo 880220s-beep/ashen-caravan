@@ -215,6 +215,8 @@ const RBCAR=['raven','mammoth','croc'].includes(CAR);
 const RBXP={raven:1,mammoth:1.05,croc:1};
 /* damage coefficients per stage Lv1/5/10/15/20 (tuned by sim) */
 const RBK={"raven":[0.563,0.71,0.586,0.499,0.376],"mammoth":[0.165,0.434,0.466,0.159,0.165],"croc":[0.275,1.58,1.423,0.66,0.578]};
+const RBSZ={"raven":[1.221,1.158,1.011,0.829,1.038],"mammoth":[1.196,1.257,1.189,1.067,0.948],"croc":[1.48,1.269,1.227,1.075,1.212]};/* on-screen size matched to the lion */
+function rbSc(k){if(k!==1){cx.translate(P.x,P.y);cx.scale(k,k);cx.translate(-P.x,-P.y);}}
 const RBP=[];let RBSS=null;
 function rbS(){return G.l20?4:G.veh;}
 function rbL(){const w=WP.mg;return w?(w.evo?6:w.lv):1;}
@@ -275,16 +277,16 @@ function rbTF(f){const l2=!!f.l20,st=l2?3:G.veh,tt=Math.min(3,l2?f.t:f.t/f.D*3),
  f.evR=f.evR||{};const go=(n,t,fn)=>{if(tt>=t&&!f.evR[n]){f.evR[n]=1;fn();}};
  const spk=(n)=>{const a0=rnd(0,TAU),r=rnd(.3,.9)*P.r,x=P.x+Math.cos(a0)*r,y=P.y+Math.sin(a0)*r;for(let i=0;i<n;i++){const a=rnd(0,TAU),v=rnd(60,140);RFX.push({k:'sp',x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:.25,max:.25,s:rnd(1.5,2.4),c:i%2?'#FFE07A':'#4EC2FC'});}};
  go('a',0,()=>beep(1300,.08,'square',.06,400));go('b',.3,()=>beep(420,.12,'square',.07,180));
- let nf=0;Object.keys(S).filter(n=>S[n][0]===st+1).sort((a,b)=>S[a][2]-S[b][2]).forEach((n,j)=>{const fly=FL.includes(n),fi=fly?nf++:-1;go('L'+n,S[n][2],()=>{if(j>14)return;beep(900+(j%6)*150,.05,'square',fly?.08:.05,600);if(fly){G.shake=Math.max(G.shake,1.6);if(fi<3){G.stop=.04;f.t+=.04;}spk(3);}});});
+ let nf=0;Object.keys(S).filter(n=>S[n][0]===st+1).sort((a,b)=>S[a][2]-S[b][2]).forEach((n,j)=>{const fly=FL.includes(n),fi=fly?nf++:-1;go('L'+n,S[n][2],()=>{if(j>14)return;beep(900+(j%6)*150,.05,'square',fly?.08:.05,600);if(fly){G.shake=Math.max(G.shake,2);if(fi<3){G.stop=.04;f.t+=.04;}spk(3);{const a0=rnd(0,TAU),r=rnd(.3,.8)*P.r;LFL(P.x+Math.cos(a0)*r,P.y+Math.sin(a0)*r);}}});});
  go('d',2.2,()=>{beep(150,.12,'square',.12,70);G.shake=Math.max(G.shake,2);});go('g',2.85,()=>{beep(75,.12,'square',.1,40);G.shake=Math.max(G.shake,2);});
- RBX.draw(CAR,st,tt,tkAimL());}
+ const Z=RBSZ[CAR],uu=SS(Math.max(0,Math.min(1,(tt-.3)/2.2)));cx.save();rbSc(Z[st]+(Z[st+1]-Z[st])*uu);RBX.RB.nofx=1;try{RBX.draw(CAR,st,tt,tkAimL());}finally{RBX.RB.nofx=0;cx.restore();}}
 function rbHead(){if(!G.l20||!RBSS)return null;const t=G.t-RBSS.t0,h=RBSS.hit,c=RBSS.car,cl=(x)=>Math.max(0,Math.min(1,x));
  if(t>6.5){const u=cl((t-6.5)/1.0);if(u>=1)return null;return {tt:(c==='croc'?2.25:c==='mammoth'?2.1:2.55)-.6*u*(1-u)*2,sc:1};}/* fold back: replay climax in reverse, then settle */
  if(c==='raven'){if(t<.8)return {tt:2.0+.4*SS(t/.8),sc:1};if(t<h)return {tt:2.4,sc:1};const u=cl((t-h)/.35);return {tt:2.0+.55*u,sc:1};}
  if(c==='mammoth'){let tt=2.0;for(const r of RBSS.rows){const a=t-r.t;if(a>=0&&a<.4)tt=1.9+.1*Math.abs(Math.cos(a/.4*Math.PI*2));}if(t>h-.5&&t<h){tt=1.85;}if(t>=h){tt=Math.min(2.1,1.85+(t-h)/.25*.25);}return {tt,sc:1};}
  if(c==='croc'){if(t<1)return {tt:2.25,sc:1};if(t<h){const u=SS(cl((t-1)/1.2));return {tt:2.25-.25*u,sc:1+.25*u};}const a=t-h;if(a<.25)return {tt:2.0+a,sc:1.25-.25*a/.25};if(a<1.3)return {tt:2.1+.15*Math.abs(Math.sin(a*9)),sc:1};return {tt:2.25,sc:1};}
  return null;}
-function rbVeh(fl){cx.save();if(fl)cx.globalAlpha=.55;const hp=rbHead();if(hp){RBX.RB.nofx=1;try{if(hp.sc!==1){cx.translate(P.x,P.y);cx.scale(hp.sc,hp.sc);cx.translate(-P.x,-P.y);}RBX.draw(CAR,3,hp.tt,tkAimL());}finally{RBX.RB.nofx=0;}}else RBX.draw(CAR,G.l20?4:G.veh,null,tkAimL());cx.restore();}
+function rbVeh(fl){cx.save();if(fl)cx.globalAlpha=.55;rbSc(RBSZ[CAR][G.l20?4:G.veh]);const hp=rbHead();if(hp){RBX.RB.nofx=1;try{if(hp.sc!==1){cx.translate(P.x,P.y);cx.scale(hp.sc,hp.sc);cx.translate(-P.x,-P.y);}RBX.draw(CAR,3,hp.tt,tkAimL());}finally{RBX.RB.nofx=0;}}else RBX.draw(CAR,G.l20?4:G.veh,null,tkAimL());cx.restore();}
 function rbIcon(id,w){rbIcon.c=rbIcon.c||{};if(!rbIcon.c[id]){const c=document.createElement('canvas');c.width=260;c.height=160;const o=cx,op=[P.x,P.y,P.ang];try{cx=c.getContext('2d');cx.translate(130,80);cx.scale(2.3,2.3);P.x=0;P.y=0;P.ang=0;RBX.draw(id,1,null,0);}catch(e){}finally{cx=o;P.x=op[0];P.y=op[1];P.ang=op[2];}rbIcon.c[id]=c.toDataURL();}return '<img src="'+rbIcon.c[id]+'" width="'+w+'" height="'+(w*8/13)+'" style="object-fit:contain">';}
 /* ---------- awakening skills (BC framework + bull climax budget) ---------- */
 const RBSK={raven:{n:'흑익 대처형!',hit:5.4,c:'#D2A646'},mammoth:{n:'상아 대진군!',hit:5.5,c:'#FFF6E0'},croc:{n:'비취 대탐식!',hit:5.2,c:'#5FE0A0'}};
@@ -620,15 +622,15 @@ function roboTick(dt){const r=G.robo;if(!r.hold)r.t+=dt;P.inv=Math.max(P.inv,.3)
 function checkVeh(){const nv=G.lv>=VEH_LV[2]?3:G.lv>=VEH_LV[1]?2:G.lv>=VEH_LV[0]?1:0;if(nv>G.veh&&!G.ready){G.ready={nv,at:G.t+3,t0:G.t};if(T0<=0){beep(880,.12,'square',.08);setTimeout(()=>beep(1320,.16,'square',.08),140);}if(T0>0)doVeh();}}
 function vehTick(){FRTick();if(CAR==='flame'&&G.lv>=20&&!G.l20s&&G.veh>=3&&!G.tf&&!G.ready){G.l20s=1;G.tf={nv:3,l20:1,t:0,D:3,r0:P.r,r1:P.r,seed:Math.random()};sfxTransform(3);vib(40);}if(CAR!=='flame'&&G.lv>=20&&!G.l20s&&G.veh>=3&&!G.tf&&!G.ready){G.l20s=1;G.tf={nv:3,l20:1,t:0,D:3,r0:P.r,r1:P.r,seed:Math.random()};sfxTransform(3);vib(40);}if(G.bq&&G.bq.length){G.bq=G.bq.filter(q=>{if(G.t>=q.t){q.f();return false;}return true;});}if(G.evoQ&&G.evoQ.length&&!(BAN&&BAN.life>0)){banner(WD[G.evoQ.shift()].e+'!');}if(G.ready&&G.t>=G.ready.at&&!G.tf){G.ready=null;startTF();}}
 function startTF(){const nv=Math.min(3,G.veh+1);G.tf={nv,t:0,D:tfDur(nv),r0:P.r,r1:RTAB()[nv],seed:Math.random()};sfxTransform(nv);vib(40);}
-function tfTick(dt){const f=G.tf;f.t+=dt;P.inv=Math.max(P.inv,.3);if(f.t>=f.D){G.tf=null;G.tfEnd=G.t;P.inv=Math.max(P.inv,.2);G.noFl=G.t+.25;if(f.l20&&CAR==='flame'){G.f20=1;G.bskT=G.t;G._bskWr=true;G.tb={s:'🔥 황소 돌진! 버튼으로 발동 (29초)',life:2.4,max:2.4,gold:1};return;}if(f.l20){G.l20=1;{const z=Math.max(.3,zoom()),R=52/z;FX.push({k:'cring',x:P.x,y:P.y,r:64/z,life:.45,max:.45});for(const e of EN){if(e.dead||e===G.boss)continue;const dx=e.x-P.x,dy=e.y-P.y,dd=Math.hypot(dx,dy)||1;if(dd>R+e.r*.5)continue;const el=e.mb||e.type==='shield'||e.type==='brute'||e.type==='shaman',kb=(el?7:16)/z;e.x+=dx/dd*kb;e.y+=dy/dd*kb;}}G.bskT=G.t;G._bskWr=true;G.tb={s:'👑 사자왕의 포격 심판! 버튼으로 발동 (30초)',life:2.4,max:2.4,gold:1};return;}tfLock(f);G.tb={s:(CAR==='flame'?['', '1차 변신! 불길 커짐 · 체력 +50', '2차 변신! 보호막 획득 · 공격력 +15%', '새 공격: 불기둥 폭풍 — 7초마다 주변 불바다']:['', '1차 변신! 무기 커짐 · 체력 +50', '2차 변신! 보호막 획득 · 공격력 +15%', '새 공격: 코어 폭격 — 9초마다 큰 폭발'])[G.veh]||'',life:1.5,max:1.5};}}
-function tfLock(f){const tk=CAR!=='flame';beep(1800,.04,'square',.12,900);setTimeout(()=>beep(220,.08,'square',.18,90),40);for(const e of EN){if(e.dead)continue;const dx=e.x-P.x,dy=e.y-P.y,dd=Math.hypot(dx,dy)||1;if(dd<260+e.r&&!e.pa){e.pa={x0:e.x,y0:e.y,x1:P.x+dx/dd*(260+e.r),y1:P.y+dy/dd*(260+e.r),t:0};}}G.tfWave=(G.tfWave||0)+1;beep(70,.35,'sawtooth',.2,35);if(CAR==='flame'){if(f.nv<3)FX.push({k:'tline',x:P.x,y:P.y,r:240,life:.45,max:.45});for(const e of EN){if(!e.dead&&Math.hypot(e.x-P.x,e.y-P.y)<240+e.r){e.hp-=(e.max||e.hp)*.3;e.flash=.1;if(e.hp<=0){e.dead=1;kill(e);}}}}doVeh();}
+function tfTick(dt){const f=G.tf;if(!f.clr){f.clr=1;/* v82: no own projectiles during transforms */BUL.length=0;SHELL.length=0;MLF.length=0;if(typeof RBP!=='undefined')RBP.length=0;}f.t+=dt;P.inv=Math.max(P.inv,.3);if(f.t>=f.D){G.tf=null;G.tfEnd=G.t;P.inv=Math.max(P.inv,.2);G.noFl=G.t+.25;if(f.l20&&CAR==='flame'){G.f20=1;{const z=Math.max(.3,zoom());FX.push({k:'cring',x:P.x,y:P.y,r:64/z,life:.45,max:.45});}G.bskT=G.t;G._bskWr=true;G.tb={s:'🔥 황소 돌진! 버튼으로 발동 (29초)',life:2.4,max:2.4,gold:1};return;}if(f.l20){G.l20=1;{const z=Math.max(.3,zoom()),R=52/z;FX.push({k:'cring',x:P.x,y:P.y,r:64/z,life:.45,max:.45});for(const e of EN){if(e.dead||e===G.boss)continue;const dx=e.x-P.x,dy=e.y-P.y,dd=Math.hypot(dx,dy)||1;if(dd>R+e.r*.5)continue;const el=e.mb||e.type==='shield'||e.type==='brute'||e.type==='shaman',kb=(el?7:16)/z;e.x+=dx/dd*kb;e.y+=dy/dd*kb;}}G.bskT=G.t;G._bskWr=true;G.tb={s:'👑 사자왕의 포격 심판! 버튼으로 발동 (30초)',life:2.4,max:2.4,gold:1};return;}tfLock(f);G.tb={s:(CAR==='flame'?['', '1차 변신! 불길 커짐 · 체력 +50', '2차 변신! 보호막 획득 · 공격력 +15%', '3차 변신! 공격력 +10% · 체력 +100']:['', '1차 변신! 무기 커짐 · 체력 +50', '2차 변신! 보호막 획득 · 공격력 +15%', '3차 변신! 공격력 +10% · 체력 +100'])[G.veh]||'',life:1.5,max:1.5};}}
+function tfLock(f){const tk=CAR!=='flame';beep(1800,.04,'square',.12,900);setTimeout(()=>beep(220,.08,'square',.18,90),40);for(const e of EN){if(e.dead)continue;const dx=e.x-P.x,dy=e.y-P.y,dd=Math.hypot(dx,dy)||1;if(dd<260+e.r&&!e.pa){e.pa={x0:e.x,y0:e.y,x1:P.x+dx/dd*(260+e.r),y1:P.y+dy/dd*(260+e.r),t:0};}}G.tfWave=(G.tfWave||0)+1;beep(70,.35,'sawtooth',.2,35);if(CAR==='flame'){for(const e of EN){if(!e.dead&&Math.hypot(e.x-P.x,e.y-P.y)<240+e.r){e.hp-=(e.max||e.hp)*.3;e.flash=.1;if(e.hp<=0){e.dead=1;kill(e);}}}}doVeh();}
 function doVeh(){const nv=Math.min(3,G.veh+1);G.ready=null;G.veh=nv;G.vehT.push(+G.t.toFixed(1));G.lvAtVeh=(G.lvAtVeh||[]);G.lvAtVeh.push(G.lv);
  P.r=RTAB()[nv];
  if(nv===1){MAXW=7;G.maxhp+=50;G.hp=Math.min(G.maxhp,G.hp+80);}else if(nv===2){P.dmgMul*=1.15;G.maxhp+=80;G.hp=Math.min(G.maxhp,G.hp+120);}else{P.dmgMul*=1.1;G.maxhp+=100;G.hp=Math.min(G.maxhp,G.hp+150);G.cbT=3;}
  if(T0>0&&G.t<1)return;
  G.spike=4;
  for(const k in WP)WP[k].cd=0;P.inv=Math.max(P.inv,1);
- if(CAR!=='flame'&&nv<3){ring(P.x,P.y,420,'#ffe27a',.8);ring(P.x,P.y,260,'#ffb347',.6);}/*v80d: no ring on 3rd transform*/
+ if(nv<3){/* v82: same final ring for all cars */ring(P.x,P.y,420,'#ffe27a',.8);ring(P.x,P.y,260,'#ffb347',.6);}/*v80d: no ring on 3rd transform*/
  BAN={s:['','전투마차 변신!','요새 전차 가동!','천공 요새 완성!'][nv],life:1.8,big:1};
  const v=viewHalf();const on=e=>Math.abs(e.x-P.x)<v.w&&Math.abs(e.y-P.y)<v.h;
  for(const e of EN){if(e.dead||!on(e))continue;const a=Math.atan2(e.y-P.y,e.x-P.x);
@@ -1593,7 +1595,7 @@ function fMix(a,b,t){const A=fHex(a),B=fHex(b);return'rgb('+A.map((v,i)=>Math.ro
 function fSh(c,m){const A=fHex(c);return'rgb('+A.map(x=>Math.max(0,Math.min(255,Math.round(m>1?x+(255-x)*(m-1):x*m)))).join(',')+')';}
 function fIdx(){return G.f20?4:G.veh;}
 /* vehicle scale follows the live camera so the 46px body keeps one on-screen size; growth = attached parts only */
-function fWS(){return (G.zv||520)/520;}
+const BSZ=[0.781, 1.0, 1.0, 0.939, 1.148];/* v82: bull on-screen size matched to the lion per stage */function fWS(){let k=BSZ[G.f20?4:G.veh];const f=G.tf;if(f){const a=BSZ[G.veh],b2=BSZ[f.l20?4:f.nv],u=Math.max(0,Math.min(1,((f.l20?f.t:f.t/f.D*3)-2.0)/.2));k=a+(b2-a)*u*u*(3-2*u);}return (G.zv||520)/520*k;}
 function fK(){return fWS();}
 const FPL=[[],['nozL','nozR','guard','dist'],['podL','podR','covL','covR'],['heatL','heatR','ign','exh'],['hornL','hornR','brow','mouth']];
 /* fly-in direction (unit, outward) + anchor for rotation/sparks */
@@ -2324,7 +2326,7 @@ function showSelect(){const d=$('cfm');let sel=SAVE.cars[SAVE.car]?SAVE.car:'tan
 `;document.head.appendChild(st);}
 
 let SHOPTAB=Q.get('tab')==='car'?'car':'up';
-const CARS=[['tank','🛡️ 성전차','기관총 · 변신 공격: 코어 폭격<br>Lv5 무기 커짐·체력↑ · Lv10 보호막·공격력↑ · Lv15 코어 폭격 · Lv20 전면 집중 포격',0,0],['flame','🔥 화염방사차','화염방사기 · 변신 공격: 불기둥 폭풍<br>Lv5 불길 커짐·체력↑ · Lv10 보호막·공격력↑ · Lv15 불기둥 폭풍 · Lv20 각성',1100,300],['raven','🐦‍⬛ 잿까마귀','깃털 부메랑 · 변신 공격: 잿까마귀 강습<br>Lv20 각성 흑익 대처형 (가격 임시)',1500,400],['mammoth','🦣 상아 매머드','코 개틀링 · 변신 공격: 빙결 균열<br>Lv20 각성 상아 대진군 (가격 임시)',1500,400],['croc','🐊 비취 악어','꼬리 휘두르기 · 변신 공격: 데스롤<br>Lv20 각성 비취 대탐식 (가격 임시)',1500,400]];
+const CARS=[['tank','🛡️ 성전차','기관총<br>Lv5 무기 커짐·체력↑ · Lv10 보호막·공격력↑ · Lv15 3차 변신 · Lv20 전면 집중 포격',0,0],['flame','🔥 화염방사차','화염방사기<br>Lv5 불길 커짐·체력↑ · Lv10 보호막·공격력↑ · Lv15 3차 변신 · Lv20 각성',1100,300],['raven','🐦‍⬛ 잿까마귀','깃털 부메랑<br>Lv20 각성 흑익 대처형 (가격 임시)',1500,400],['mammoth','🦣 상아 매머드','코 개틀링<br>Lv20 각성 상아 대진군 (가격 임시)',1500,400],['croc','🐊 비취 악어','꼬리 휘두르기<br>Lv20 각성 비취 대탐식 (가격 임시)',1500,400]];
 function showShop(){G.paused=true;const g=$('gar');let h='<h1 style="font-size:28px">'+(SHOPTAB==='car'?'🚙 차고':'🏪 상점')+'</h1><div class="gold">💰 '+SAVE.gold+' &nbsp; 💎 '+SAVE.dia+'</div><div class="rowx"><button class="sm'+(SHOPTAB==='up'?' on':'')+'" data-tab="up">⬆️ 강화</button><button class="sm'+(SHOPTAB==='car'?' on':'')+'" data-tab="car">🚗 차량</button></div>';
  if(SHOPTAB==='up'){h+='<div class="box">';for(const k in UPG){const l=SAVE.up[k],c=upCost(l),mx=l>=UPMAX;h+='<div class="ln"><div>'+UPG[k].n+' <span style="color:#ffd24a">'+'★'.repeat(l)+'☆'.repeat(UPMAX-l)+'</span><small>'+UPG[k].d+'</small></div><button class="bt" data-up="'+k+'"'+(mx||SAVE.gold<c?' disabled':'')+'>'+(mx?'최대':'💰 '+c)+'</button></div>';}
   h+='</div><div class="box"><b>목표</b>';for(const a of ACH){const ok=SAVE.ach[a.id];h+='<div class="ln"><div>'+(ok?'✅ ':'⬜ ')+a.n+'<small>'+a.r+'</small></div></div>';}h+='</div>';}
