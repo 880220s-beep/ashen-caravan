@@ -34,7 +34,7 @@ const L=(a,b,t)=>a+(b-a)*t;
 let RBQ=[],RBZ=0;
 function rbM(u,z20,a15,a20,rot,sc,f15,f20,hg){const z=u<.5?RBZ:z20;RBZ++;RBQ.push([z,()=>{if(u<=0){f15();return;}
  const x=L(a15[0],a20[0],u),y=L(a15[1],a20[1],u),a=rot*u,s=L(1,sc,u),r=f20?SSm((Math.min(u,1)-.15)/.75):0;
- if(hg){/* visible hinge arm / rail from the fixed pivot to the moving part */const ha=Math.min(1,u)<.999?1:0;if(ha){cx.save();cx.lineCap='round';cx.strokeStyle=RBOL;cx.lineWidth=4.2;cx.beginPath();cx.moveTo(hg[0],hg[1]);cx.lineTo(x,y);cx.stroke();cx.strokeStyle='#8a8478';cx.lineWidth=2.2;cx.stroke();pC(hg[0],hg[1],2,'#C9A04A',1);pC(x,y,1.6,'#C9A04A',1);cx.restore();}}
+ if(hg){/* visible hinge arm / rail from the fixed pivot to the moving part */const ha=Math.min(1,u)<.999||(hg[2]!=null&&hg[2]<.999)?1:0;if(ha){cx.save();cx.lineCap='round';cx.strokeStyle=RBOL;cx.lineWidth=4.2;cx.beginPath();cx.moveTo(hg[0],hg[1]);cx.lineTo(x,y);cx.stroke();cx.strokeStyle='#8a8478';cx.lineWidth=2.2;cx.stroke();pC(hg[0],hg[1],2,'#C9A04A',1);pC(x,y,1.6,'#C9A04A',1);cx.restore();}}
  if(r<1){cx.save();const g=cx.globalAlpha;cx.translate(x,y);cx.rotate(a);cx.scale(s*L(1,1.2,r),s*L(1,1.2,r));cx.translate(-a15[0],-a15[1]);cx.globalAlpha=g*Math.min(1,2-2*r);f15();cx.restore();}
  if(r>0){cx.save();const g=cx.globalAlpha;cx.translate(x,y);cx.rotate(a-rot);cx.scale(s/sc*L(.72,1,r),s/sc*L(.72,1,r));cx.translate(-a20[0],-a20[1]);cx.globalAlpha=g*Math.min(1,2*r);f20();cx.restore();}}]);}
 function rbAdd(z,fn){RBQ.push([z,fn]);RBZ++;}
@@ -88,9 +88,9 @@ function dMammoth(q,aimL,tt,st){RBOL='#1E140D';const F='#7A5236',FD='#4E3322',FL
  /* tracks + fur skirts -> swing out and reshape into the big ears */
  {const sk=q('skirt');for(const s of[-1,1])rbM(q('mEar'),1,[0,s*13],[9.5,s*27],-s*.35,1,()=>{pR(-21,s*13-4,40,8,4,AR,1.4);cx.fillStyle='#4a423c';for(let i=0;i<6;i++)cx.fillRect(-18+i*6.5,s*13-3,2,6);
    if(sk>0)pJ(0,s*(9+5*sk),0,()=>{pR(-19,-3,34,6,3,FD,1.3);fur(-17,-2,13,2,7);pBolt(-15,0,.9);pBolt(11,0,.9);});},
-  fF(()=>pJ(6,s*12,0,()=>{pP([4,0,10,s*8,6,s*18,-6,s*19,-14,s*13,-12,s*3],F,1.8);pP([2,s*2,7,s*8,4,s*15,-5,s*16,-10,s*11,-9,s*4],FL,0);fur(-8,s*6,2,s*13,4);})),[14,s*9]);}
+  fF(()=>pJ(6,s*12,0,()=>{pP([4,0,10,s*8,6,s*18,-6,s*19,-14,s*13,-12,s*3],F,1.8);pP([2,s*2,7,s*8,4,s*15,-5,s*16,-10,s*11,-9,s*4],FL,0);fur(-8,s*6,2,s*13,4);})),[14,s*9,q('mDome')]);}
  /* Lv15 rear guard plates -> slide forward onto the ear roots as cheek armour */
- {const g=q('guard');if(g>0)for(const s of[-1,1])rbM(q('mGuard'),.8,[-24,s*7],[6,s*22],s*PI/2,1,()=>pJ(-19-5*g,s*7,0,()=>{for(let i=0;i<3;i++)pR(-5+i*1.5,-6+i*2.5,8,5,1.6,i%2?'#3A332E':'#5A5047',1.2);cx.strokeStyle='#9a8a72';cx.lineWidth=.8;cx.beginPath();cx.moveTo(-4,-5);cx.lineTo(2,-5);cx.stroke();pBolt(-1,-3,.8);pBolt(1,2,.8);}),null,[8,s*10]);}
+ {const g=q('guard');if(g>0)for(const s of[-1,1])rbM(q('mGuard'),.8,[-24,s*7],[6,s*22],s*PI/2,1,()=>pJ(-19-5*g,s*7,0,()=>{for(let i=0;i<3;i++)pR(-5+i*1.5,-6+i*2.5,8,5,1.6,i%2?'#3A332E':'#5A5047',1.2);cx.strokeStyle='#9a8a72';cx.lineWidth=.8;cx.beginPath();cx.moveTo(-4,-5);cx.lineTo(2,-5);cx.stroke();pBolt(-1,-3,.8);pBolt(1,2,.8);}),null,[8,s*10,q('mDome')]);}
  /* hull -> the big furred head dome */
  rbM(q('mDome'),3,[0,0],[14.5,0],0,1,()=>{pR(-20,-11.5,38,23,8,F,st<=1&&tt==null||st<1?2.8:1.8);if(st<=1){cx.strokeStyle='#D6AE82';cx.lineWidth=1;cx.beginPath();cx.moveTo(-15,-10);cx.lineTo(13,-10);cx.stroke();}fur(-18,-9,14,-4,9);fur(-18,4,14,9,9);},
   fF(()=>{pR(-12,-15,28,30,10,F,2.2);fur(-9,-12,10,-6,6);fur(-9,6,10,12,6);}));
@@ -102,7 +102,7 @@ function dMammoth(q,aimL,tt,st){RBOL='#1E140D';const F='#7A5236',FD='#4E3322',FL
  rbM(q('mBrow'),4,[-5,0],[26.5,0],PI/2,1,()=>{const o=q('domeO'),h=q('hump');pR(-15-5*o,-8,7,16,3,FL,1.3);pR(5+5*o,-8,7,16,3,FL,1.3);if(o<1)pR(-5,-8,10,16,3,FL,1.3);if(h>0)pJ(-30+20*h,0,0,()=>{pR(-6,-9,10,18,4,FD,1.4);fur(-5,-7,3,7,4);});},
   fF(()=>{pR(9,-11,6,22,3,FD,1.4);}));
  /* small ears -> fold out flat onto the big ears as the inner flaps */
- {const e=q('ears');if(e>0)for(const s of[-1,1])rbM(q('mEar'),1.5,[18,s*8],[8,s*26],0,1,()=>pJ(18,s*8,s*(PI*(1-.17*e)),()=>{pP([0,-1,12,-5,14,3,10,8,0,6].map((v,j)=>j%2?v*s:v),F,1.4);pP([2,1,10,-2,11,3,8,6,2,4.5].map((v,j)=>j%2?v*s:v),FL,0);}),null,[16,s*8]);}
+ {const e=q('ears');if(e>0)for(const s of[-1,1])rbM(q('mEar'),1.5,[18,s*8],[8,s*26],0,1,()=>pJ(18,s*8,s*(PI*(1-.17*e)),()=>{pP([0,-1,12,-5,14,3,10,8,0,6].map((v,j)=>j%2?v*s:v),F,1.4);pP([2,1,10,-2,11,3,8,6,2,4.5].map((v,j)=>j%2?v*s:v),FL,0);}),null,[16,s*8,q('mDome')]);}
  /* head block -> slides back and opens into the eye sockets */
  rbM(q('mEye'),5,[19.5,0],[17,0],0,1,()=>{pR(14,-9,11,18,5,F,st<=1?2.6:1.6);fur(15,-7,23,-3,3);},
   fF(()=>{const e=q('eye'),h=q('eyeH');for(const s of[-1,1]){pE(4,s*7,4.2,3.4,'#140d08',1.3);pE(4,s*7,3*Math.max(.15,h),2.3,e>0?AM:'#7a5a2a',0);if(e>0){const g=cx.globalAlpha;cx.globalAlpha=g*.4*e;pC(4,s*7,7,'#FFD58A',0);cx.globalAlpha=g;}}}));
