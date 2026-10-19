@@ -1,4 +1,4 @@
-<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>robots preview v82m</title><style>body{margin:0;background:#26313D;color:#fff;font:14px system-ui;text-align:center}button{margin:3px;padding:8px 12px;font:700 14px system-ui;border-radius:8px;border:2px solid #FFC83D;background:#26313D;color:#FFC83D}canvas{max-width:100%}</style><div id=ui></div><canvas id=c width=420 height=520></canvas><script>const TAU=Math.PI*2;const G={t:0};const P={x:0,y:0,ang:0};let cx;
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>robots preview v82n</title><style>body{margin:0;background:#26313D;color:#fff;font:14px system-ui;text-align:center}button{margin:3px;padding:8px 12px;font:700 14px system-ui;border-radius:8px;border:2px solid #FFC83D;background:#26313D;color:#FFC83D}canvas{max-width:100%}</style><div id=ui></div><canvas id=c width=420 height=520></canvas><script>const TAU=Math.PI*2;const G={t:0};const P={x:0,y:0,ang:0};let cx;
 const WP={mg:{mf:0}};
 
 /* ===== v82 art30 preview: 3 ground-vehicle robots, lion/bull transform pattern (top-down, front=+x, face revealed at Lv20 awakening facing up) ===== */
@@ -10,14 +10,14 @@ const RBS={
   wingF1:[2,.5,.8],wingF2:[2,.8,1.1],thr:[2,2.1,2.45],railL:[2,1.1,1.5],
   wingF3:[3,.5,.8],wingF4:[3,.8,1.1],crest:[3,2.1,2.45],beakL:[3,1.1,1.5],tailL:[3,1.4,1.8],turn:[4,0,.9],mTail:[4,.3,.75],mWheel:[4,.45,.9],mThr:[4,.45,.9],mFeat:[4,.6,1.05],mWing:[4,.9,1.35],mBrow:[4,1.2,1.65],mHull:[4,1.4,2.0],mPlate:[4,1.2,2.0],mHead:[4,1.0,1.7],mShell:[4,1.4,2.0],mBeak:[4,1.6,2.1],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]},
  mammoth:{domeO:[1,.3,.5],trunk0:[1,.5,.7],trunk1:[1,.6,.8],trunk2:[1,.7,.9],trunk3:[1,.8,1.0],split:[1,1.1,1.4],tusk:[1,2.1,2.45],
-  ears:[2,.5,.8],belt:[2,.8,1.1],barL:[2,1.1,1.5],skirt:[2,2.1,2.45],
-  hump:[3,.5,.8],pack:[3,.8,1.2],tuskB:[3,1.2,1.6],guard:[3,2.1,2.45],turn:[4,0,.9],mGuard:[4,.3,.75],mEar:[4,1.8,2.0],mCore:[4,.6,1.05],mDome:[4,.9,1.35],mBrow:[4,1.2,1.65],mEye:[4,1.35,1.8],mTusk:[4,1.8,2.0],mTrunk:[4,1.8,2.1],trunkC:[4,2.1,2.4],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]},
+  ears:[2,.4,.7],belt:[2,.7,1.0],barL:[2,1.6,2.0],tuskB:[2,1.2,1.5],skirt:[2,2.1,2.4],
+  hump:[3,.4,.7],pack:[3,1.0,1.5],guard:[3,2.1,2.4],turn:[4,0,.9],mGuard:[4,.3,.75],mEar:[4,1.8,2.0],mCore:[4,.6,1.05],mDome:[4,.9,1.35],mBrow:[4,1.2,1.65],mEye:[4,1.35,1.8],mTusk:[4,1.8,2.0],mTrunk:[4,1.8,2.1],trunkC:[4,2.1,2.4],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]},
  croc:{legs:[1,.5,.8],armF:[1,.8,1.1],tail4:[1,2.1,2.45],
-  sc0:[2,.5,.8],sc1:[2,.5,.8],sc2:[2,.5,.8],sc3:[2,.5,.8],sc4:[2,.5,.8],sc5:[2,.5,.8],blade:[2,.8,1.1],jawL:[2,2.1,2.45],
+  sc0:[2,.5,.8],sc1:[2,.5,.8],sc2:[2,.5,.8],sc3:[2,.5,.8],sc4:[2,.5,.8],sc5:[2,.5,.8],blade:[2,1.2,1.5],jawL:[2,2.1,2.45],
   armor:[3,.5,.8],tip:[3,.8,1.1],claws:[3,1.1,1.4],teeth:[3,2.1,2.45],turn:[4,0,.9],mSpike:[4,.55,1.1],mLegR:[4,.4,.85],mPlate:[4,.8,1.0],mEyeB:[4,1.2,1.65],mSnout:[4,1.5,1.95],mJaw:[4,1.8,2.25],jawO:[4,2.1,2.4],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]}};
 /* q(name): 0 stowed .. 1 locked; overshoots to 1.06 then clicks back like the tank parts */
 /* lion/bull fly-in parts: they arrive fully formed from outside, so their own value is a step (shape) and the motion is done by rbF */
-const RBFLY={raven:['wingP','wingF0','wingF1','wingF2','wingF3','wingF4','tail5','rail2','thr','crest'],mammoth:['tusk','ears','skirt','hump','guard'],croc:['legs','armF','tail4','sc0','sc1','sc2','sc3','sc4','sc5','jawL','armor','tip','teeth']};
+const RBFLY={raven:['wingP','wingF0','wingF1','wingF2','wingF3','wingF4','tail5','rail2','thr','crest'],mammoth:['tusk','ears','tuskB','skirt','hump','guard'],croc:['legs','armF','tail4','blade','sc0','sc1','sc2','sc3','sc4','sc5','jawL','armor','tip','teeth']};
 function rbQ(car,st,tt,n){const s=RBS[car][n];if(!s)return 1;if(s[0]<=st)return 1;if(s[0]>st+1||tt==null)return 0;if(RBFLY[car].includes(n))return tt>=s[1]?1:0;const p=(tt-s[1])/(s[2]-s[1]);if(p<=0)return 0;if(n==='turn'||n==='eye')return SSm(Math.min(1,p));if(p<.8)return 1.06*SSm(p/.8);return 1.06-.06*SSm(Math.min(1,(p-.8)/.2+.0));}
 const RB={face:1};let RBOL='#142233';
 function oL(w){cx.strokeStyle=RBOL;cx.lineWidth=w||1.6;cx.lineJoin='round';cx.stroke();}
@@ -40,7 +40,7 @@ function rbAdd(z,fn){RBQ.push([z,fn]);RBZ++;}
 /* fly-in (art29 drawTFC/drawFTF): from ~65 units out along the mount direction, eased in over 0.3s with a 3-unit overshoot past the mount, then settles; fades in over the first 20%; every 3rd part also spins in from 25deg. Lock = sparks + shake. */
 let RBL=[];
 function rbFly(car,st,tt,n,m,fn){return()=>{const s=RBS[car][n];if(!s||s[0]!==st+1||tt==null){fn();return;}const p=(tt-s[1])/(s[2]-s[1]);if(p<=0||p>=1){if(p>=1&&p<1.9)RBL.push([m,tt-s[2]]);fn();return;}
- let dx=m[0],dy=m[1];if(Math.abs(dy)<3&&m[0]>0){dx=1;dy=0;}if(Math.abs(dy)<3&&m[0]<0){dx=-1;dy=0;}const l=Math.hypot(dx,dy)||1;dx/=l;dy/=l;{const jj=RBFLY[car].indexOf(n),ra=[0,.6,-.6][jj%3];const c0=Math.cos(ra),s0=Math.sin(ra);[dx,dy]=[dx*c0-dy*s0,dx*s0+dy*c0];}const d=p<.8?58*(1-SSm(p/.8))-3*SSm(p/.8):-3*(1-SSm((p-.8)/.2));
+ let dx=m[0],dy=m[1];if(Math.abs(dy)<3&&m[0]>0){dx=1;dy=0;}if(Math.abs(dy)<3&&m[0]<0){dx=-1;dy=0;}const l=Math.hypot(dx,dy)||1;dx/=l;dy/=l;{const jj=RBFLY[car].indexOf(n),ra=[0,.6,-.6][jj%3];const c0=Math.cos(ra),s0=Math.sin(ra);[dx,dy]=[dx*c0-dy*s0,dx*s0+dy*c0];}const d=p<.8?72*(1-SSm(p/.8))-3*SSm(p/.8):-3*(1-SSm((p-.8)/.2));
  const j=RBFLY[car].indexOf(n),r=j%3===2?(25*Math.PI/180)*(1-SSm(p)):0;cx.save();cx.globalAlpha*=Math.min(1,p/.2);cx.shadowColor='#FFE07A';cx.shadowBlur=9;cx.translate(dx*d,dy*d);if(r){cx.translate(m[0],m[1]);cx.rotate(r);cx.translate(-m[0],-m[1]);}fn();cx.restore();};}
 function rbFlush(){RBQ.map((e,i)=>[e[0],i,e[1]]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]).forEach(e=>e[2]());RBQ=[];RBZ=0;}
 /* draw at P: st=stage 0..3 (4=awakened), tt=transform time to st+1 (null=idle) */
@@ -104,6 +104,7 @@ function dMammoth(q,aimL,tt,st,FY){RBOL='#1E140D';const F='#7A5236',FD='#4E3322'
  const fF=fn=>()=>{cx.save();cx.translate(12,0);cx.scale(1.25,1.25);fn();cx.restore();};/* face-local -> body coords */
  /* tracks + fur skirts -> swing out and reshape into the big ears */
  {const sk=q('skirt');for(const s of[-1,1])rbM(q('mEar'),1,[17,s*13],[19.5,s*15],0,1,()=>{pR(-21,s*13-4,40,8,4,AR,1.4);cx.fillStyle='#4a423c';for(let i=0;i<6;i++)cx.fillRect(-18+i*6.5,s*13-3,2,6);
+   if(st===3&&tt!=null&&tt>.8){const fo=SSm(Math.min(1,(tt-.8)/.3));pJ(8,s*(13+8*fo),0,()=>{cx.scale(.95,.45*fo+.01);pP([4,0,10,s*8,6,s*18,-6,s*19,-14,s*13,-12,s*3],F,1.8/(.4*fo+.4));pP([2,s*2,7,s*8,4,s*15,-5,s*16,-10,s*11,-9,s*4],FL,0);});}
    if(sk>0)FY('skirt',[0,s*14],()=>pJ(0,s*(9+5*sk),0,()=>{pR(-19,-3,34,6,3,FD,1.3);fur(-17,-2,13,2,7);pBolt(-15,0,.9);pBolt(11,0,.9);}))();},
   fF(()=>pJ(6,s*12,0,()=>{{const fl=tt!=null&&st===3&&tt>1.95&&tt<2.35?Math.sin(PI*(tt-1.95)/.4):0;cx.scale(1+.15*fl,1+.15*fl);}pP([4,0,10,s*8,6,s*18,-6,s*19,-14,s*13,-12,s*3],F,1.8);pP([2,s*2,7,s*8,4,s*15,-5,s*16,-10,s*11,-9,s*4],FL,0);fur(-8,s*6,2,s*13,4);})),[14,s*9,q('mDome')]);}
  /* Lv15 rear guard plates -> slide forward onto the ear roots as cheek armour */
@@ -124,7 +125,7 @@ function dMammoth(q,aimL,tt,st,FY){RBOL='#1E140D';const F='#7A5236',FD='#4E3322'
  rbM(q('mBrow'),5,[19.5,0],[26.5,0],0,1,()=>{pR(14,-9,11,18,5,F,st<=1?2.6:1.6);fur(15,-7,23,-3,3);},
   fF(()=>{pR(9,-11,6,22,3,FD,1.4);}));
  /* tusks -> swing down from the mounts into the big curved tusks */
- {const t=q('tusk'),tb=q('tuskB');for(const s of[-1,1])rbM(q('mTusk'),6,[22,s*7],[8,s*4.4],s*.8,1,FY('tusk',[24,s*7],()=>pJ(22,s*7,s*.35*tb,()=>{const l=4+5*t+7*tb;cx.beginPath();cx.moveTo(0,-1.6);cx.quadraticCurveTo(l*.7,-1.6,l,s*(-2-3*tb)*-1);cx.quadraticCurveTo(l*.6,1.8,0,1.6);cx.closePath();cx.fillStyle=IV;cx.fill();oL(1.2);pR(-1,-2,3,4,1,AR,.9);})),
+ {const t=q('tusk'),tb=q('tuskB');for(const s of[-1,1])rbM(q('mTusk'),6,[22,s*7],[8,s*4.4],s*.8,1,FY('tuskB',[30,s*7],FY('tusk',[24,s*7],()=>pJ(22,s*7,s*.35*tb,()=>{const l=4+5*t+7*tb;cx.beginPath();cx.moveTo(0,-1.6);cx.quadraticCurveTo(l*.7,-1.6,l,s*(-2-3*tb)*-1);cx.quadraticCurveTo(l*.6,1.8,0,1.6);cx.closePath();cx.fillStyle=IV;cx.fill();oL(1.2);pR(-1,-2,3,4,1,AR,.9);}))),
   fF(()=>{const tc=q('trunkC');cx.beginPath();cx.moveTo(-3,s*3.5);cx.quadraticCurveTo(-20,s*7,-12,s*(16+2*tc));cx.lineTo(-9.5,s*(15.5+2*tc));cx.quadraticCurveTo(-15,s*8,-1,s*6.5);cx.closePath();cx.fillStyle=IV;cx.fill();oL(1.3);}));}
  /* trunk gatling -> swings down 180deg, segments add on and hang over the chest, ending in the 3-barrel muzzle */
  {const u=q('mTrunk');rbM(u,9,[25,0],[9.5,0],0,1,()=>pJ(25,0,aimL*(1-Math.min(1,u*3)),()=>{const seg=i=>{if(i>=2){const sp=q('split'),bl=2+.8*q('barL');for(const y of sp>0?[-2.2*sp,0,2.2*sp]:[0])pR(0,y-.9,bl,1.8,.8,AR,.9);return;}
@@ -140,7 +141,7 @@ function dCroc(q,aimL,tt,st,F){const FS=F;RBOL='#142016';const C='#3F5E34',CD='#
  const fF=fn=>()=>{cx.save();cx.translate(-15,0);cx.scale(1.65,1.65);fn();cx.restore();};
  /* tail whip -> turns 90deg in place at the rear and closes into the lower jaw */
  rbM(q('mJaw'),7,[-24,0],[-21.6-(tt!=null&&st===3&&tt>1.9&&tt<2.05?3*SSm((tt-1.9)/.15):tt!=null&&st===3&&tt>=2.05&&tt<2.3?3*(1-SSm((tt-2.05)/.2)):0),0],0,1,()=>{const n=3+(q('tail4')>0?1:0),t4=q('tail4'),bl=q('blade'),tp=q('tip'),sw=Math.sin((G.t||0)*3)*.08*(1-Math.min(1,q('mSpike')*3));pJ(-15,0,0,()=>{for(let i=0;i<n;i++){const l=3.85,w=8-i*1.4;cx.rotate(sw);if(i===3){F('tail4',[-30,0],()=>{pR(-l-1,-w/2-1.5,l+2,w+3,2,'#557A3E',1.3);pP([-l/2-1.5,-w/2-1.5,-l/2,-w/2-4.5,-l/2+1.5,-w/2-1.5],T,.8);pP([-l/2-1.5,w/2+1.5,-l/2,w/2+4.5,-l/2+1.5,w/2+1.5],T,.8);})();cx.translate(-l+.5,0);continue;}
-   if(bl>0&&(i===1||i===2))for(const s of[-1,1])pP([-.5,s*w/2,-l+.5,s*(w/2-.8),-l/2,s*(w/2+2.6*bl)],T,1);
+   if(bl>0&&(i===1||i===2))F('blade',[-32,0],()=>{pR(-l,-w/2-1,l+1,w+2,2,'#557A3E',1);for(const s of[-1,1])pP([-.5,s*w/2,-l+.5,s*(w/2-.8),-l/2,s*(w/2+3.4*bl)],T,1);})();
    pR(-l,-w/2,l+1,w,w/2.2,i%2?C:CD,1.3);cx.translate(-l+.5,0);}
   if(tp>0)F('tip',[-30,0],()=>{pP([.5,-4,-10*tp,0,.5,4],T,1.3);cx.strokeStyle='#FFE07A';cx.lineWidth=.7;cx.beginPath();cx.moveTo(-1,0);cx.lineTo(-7,0);cx.stroke();})();});},
   fF(()=>{const g=crJ(q,tt,st);pR(-8,-15,8,30,5,CD,1.6);for(let i=0;i<7;i++){const y=-12+i*4;pP([-1+g,y-1.4,-4.2,y,-1+g,y+1.4],T,.6);}}));
