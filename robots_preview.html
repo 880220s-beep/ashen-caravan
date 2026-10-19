@@ -1,4 +1,4 @@
-<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>robots preview v82j</title><style>body{margin:0;background:#26313D;color:#fff;font:14px system-ui;text-align:center}button{margin:3px;padding:8px 12px;font:700 14px system-ui;border-radius:8px;border:2px solid #FFC83D;background:#26313D;color:#FFC83D}canvas{max-width:100%}</style><div id=ui></div><canvas id=c width=420 height=520></canvas><script>const TAU=Math.PI*2;const G={t:0};const P={x:0,y:0,ang:0};let cx;
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>robots preview v82l</title><style>body{margin:0;background:#26313D;color:#fff;font:14px system-ui;text-align:center}button{margin:3px;padding:8px 12px;font:700 14px system-ui;border-radius:8px;border:2px solid #FFC83D;background:#26313D;color:#FFC83D}canvas{max-width:100%}</style><div id=ui></div><canvas id=c width=420 height=520></canvas><script>const TAU=Math.PI*2;const G={t:0};const P={x:0,y:0,ang:0};let cx;
 const WP={mg:{mf:0}};
 
 /* ===== v82 art30 preview: 3 ground-vehicle robots, lion/bull transform pattern (top-down, front=+x, face revealed at Lv20 awakening facing up) ===== */
@@ -6,20 +6,19 @@ const RBC=['raven','mammoth','croc'];
 const SSm=x=>x<=0?0:x>=1?1:x*x*x*(x*(6*x-15)+10);
 /* part schedule: name:[stage gained (1..3, 4=awakening face), t0, t1]; motion lasts t0..t1 with a lock overshoot at the end (like the tank parts) */
 const RBS={
- raven:{wingP:[1,.5,.9],wingF0:[1,1.0,1.3],tail5:[1,1.4,1.7],rail2:[1,1.8,2.1],
-  wingF1:[2,.5,.8],wingF2:[2,.9,1.2],thr:[2,1.3,1.6],railL:[2,1.7,2.0],
-  wingF3:[3,.5,.8],wingF4:[3,.65,.95],crest:[3,1.1,1.4],beakL:[3,1.5,1.8],tailL:[3,1.9,2.2],
-  turn:[4,0,.9],mTail:[4,.3,.75],mWheel:[4,.45,.9],mThr:[4,.45,.9],mFeat:[4,.6,1.05],mWing:[4,.9,1.35],mBrow:[4,1.2,1.65],mHull:[4,1.4,2.0],mPlate:[4,1.2,2.0],mHead:[4,1.0,1.7],mShell:[4,1.4,2.0],mBeak:[4,1.6,2.1],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]},
- mammoth:{domeO:[1,.5,.8],trunk0:[1,.8,1.0],trunk1:[1,.9,1.1],trunk2:[1,1.0,1.2],trunk3:[1,1.1,1.3],split:[1,1.4,1.6],tusk:[1,1.8,2.1],
-  ears:[2,.5,.9],belt:[2,1.0,1.4],barL:[2,1.5,1.8],skirt:[2,1.9,2.2],
-  pack:[3,.5,.9],hump:[3,1.0,1.3],tuskB:[3,1.4,1.8],guard:[3,1.9,2.2],
-  turn:[4,0,.9],mGuard:[4,.3,.75],mEar:[4,.45,.9],mCore:[4,.6,1.05],mDome:[4,.9,1.35],mBrow:[4,1.2,1.65],mEye:[4,1.35,1.8],mTusk:[4,1.5,1.95],mTrunk:[4,1.8,2.25],trunkC:[4,2.1,2.4],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]},
- croc:{legs:[1,.5,.9],tail4:[1,1.0,1.3],armF:[1,1.4,1.7],
-  sc0:[2,.5,.7],sc1:[2,.58,.78],sc2:[2,.66,.86],sc3:[2,.74,.94],sc4:[2,.82,1.02],sc5:[2,.9,1.1],blade:[2,1.3,1.7],jawL:[2,1.8,2.1],
-  teeth:[3,.5,.9],armor:[3,1.0,1.4],tip:[3,1.5,1.8],claws:[3,1.9,2.2],
-  turn:[4,0,.9],mSpike:[4,.55,1.1],mLegR:[4,.4,.85],mPlate:[4,.8,1.0],mEyeB:[4,1.2,1.65],mSnout:[4,1.5,1.95],mJaw:[4,1.8,2.25],jawO:[4,2.1,2.4],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]}};
+ raven:{wingP:[1,.5,.8],wingF0:[1,.8,1.1],tail5:[1,1.1,1.4],rail2:[1,1.4,1.7],
+  wingF1:[2,.5,.8],wingF2:[2,.8,1.1],thr:[2,1.1,1.4],railL:[2,1.4,1.8],
+  wingF3:[3,.5,.8],wingF4:[3,.8,1.1],crest:[3,1.1,1.4],beakL:[3,1.4,1.8],tailL:[3,1.7,2.1],turn:[4,0,.9],mTail:[4,.3,.75],mWheel:[4,.45,.9],mThr:[4,.45,.9],mFeat:[4,.6,1.05],mWing:[4,.9,1.35],mBrow:[4,1.2,1.65],mHull:[4,1.4,2.0],mPlate:[4,1.2,2.0],mHead:[4,1.0,1.7],mShell:[4,1.4,2.0],mBeak:[4,1.6,2.1],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]},
+ mammoth:{domeO:[1,.3,.5],tusk:[1,.5,.8],trunk0:[1,.8,1.0],trunk1:[1,.9,1.1],trunk2:[1,1.0,1.2],trunk3:[1,1.1,1.3],split:[1,1.4,1.7],
+  ears:[2,.5,.8],skirt:[2,.8,1.1],belt:[2,1.1,1.4],barL:[2,1.4,1.8],
+  hump:[3,.5,.8],guard:[3,.8,1.1],pack:[3,1.1,1.5],tuskB:[3,1.4,1.8],turn:[4,0,.9],mGuard:[4,.3,.75],mEar:[4,.45,.9],mCore:[4,.6,1.05],mDome:[4,.9,1.35],mBrow:[4,1.2,1.65],mEye:[4,1.35,1.8],mTusk:[4,1.5,1.95],mTrunk:[4,1.8,2.25],trunkC:[4,2.1,2.4],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]},
+ croc:{legs:[1,.5,.8],armF:[1,.8,1.1],tail4:[1,1.1,1.4],
+  sc0:[2,.5,.8],sc1:[2,.56,.86],sc2:[2,.62,.92],sc3:[2,.68,.98],sc4:[2,.74,1.04],sc5:[2,.8,1.1],blade:[2,1.1,1.4],jawL:[2,1.4,1.7],
+  armor:[3,.5,.8],tip:[3,.8,1.1],teeth:[3,1.1,1.4],claws:[3,1.4,1.7],turn:[4,0,.9],mSpike:[4,.55,1.1],mLegR:[4,.4,.85],mPlate:[4,.8,1.0],mEyeB:[4,1.2,1.65],mSnout:[4,1.5,1.95],mJaw:[4,1.8,2.25],jawO:[4,2.1,2.4],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]}};
 /* q(name): 0 stowed .. 1 locked; overshoots to 1.06 then clicks back like the tank parts */
-function rbQ(car,st,tt,n){const s=RBS[car][n];if(!s)return 1;if(s[0]<=st)return 1;if(s[0]>st+1||tt==null)return 0;const p=(tt-s[1])/(s[2]-s[1]);if(p<=0)return 0;if(n==='turn'||n==='eye')return SSm(Math.min(1,p));if(p<.8)return 1.06*SSm(p/.8);return 1.06-.06*SSm(Math.min(1,(p-.8)/.2+.0));}
+/* lion/bull fly-in parts: they arrive fully formed from outside, so their own value is a step (shape) and the motion is done by rbF */
+const RBFLY={raven:['wingP','wingF0','wingF1','wingF2','wingF3','wingF4','tail5','rail2','thr','crest'],mammoth:['tusk','ears','skirt','hump','guard'],croc:['legs','armF','sc0','sc1','sc2','sc3','sc4','sc5','armor','tip']};
+function rbQ(car,st,tt,n){const s=RBS[car][n];if(!s)return 1;if(s[0]<=st)return 1;if(s[0]>st+1||tt==null)return 0;if(RBFLY[car].includes(n))return tt>=s[1]?1:0;const p=(tt-s[1])/(s[2]-s[1]);if(p<=0)return 0;if(n==='turn'||n==='eye')return SSm(Math.min(1,p));if(p<.8)return 1.06*SSm(p/.8);return 1.06-.06*SSm(Math.min(1,(p-.8)/.2+.0));}
 const RB={face:1};let RBOL='#142233';
 function oL(w){cx.strokeStyle=RBOL;cx.lineWidth=w||1.6;cx.lineJoin='round';cx.stroke();}
 function pR(x,y,w,h,r,f,w2){cx.beginPath();cx.roundRect(x,y,w,h,Math.max(0,Math.min(r,Math.abs(w)/2,Math.abs(h)/2)));cx.fillStyle=f;cx.fill();if(w2!==0)oL(w2);}
@@ -35,31 +34,39 @@ let RBQ=[],RBZ=0;
 function rbM(u,z20,a15,a20,rot,sc,f15,f20,hg,keep){const z=u<.5?RBZ:z20;RBZ++;RBQ.push([z,()=>{if(u<=0){f15();return;}
  const x=L(a15[0],a20[0],u),y=L(a15[1],a20[1],u),a=rot*u,s=L(1,sc,u),r=f20?SSm((Math.min(u,1)-.15)/.75):0;
  if(hg){/* visible hinge arm / rail from the fixed pivot to the moving part */const ha=Math.min(1,u)<.999||(hg[2]!=null&&hg[2]<.999)?1:0;if(ha){cx.save();cx.lineCap='round';cx.strokeStyle=RBOL;cx.lineWidth=4.2;cx.beginPath();cx.moveTo(hg[0],hg[1]);cx.lineTo(x,y);cx.stroke();cx.strokeStyle='#8a8478';cx.lineWidth=2.2;cx.stroke();pC(hg[0],hg[1],2,'#C9A04A',1);pC(x,y,1.6,'#C9A04A',1);cx.restore();}}
- /* fully solid (no alpha): the old shape shrinks under the new one, which grows over it */if(keep||r<1){cx.save();cx.translate(x,y);cx.rotate(a);const k1=keep?1:L(1,.55,r);cx.scale(s*k1,s*k1);cx.translate(-a15[0],-a15[1]);f15();cx.restore();}
+ /* fully solid (no alpha): the old shape shrinks under the new one, which grows over it */if(keep||r<1){cx.save();cx.translate(x,y);cx.rotate(a);const k1=keep?1:L(1,.15,r);cx.scale(s*k1,s*k1);cx.translate(-a15[0],-a15[1]);f15();cx.restore();}
  if(keep||r>0){cx.save();cx.translate(x,y);cx.rotate(a-rot);const k2=keep?1:L(.3,1,r);cx.scale(s/sc*k2,s/sc*k2);cx.translate(-a20[0],-a20[1]);f20();cx.restore();}}]);}
 function rbAdd(z,fn){RBQ.push([z,fn]);RBZ++;}
+/* fly-in (art29 drawTFC/drawFTF): from ~65 units out along the mount direction, eased in over 0.3s with a 3-unit overshoot past the mount, then settles; fades in over the first 20%; every 3rd part also spins in from 25deg. Lock = sparks + shake. */
+let RBL=[];
+function rbFly(car,st,tt,n,m,fn){return()=>{const s=RBS[car][n];if(!s||s[0]!==st+1||tt==null){fn();return;}const p=(tt-s[1])/(s[2]-s[1]);if(p<=0||p>=1){if(p>=1&&p<1.9)RBL.push([m,tt-s[2]]);fn();return;}
+ let dx=m[0],dy=m[1];if(Math.abs(dy)<3&&m[0]>0){dx=1;dy=0;}const l=Math.hypot(dx,dy)||1;dx/=l;dy/=l;const d=p<.8?42*(1-SSm(p/.8))-2*SSm(p/.8):-2*(1-SSm((p-.8)/.2));
+ const j=RBFLY[car].indexOf(n),r=j%3===2?(25*Math.PI/180)*(1-SSm(p)):0;cx.save();cx.globalAlpha*=Math.min(1,p/.2);cx.translate(dx*d,dy*d);if(r){cx.translate(m[0],m[1]);cx.rotate(r);cx.translate(-m[0],-m[1]);}fn();cx.restore();};}
 function rbFlush(){RBQ.map((e,i)=>[e[0],i,e[1]]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]).forEach(e=>e[2]());RBQ=[];RBZ=0;}
 /* draw at P: st=stage 0..3 (4=awakened), tt=transform time to st+1 (null=idle) */
 function rbDraw(car,st,tt,aimL){const q=n=>rbQ(car,st,tt,n);const k=q('turn');
  let dip=0;if(tt!=null)dip=tt<.3?Math.sin(Math.PI*tt/.3):0;
  cx.save();cx.translate(P.x,P.y);
- cx.rotate(P.ang+(-Math.PI/2-P.ang)*k);cx.translate(-dip,0);{const SC=[1,60/42,74/42,85/42,85/42].map(v=>v*(car==='croc'?.63:.75));let sc=SC[Math.min(4,st)];if(tt!=null&&st<4){const u=SSm((tt-.3)/2.2);sc=L(SC[st],SC[st+1],u);}cx.scale(sc,sc);}cx.fillStyle='rgba(0,0,0,.2)';cx.beginPath();cx.ellipse(1,2,26,19,0,0,TAU);cx.fill();
- RBQ=[];RBZ=0;({raven:dRaven,mammoth:dMammoth,croc:dCroc})[car](q,aimL||0,tt,st);rbFlush();cx.restore();}
+ cx.rotate(P.ang+(-Math.PI/2-P.ang)*k);cx.translate(-dip,0);
+ if(tt!=null){let sh=tt>.1&&tt<.3?1.2:0;for(const v of Object.values(RBS[car]))if(v[0]===st+1){const a=tt-v[2];if(a>=0&&a<.1)sh=Math.max(sh,1.6*(1-a/.1));}for(const th of[2.2,2.85]){const a=tt-th;if(a>=0&&a<.12)sh=Math.max(sh,2*(1-a/.12));}
+  if(sh)cx.translate(Math.sin(tt*97)*sh,Math.cos(tt*83)*sh);if(tt>=2.85){const sq=Math.exp(-(tt-2.85)*12)*.05;cx.scale(1+sq,1-sq);}}{const SC=[1,60/42,74/42,85/42,85/42].map(v=>v*(car==='croc'?.63:.75));let sc=SC[Math.min(4,st)];if(tt!=null&&st<4){const u=SSm((tt-.3)/2.2);sc=L(SC[st],SC[st+1],u);}cx.scale(sc,sc);}cx.fillStyle='rgba(0,0,0,.2)';cx.beginPath();cx.ellipse(1,2,26,19,0,0,TAU);cx.fill();
+ RBQ=[];RBZ=0;RBL=[];const F=(n,m,fn)=>rbFly(car,st,tt,n,m,fn);({raven:dRaven,mammoth:dMammoth,croc:dCroc})[car](q,aimL||0,tt,st,F);rbFlush();
+ /* lock sparks at each mount for 0.25s */for(const [m,a] of RBL){if(a>.25)continue;const k=a/.25;for(let i=0;i<4;i++){const an=i*1.7+m[0]*.3,rr=3+12*k;cx.globalAlpha=1-k;pC(m[0]+Math.cos(an)*rr,m[1]+Math.sin(an)*rr,1.4*(1-k)+.4,i%2?'#FFE07A':'#FF982D',0);}cx.globalAlpha=1;}cx.restore();}
 
-function dRaven(q,aimL,tt,st){RBOL='#06070A';const K='#16171D',B='#2A2F3E',H='#566078',E='#C9A04A',BK='#2E2E35',PL='#4E5976';
+function dRaven(q,aimL,tt,st,F){RBOL='#06070A';const K='#16171D',B='#2A2F3E',H='#566078',E='#C9A04A',BK='#2E2E35',PL='#4E5976';
  const wP=q('wingP'),PI=Math.PI;
  /* wheels -> slide out under the cheek guards */
  for(const s of[-1,1])rbM(q('mWheel'),1,[0,s*12],[-3,s*25],0,1,()=>{for(const x of[-10,10])pR(x-5,s*12-3.5,10,7,3,'#0E0F13',1.2);},null);
  /* rear thrusters -> slide in under the head plate */
- {const t=q('thr');if(t>0)for(const s of[-1,1])rbM(q('mThr'),.5,[-21,s*6],[-6,s*8],0,1,()=>pJ(-14-7*t,s*6,0,()=>{pR(-5,-3.5,9,7,3,B);pC(-5,0,2.2,'rgba(255,190,90,'+(.8*Math.min(1,t))+')',0);}),null);}
+ {const t=q('thr');if(t>0)for(const s of[-1,1])rbM(q('mThr'),.5,[-21,s*6],[-6,s*8],0,1,F('thr',[-21,s*6],()=>pJ(-14-7*t,s*6,0,()=>{pR(-5,-3.5,9,7,3,B);pC(-5,0,2.2,'rgba(255,190,90,'+(.8*Math.min(1,t))+')',0);})),null);}
  /* tail feathers -> swing 180deg over the top and become the swept-back crest */
- rbM(q('mTail'),2,[-17,0],[19,0],PI,1,()=>{const tl=10+4*q('tailL'),t5=q('tail5');const fe=(a)=>pJ(-17,0,PI+a,()=>{pP([0,-2.2,tl,-1.6,tl+3,0,tl,1.6,0,2.2],K,1.3);cx.strokeStyle=H;cx.lineWidth=.8;cx.beginPath();cx.moveTo(2,0);cx.lineTo(tl,0);cx.stroke();});
-  if(t5>0){fe(-.5*t5);fe(.5*t5);}fe(-.26);fe(.26);fe(0);},null);
+ rbM(q('mTail'),2,[-17,0],[-15,0],0,1,()=>{const tl=10+4*q('tailL'),t5=q('tail5');const fe=(a)=>pJ(-17,0,PI+a,()=>{pP([0,-2.2,tl,-1.6,tl+3,0,tl,1.6,0,2.2],K,1.3);cx.strokeStyle=H;cx.lineWidth=.8;cx.beginPath();cx.moveTo(2,0);cx.lineTo(tl,0);cx.stroke();});
+  if(t5>0)F('tail5',[-22,0],()=>{fe(-.5*t5);fe(.5*t5);})();fe(-.26);fe(.26);fe(0);},null);
  /* wings: feather plates fold down into the neck ruff, the side panel slides out and becomes the cheek guard */
  for(const s of[-1,1]){if(wP<=0)continue;const y0=s*(7+9*wP);
-  rbM(q('mFeat'),2.5,[4,y0],[-4,s*14],s*.5,1,()=>{for(let i=4;i>=0;i--){const f=q('wingF'+i);if(f<=0)continue;pJ(9,y0,-s*(.18+.13*i)*f,()=>{const l=16+i*1.6;pP([0,0,-l,-2.4,-l-3,0,-l,2.4,0,2.6],i%2?'#46506C':'#333A50',1.4);cx.strokeStyle=H;cx.lineWidth=1;cx.beginPath();cx.moveTo(-3,0);cx.lineTo(-l,0);cx.stroke();});}},
+  rbM(q('mFeat'),2.5,[4,y0],[-4,s*14],s*.5,1,()=>{for(let i=4;i>=0;i--){const f=q('wingF'+i);if(f<=0)continue;F('wingF'+i,[2,y0+s*10],()=>pJ(9,y0,-s*(.18+.13*i)*f,()=>{const l=16+i*1.6;pP([0,0,-l,-2.4,-l-3,0,-l,2.4,0,2.6],i%2?'#46506C':'#333A50',1.4);cx.strokeStyle=H;cx.lineWidth=1;cx.beginPath();cx.moveTo(-3,0);cx.lineTo(-l,0);cx.stroke();}))();}},
    ()=>{for(let j=0;j<6;j++){const a=PI-s*(PI/2)*(j/5);pJ(0,0,a,()=>pP([17,-4,25,-1.6,27,0,25,1.6,17,4],j%2?'#1A1E2B':'#22273A',1.3));}});
-  rbM(q('mWing'),3,[0,y0],[-3,s*25],0,1,()=>pJ(0,y0,0,()=>{pR(-18,-4,30,8,4,'#3B4560',1.8);cx.globalAlpha*=.5;pR(-13,s>0?-2.6:1,20,1.6,.8,H,0);cx.globalAlpha/=.5;pBolt(7,0,1);pBolt(-12,0,1);}),null);}
+  rbM(q('mWing'),3,[0,y0],[-3,s*25],0,1,F('wingP',[0,y0],()=>pJ(0,y0,0,()=>{pR(-18,-4,30,8,4,'#3B4560',1.8);cx.globalAlpha*=.5;pR(-13,s>0?-2.6:1,20,1.6,.8,H,0);cx.globalAlpha/=.5;pBolt(7,0,1);pBolt(-12,0,1);})),null);}
  /* head plate: left/right halves slide sideways out from behind the hull (1.2-2.0s), each carrying its eye; the hull slides in under them */
  {const u=q('mPlate');const half=s=>()=>{const k=L(.42,1,Math.min(1,u)),g=cx.globalAlpha,e=q('eye'),h=q('eyeH');cx.save();cx.translate(3,s*L(-2,0,Math.min(1,u)));cx.scale(k,k);
    pP([22,0,22,s*9,18,s*19,6,s*23,-8,s*19,-15,s*8,-15,0],PL,2.4);cx.globalAlpha=g*.8;pP([19,0,19,s*8,16,s*16,7,s*19,7,0],'#5E6A8A',0);cx.globalAlpha=g;
@@ -70,7 +77,7 @@ function dRaven(q,aimL,tt,st){RBOL='#06070A';const K='#16171D',B='#2A2F3E',H='#5
  rbM(q('mHull'),5,[0,0],[3,0],0,1,()=>{pR(-18,-10.5,34,21,9,'#1E2230',2);cx.strokeStyle=E;cx.lineWidth=.9;cx.beginPath();cx.roundRect(-16.5,-9,31,18,7.5);cx.stroke();cx.globalAlpha*=.85;pR(-14,-7.5,24,3,1.5,'#7C8AAA',0);cx.globalAlpha/=.85;
    cx.strokeStyle='#33405E';cx.lineWidth=1;cx.beginPath();cx.moveTo(-6,-10);cx.lineTo(-6,10);cx.stroke();},null);
  /* crest plates -> slide forward and tilt into the brows */
- {const c=q('crest');if(c>0)for(const s of[-1,1])rbM(q('mBrow'),7,[-12,s*5*c],[14,s*12.5],-s*1.25,1,()=>pJ(-12,s*5*c,s*.5,()=>pP([-5,-1.6,5,-1.2,6,0,5,1.2,-5,1.6],B,1.2)),
+ {const c=q('crest');if(c>0)for(const s of[-1,1])rbM(q('mBrow'),7,[-12,s*5*c],[14,s*12.5],-s*1.25,1,F('crest',[-12,s*5],()=>pJ(-12,s*5*c,s*.5,()=>pP([-5,-1.6,5,-1.2,6,0,5,1.2,-5,1.6],B,1.2))),
    ()=>{cx.strokeStyle='#15161E';cx.lineWidth=2.2;cx.beginPath();cx.moveTo(13,s*7);cx.lineTo(15,s*17);cx.stroke();});}
  /* Lv15 drill head -> slides down to the centre and turns over; its cover plates spread to beak width, so the drill becomes the hooked beak */
  {const u=q('mHead');rbM(u,8,[15,0],[-2,0],PI,1,()=>{const bl=4*q('beakL');pR(10,-7,10,14,6,K,1.6);pJ(18,0,0,()=>{for(const s of[-1,1]){pP([0,0,9+bl,0,0,s*6.5],BK,1.5);cx.strokeStyle='#55555E';cx.lineWidth=.8;cx.beginPath();cx.moveTo(1,s*2);cx.lineTo(7+bl,s*.6);cx.stroke();}});
@@ -82,76 +89,75 @@ function dRaven(q,aimL,tt,st){RBOL='#06070A';const K='#16171D',B='#2A2F3E',H='#5
    if(pH>0){cx.save();cx.translate(-22,0);cx.scale(pH,pH);cx.translate(22,0);cx.beginPath();cx.moveTo(-20,-3.2);cx.quadraticCurveTo(-34,1.5,-29.5,5.5);cx.quadraticCurveTo(-25,3.2,-20,4.4);cx.closePath();cx.fillStyle=BK;cx.fill();oL(1.8);cx.restore();}
    if(pL>.5){cx.strokeStyle='#76768A';cx.lineWidth=1.3;cx.beginPath();cx.moveTo(15,0);cx.quadraticCurveTo(-6,-1,L(-14,-26,pH),.6);cx.stroke();pC(8.5,-4,1,'#0B0B10',0);pC(8.5,4,1,'#0B0B10',0);}},null,true);}
  /* feather launcher turret -> swings up and locks as the dark forehead cap */
- {const u=q('mBeak');rbM(u,6.5,[0,0],[19,0],PI,1,()=>pJ(0,0,aimL*(1-Math.min(1,u*3)),()=>{const r2=q('rail2'),rl=5*q('railL');pC(0,0,6,B,1.5);for(const y of r2>0?[-3.5*r2,3.5*r2]:[0]){pR(2,y-1.5,12+rl,3,1.5,K,1.2);pP([8+rl,y-1.2,15+rl,y,8+rl,y+1.2],'#BDB7A8',0);}pC(0,0,2.4,E,1);}),
-  ()=>{pP([23,-7,24.5,0,23,7,18,5.5,18,-5.5],K,1.6);});}
+ {const u=q('mBeak');rbM(u,6.5,[0,0],[19,0],PI,1,()=>pJ(0,0,aimL*(1-Math.min(1,u*3)),()=>{const r2=q('rail2'),rl=5*q('railL');pC(0,0,6,B,1.5);F('rail2',[10,0],()=>{for(const y of r2>0?[-3.5*r2,3.5*r2]:[0]){pR(2,y-1.5,12+rl,3,1.5,K,1.2);pP([8+rl,y-1.2,15+rl,y,8+rl,y+1.2],'#BDB7A8',0);}})();pC(0,0,2.4,E,1);}),
+  ()=>{const g2=Math.min(1,u);for(let i=0;i<5;i++){const y=-6+i*3;pJ(22,y,(y/6)*.35,()=>pP([0,-1.6,(7+2*(i%2))*g2,-.6,(9+2*(i%2))*g2,.6,0,1.6],i%2?'#1A1E2B':'#262B3C',1.1));}pP([23,-7,24.5,0,23,7,18,5.5,18,-5.5],K,1.6);});}
 }
 
-function dMammoth(q,aimL,tt,st){RBOL='#1E140D';const F='#7A5236',FD='#4E3322',FL='#A0714A',IV='#F3EAD2',AR='#2C2826',AM='#FFB547',PI=Math.PI;
+function dMammoth(q,aimL,tt,st,FY){RBOL='#1E140D';const F='#7A5236',FD='#4E3322',FL='#A0714A',IV='#F3EAD2',AR='#2C2826',AM='#FFB547',PI=Math.PI;
  const fur=(x0,y0,x1,y1,n)=>{cx.strokeStyle=FD;cx.lineWidth=1;cx.beginPath();for(let i=0;i<n;i++){const x=x0+(x1-x0)*(i+.5)/n;cx.moveTo(x,y0);cx.quadraticCurveTo(x-1.5,(y0+y1)/2,x,y1);}cx.stroke();};
  const fF=fn=>()=>{cx.save();cx.translate(12,0);cx.scale(1.25,1.25);fn();cx.restore();};/* face-local -> body coords */
  /* tracks + fur skirts -> swing out and reshape into the big ears */
- {const sk=q('skirt');for(const s of[-1,1])rbM(q('mEar'),1,[0,s*13],[9.5,s*27],-s*.35,1,()=>{pR(-21,s*13-4,40,8,4,AR,1.4);cx.fillStyle='#4a423c';for(let i=0;i<6;i++)cx.fillRect(-18+i*6.5,s*13-3,2,6);
-   if(sk>0)pJ(0,s*(9+5*sk),0,()=>{pR(-19,-3,34,6,3,FD,1.3);fur(-17,-2,13,2,7);pBolt(-15,0,.9);pBolt(11,0,.9);});},
+ {const sk=q('skirt');for(const s of[-1,1])rbM(q('mEar'),1,[17,s*13],[19.5,s*15],0,1,()=>{pR(-21,s*13-4,40,8,4,AR,1.4);cx.fillStyle='#4a423c';for(let i=0;i<6;i++)cx.fillRect(-18+i*6.5,s*13-3,2,6);
+   if(sk>0)FY('skirt',[0,s*14],()=>pJ(0,s*(9+5*sk),0,()=>{pR(-19,-3,34,6,3,FD,1.3);fur(-17,-2,13,2,7);pBolt(-15,0,.9);pBolt(11,0,.9);}))();},
   fF(()=>pJ(6,s*12,0,()=>{pP([4,0,10,s*8,6,s*18,-6,s*19,-14,s*13,-12,s*3],F,1.8);pP([2,s*2,7,s*8,4,s*15,-5,s*16,-10,s*11,-9,s*4],FL,0);fur(-8,s*6,2,s*13,4);})),[14,s*9,q('mDome')]);}
  /* Lv15 rear guard plates -> slide forward onto the ear roots as cheek armour */
- {const g=q('guard');if(g>0)for(const s of[-1,1])rbM(q('mGuard'),.8,[-24,s*7],[6,s*22],s*PI/2,1,()=>pJ(-19-5*g,s*7,0,()=>{for(let i=0;i<3;i++)pR(-5+i*1.5,-6+i*2.5,8,5,1.6,i%2?'#3A332E':'#5A5047',1.2);cx.strokeStyle='#9a8a72';cx.lineWidth=.8;cx.beginPath();cx.moveTo(-4,-5);cx.lineTo(2,-5);cx.stroke();pBolt(-1,-3,.8);pBolt(1,2,.8);}),null,[8,s*10,q('mDome')]);}
+ {const g=q('guard');if(g>0)for(const s of[-1,1])rbM(q('mGuard'),2.6,[-24,s*7],[-12,s*7],0,1,FY('guard',[-24,s*7],()=>pJ(-19-5*g,s*7,0,()=>{for(let i=0;i<3;i++)pR(-5+i*1.5,-6+i*2.5,8,5,1.6,i%2?'#3A332E':'#5A5047',1.2);cx.strokeStyle='#9a8a72';cx.lineWidth=.8;cx.beginPath();cx.moveTo(-4,-5);cx.lineTo(2,-5);cx.stroke();pBolt(-1,-3,.8);pBolt(1,2,.8);})),null);}
  /* hull -> the big furred head dome */
  rbM(q('mDome'),3,[0,0],[14.5,0],0,1,()=>{pR(-20,-11.5,38,23,8,F,st<=1&&tt==null||st<1?2.8:1.8);if(st<=1){cx.strokeStyle='#D6AE82';cx.lineWidth=1;cx.beginPath();cx.moveTo(-15,-10);cx.lineTo(13,-10);cx.stroke();}fur(-18,-9,14,-4,9);fur(-18,4,14,9,9);},
   fF(()=>{pR(-12,-15,28,30,10,F,2.2);fur(-9,-12,10,-6,6);fur(-9,6,10,12,6);}));
  /* drum / backpack -> slides up under the brow plate */
- {const p=q('pack');rbM(q('mCore'),3.5,[-4-7*p,0],[25,0],0,1,()=>pJ(-4-7*p,0,p*PI/2,()=>{pR(-6,-5,12,10,4,AR,1.4);for(const x of[-3,0,3]){cx.strokeStyle='#5d5650';cx.lineWidth=1;cx.beginPath();cx.moveTo(x,-4.5);cx.lineTo(x,4.5);cx.stroke();}pC(0,0,1.6,AM,0);}),null);}
+ {const p=q('pack');rbM(q('mCore'),2.5,[-4-7*p,0],[2,0],0,1,()=>pJ(-4-7*p,0,p*PI/2,()=>{pR(-6,-5,12,10,4,AR,1.4);for(const x of[-3,0,3]){cx.strokeStyle='#5d5650';cx.lineWidth=1;cx.beginPath();cx.moveTo(x,-4.5);cx.lineTo(x,4.5);cx.stroke();}pC(0,0,1.6,AM,0);}),null);}
  /* belt links -> run into the trunk root (under the trunk) */
  {const b=q('belt');if(b>0)rbM(q('mTrunk'),3.6,[10,3],[10,0],0,1,()=>{for(let i=0;i<6;i++){const u=Math.min(1,b*1.15-i*.02);const x=L(-2,4+i*3,u);pR(x-1,-1-(i%2)*.5+3,2.2,2.2,.6,'#C9A04A',.8);}},null);}
  /* dome plates + hump -> turn 90deg and lock as the forehead brow plate */
- rbM(q('mBrow'),4,[-5,0],[26.5,0],PI/2,1,()=>{const o=q('domeO'),h=q('hump');pR(-15-5*o,-8,7,16,3,FL,1.3);pR(5+5*o,-8,7,16,3,FL,1.3);if(o<1)pR(-5,-8,10,16,3,FL,1.3);if(h>0)pJ(-30+20*h,0,0,()=>{pR(-6,-9,10,18,4,FD,1.4);fur(-5,-7,3,7,4);});},
-  fF(()=>{pR(9,-11,6,22,3,FD,1.4);}));
- /* small ears -> fold out flat onto the big ears as the inner flaps */
- {const e=q('ears');if(e>0)for(const s of[-1,1])rbM(q('mEar'),.9,[18,s*8],[10,s*24],0,1,()=>pJ(18,s*8,s*(PI*(1-.17*e)),()=>{pP([0,-1,12,-5,14,3,10,8,0,6].map((v,j)=>j%2?v*s:v),F,1.4);pP([2,1,10,-2,11,3,8,6,2,4.5].map((v,j)=>j%2?v*s:v),FL,0);}),null,[16,s*8,q('mDome')]);}
- /* head block -> slides back and opens into the eye sockets */
- rbM(q('mEye'),5,[19.5,0],[17,0],0,1,()=>{pR(14,-9,11,18,5,F,st<=1?2.6:1.6);fur(15,-7,23,-3,3);},
+ rbM(q('mEye'),4,[-5,0],[17,0],0,1,()=>{const o=q('domeO'),h=q('hump');pR(-15-5*o,-8,7,16,3,FL,1.3);pR(5+5*o,-8,7,16,3,FL,1.3);if(o<1)pR(-5,-8,10,16,3,FL,1.3);if(h>0)FY('hump',[-14,0],()=>pJ(-14,0,0,()=>{pR(-6,-9,10,18,4,FD,1.4);fur(-5,-7,3,7,4);}))();},
   fF(()=>{const e=q('eye'),h=q('eyeH');for(const s of[-1,1]){pE(4,s*7,4.2,3.4,'#140d08',1.3);pE(4,s*7,3*Math.max(.15,h),2.3,e>0?AM:'#7a5a2a',0);if(e>0){const g=cx.globalAlpha;cx.globalAlpha=g*.4*e;pC(4,s*7,7,'#FFD58A',0);cx.globalAlpha=g;}}}));
+ /* small ears -> fold out flat onto the big ears as the inner flaps */
+ {const e=q('ears');if(e>0)for(const s of[-1,1])rbM(q('mEar'),.9,[18,s*8],[10,s*24],0,1,FY('ears',[18,s*12],()=>pJ(18,s*8,s*(PI*(1-.17*e)),()=>{pP([0,-1,12,-5,14,3,10,8,0,6].map((v,j)=>j%2?v*s:v),F,1.4);pP([2,1,10,-2,11,3,8,6,2,4.5].map((v,j)=>j%2?v*s:v),FL,0);})),null,[16,s*8,q('mDome')]);}
+ /* head block -> slides back and opens into the eye sockets */
+ rbM(q('mBrow'),5,[19.5,0],[26.5,0],0,1,()=>{pR(14,-9,11,18,5,F,st<=1?2.6:1.6);fur(15,-7,23,-3,3);},
+  fF(()=>{pR(9,-11,6,22,3,FD,1.4);}));
  /* tusks -> swing down from the mounts into the big curved tusks */
- {const t=q('tusk'),tb=q('tuskB');for(const s of[-1,1])rbM(q('mTusk'),6,[22,s*7],[8,s*4.4],s*.8,1,()=>pJ(22,s*7,s*.35*tb,()=>{const l=4+5*t+7*tb;cx.beginPath();cx.moveTo(0,-1.6);cx.quadraticCurveTo(l*.7,-1.6,l,s*(-2-3*tb)*-1);cx.quadraticCurveTo(l*.6,1.8,0,1.6);cx.closePath();cx.fillStyle=IV;cx.fill();oL(1.2);pR(-1,-2,3,4,1,AR,.9);}),
+ {const t=q('tusk'),tb=q('tuskB');for(const s of[-1,1])rbM(q('mTusk'),6,[22,s*7],[8,s*4.4],s*.8,1,FY('tusk',[24,s*7],()=>pJ(22,s*7,s*.35*tb,()=>{const l=4+5*t+7*tb;cx.beginPath();cx.moveTo(0,-1.6);cx.quadraticCurveTo(l*.7,-1.6,l,s*(-2-3*tb)*-1);cx.quadraticCurveTo(l*.6,1.8,0,1.6);cx.closePath();cx.fillStyle=IV;cx.fill();oL(1.2);pR(-1,-2,3,4,1,AR,.9);})),
   fF(()=>{const tc=q('trunkC');cx.beginPath();cx.moveTo(-3,s*3.5);cx.quadraticCurveTo(-20,s*7,-12,s*(16+2*tc));cx.lineTo(-9.5,s*(15.5+2*tc));cx.quadraticCurveTo(-15,s*8,-1,s*6.5);cx.closePath();cx.fillStyle=IV;cx.fill();oL(1.3);}));}
  /* trunk gatling -> swings down 180deg, segments add on and hang over the chest, ending in the 3-barrel muzzle */
- {const u=q('mTrunk');rbM(u,9,[25,0],[9.5,0],PI,1,()=>pJ(25,0,aimL*(1-Math.min(1,u*3)),()=>{const seg=i=>{if(i>=2){const sp=q('split'),bl=2+.8*q('barL');for(const y of sp>0?[-2.2*sp,0,2.2*sp]:[0])pR(0,y-.9,bl,1.8,.8,AR,.9);return;}
+ {const u=q('mTrunk');rbM(u,9,[25,0],[9.5,0],0,1,()=>pJ(25,0,aimL*(1-Math.min(1,u*3)),()=>{const seg=i=>{if(i>=2){const sp=q('split'),bl=2+.8*q('barL');for(const y of sp>0?[-2.2*sp,0,2.2*sp]:[0])pR(0,y-.9,bl,1.8,.8,AR,.9);return;}
    const a=.75*(1-q('trunk'+i));pJ(0,0,a,()=>{pR(-.5,-3+i*.3,6.2-i*.3,6-i*.6,2.6,i%2?F:FL,1.2);cx.translate(5.6-i*.3,0);seg(i+1);});};seg(0);}),
   fF(()=>{const tc=q('trunkC');const segs=[[6,5.4],[6,5],[6,4.6],[5.5,4.2],[5,3.8],[4.5,3.4]],curl=[0,0,0,0,-.9,-1.2];cx.save();cx.translate(-2,0);
    segs.forEach(([l,w],i)=>{cx.rotate(i===0?PI:curl[i]*Math.min(1,tc+.3));pR(-.5,-w/2,l+1,w,w/2.2,i%2?F:FL,1.3);cx.translate(l,0);});
    for(const y2 of[-1.6,0,1.6])pR(0,y2-.7,4,1.4,.6,AR,.8);const w=WP.mg;if(w&&w.mf>0)pC(5,0,2.2,'rgba(255,240,190,.9)',0);cx.restore();}));}
 }
 
-function dCroc(q,aimL,tt,st){RBOL='#142016';const C='#3F5E34',CD='#2A4024',CL='#57773F',T='#ECE6CF',AM='#F2C14E',PI=Math.PI;
+function dCroc(q,aimL,tt,st,F){RBOL='#142016';const C='#3F5E34',CD='#2A4024',CL='#57773F',T='#ECE6CF',AM='#F2C14E',PI=Math.PI;
  const fF=fn=>()=>{cx.save();cx.translate(-15,0);cx.scale(1.65,1.65);fn();cx.restore();};
- /* tail whip -> swings up over the head, the segments line up as the brow spike band */
- rbM(q('mSpike'),1,[-24,0],[29,0],PI/2,1,()=>{const n=3+(q('tail4')>0?1:0),t4=q('tail4'),bl=q('blade'),tp=q('tip'),sw=Math.sin((G.t||0)*3)*.08*(1-Math.min(1,q('mSpike')*3));pJ(-15,0,0,()=>{for(let i=0;i<n;i++){const l=(i===3?3.85*t4:3.85),w=8-i*1.4;if(l<.05)continue;cx.rotate(sw);
+ /* tail whip -> turns 90deg in place at the rear and closes into the lower jaw */
+ rbM(q('mJaw'),7,[-24,0],[-21.6,0],0,1,()=>{const n=3+(q('tail4')>0?1:0),t4=q('tail4'),bl=q('blade'),tp=q('tip'),sw=Math.sin((G.t||0)*3)*.08*(1-Math.min(1,q('mSpike')*3));pJ(-15,0,0,()=>{for(let i=0;i<n;i++){const l=(i===3?3.85*t4:3.85),w=8-i*1.4;if(l<.05)continue;cx.rotate(sw);
    if(bl>0&&(i===1||i===2))for(const s of[-1,1])pP([-.5,s*w/2,-l+.5,s*(w/2-.8),-l/2,s*(w/2+2.6*bl)],T,1);
    pR(-l,-w/2,l+1,w,w/2.2,i%2?C:CD,1.3);cx.translate(-l+.5,0);}
-  if(tp>0)pP([.5,-2.4,-6*tp,0,.5,2.4],T,1.1);});},
-  fF(()=>{for(let i=0;i<7;i++){const y=-12+i*4;pP([24,y-1.8,30.5+(i%2?0:1.5),y,24,y+1.8],'#6E8F4C',1);}}));
+  if(tp>0)F('tip',[-30,0],()=>pP([.5,-2.4,-6*tp,0,.5,2.4],T,1.1))();});},
+  fF(()=>{const g=1.2*q('jawO');pR(-8,-15,8,30,5,CD,1.6);for(let i=0;i<7;i++){const y=-12+i*4;pP([-1+g,y-1.4,-4.2,y,-1+g,y+1.4],T,.6);}}));
  /* outrigger legs: rear pair tucks under the head plate, front pair swings up and its feet become the raised eye bumps */
  {const g=q('legs'),cl=q('claws');const leg=(x,s)=>()=>pJ(x,s*8,s*(PI-g*(x>0?2.0:1.0)),()=>{pR(-1,-2.2,11,4.4,2.2,CD,1.2);pJ(11,0,0,()=>{pE(1,0,3,3.4,C,1.1);if(cl>0)for(const c of[-1,0,1])pP([2.5,c*1.8-.5,2.5+3*cl,c*2.2,2.5,c*1.8+.5],T,.7);});});
-  if(g>0)for(const s of[-1,1]){rbM(q('mLegR'),4.5,[-9,s*8],[-4,s*22],s*PI/2,1,leg(-9,s),fF(()=>{for(let i=0;i<3;i++)pR(5+i*5.5,s*15.5-2.4,4.6,4.8,1.4,i%2?CL:'#4C6B3A',.8);}));
-   rbM(q('mEyeB'),5,[8,s*14],[16.4,s*16.5],0,1,leg(8,s),fF(()=>{const e=q('eye'),h=q('eyeH');pE(19,s*10,5,4.4,CL,1.4);pE(19.5,s*10,2.4*Math.max(.15,h),3.2,e>0?AM:'#7a6a2a',0);pR(19,s*10-2.6,1.1,5.2,.5,'#151515',0);if(e>0){const g2=cx.globalAlpha;cx.globalAlpha=g2*.35*e;pC(19.5,s*10,6.5,'#FFE08A',0);cx.globalAlpha=g2;}}));}}
- /* pontoons + side armour -> turn 90deg and lock across the bottom: left one = lower jaw, right one = upper tooth row */
- for(const s of[-1,1]){const fn=()=>{pR(-15,s*10-3.5,30,7,3.5,CD,1.3);const a=q('armor');if(a>0)pJ(0,s*(9+4*a),0,()=>{pR(-13,-3,26,6,3,C,1.3);for(let i=0;i<4;i++)pR(-11+i*6,-1.6,4,3.2,1.2,CL,.8);});};
-  if(s<0)rbM(q('mJaw'),7,[0,-11],[-21.6,0],PI/2,1,fn,fF(()=>{const g=1.2*q('jawO');pR(-8,-15,8,30,5,CD,1.6);for(let i=0;i<7;i++){const y=-12+i*4;pP([-1+g,y-1.4,-4.2,y,-1+g,y+1.4],T,.6);}}));
-  else rbM(q('mJaw'),7.5,[0,11],[-16.5,0],-PI/2,1,fn,fF(()=>{const g=1.2*q('jawO');cx.strokeStyle='#C97C6C';cx.lineWidth=.8;cx.beginPath();cx.moveTo(-1,-13);cx.lineTo(-1,13);cx.stroke();for(let i=0;i<7;i++){const y2=-10+i*4;pP([-1-g,y2-1.4,2.2,y2,-1-g,y2+1.4],T,.6);}}));}
+  if(g>0)for(const s of[-1,1]){rbM(q('mJaw'),7.5,[-9,s*8],[-16.5,s*8],0,1,F('legs',[-9,s*14],leg(-9,s)),fF(()=>{const g=1.2*q('jawO');cx.strokeStyle='#C97C6C';cx.lineWidth=.8;cx.beginPath();cx.moveTo(-1,0);cx.lineTo(-1,s*13);cx.stroke();for(let i=0;i<4;i++){const y2=s*(2+i*4);pP([-1-g,y2-1.4,2.2,y2,-1-g,y2+1.4],T,.6);}}));
+   rbM(q('mEyeB'),5,[8,s*14],[16.4,s*16.5],0,1,F('legs',[8,s*14],leg(8,s)),fF(()=>{const e=q('eye'),h=q('eyeH');pE(19,s*10,5,4.4,CL,1.4);pE(19.5,s*10,2.4*Math.max(.15,h),3.2,e>0?AM:'#7a6a2a',0);pR(19,s*10-2.6,1.1,5.2,.5,'#151515',0);if(e>0){const g2=cx.globalAlpha;cx.globalAlpha=g2*.35*e;pC(19.5,s*10,6.5,'#FFE08A',0);cx.globalAlpha=g2;}}));}}
+ /* pontoons + side armour -> stay at the sides, pull in and fold into the cheek armour scales */
+ for(const s of[-1,1]){const fn=()=>{pR(-15,s*10-3.5,30,7,3.5,CD,1.3);const a=q('armor');if(a>0)F('armor',[0,s*13],()=>pJ(0,s*(9+4*a),0,()=>{pR(-13,-3,26,6,3,C,1.3);for(let i=0;i<4;i++)pR(-11+i*6,-1.6,4,3.2,1.2,CL,.8);}))();};
+  rbM(q('mLegR'),4.5,[0,s*11],[2,s*24],0,1,fn,fF(()=>{for(let i=0;i<3;i++)pR(5+i*5.5,s*15.5-2.4,4.6,4.8,1.4,i%2?CL:'#4C6B3A',.8);}));}
  /* head block grows from the left/right back-scale rows spreading sideways in 3 locked steps (0.8 -> 1.2 -> 1.6s); the hull slides under them */
  {const p=st>=4?1:(st===3&&tt!=null?Math.min(1,Math.max(0,(tt-.8)/.8)):0);let w=0;for(let s3=0;s3<3;s3++)w+=SSm((p*3-s3)/.55)/3;
   rbM(p>0?1:0,3.9,[0,0],[0,0],0,1,()=>{pR(-16,-8.5,32,17,7,C,1.8);for(let r=-1;r<=1;r+=2)for(let i=0;i<5;i++)pR(-12+i*5,r*3.5-1.8,3.8,3.6,1.2,CL,.7);},null);
   if(p>0)for(const s of[-1,1])rbAdd(4,fF(()=>{const hw=L(.3,1,w),x0=L(9.7,2,w),x1=L(19.4,25,w);cx.beginPath();cx.roundRect(x0,s>0?0:-17*hw,x1-x0,17*hw,s>0?[0,0,9*hw,9*hw].reverse():[9*hw,9*hw,0,0].reverse());cx.fillStyle=C;cx.fill();oL(2);
    const rows=Math.max(1,Math.round(1+2*w));for(let r=0;r<rows;r++){const y=s*(2.5+r*5)*hw/(L(.3,1,w)?1:1);if(Math.abs(y)>17*hw-2.5)continue;for(let i=0;i<4;i++)pR(x0+2+i*(x1-x0-4)/4,y-1.6,(x1-x0-4)/4-.8,3.2,1,CL,.7);}
    cx.strokeStyle=CD;cx.lineWidth=.8;cx.beginPath();cx.moveTo(x0+1,0);cx.lineTo(x1-1,0);cx.stroke();}));}
- /* front armour plate -> slides under the snout */
- {const a=q('armF');if(a>0)rbM(q('mSnout'),3,[10+4*a,0],[-4,0],PI,1,()=>pJ(10+4*a,0,0,()=>pR(-3,-7,5,14,2.5,CD,1.2)),null);}
+ /* front armour plate -> slides down over the plate and widens into the flat snout */
+ {const a=q('armF');if(a>0)rbM(q('mSnout'),6,[10+4*a,0],[-5.1,0],0,1,F('armF',[14,0],()=>pJ(10+4*a,0,0,()=>pR(-3,-7,5,14,2.5,CD,1.2))),fF(()=>{pR(-2,-16,16,32,7,'#46683A',1.8);pC(11,-3.5,1.1,CD,0);pC(11,3.5,1.1,CD,0);}));}
  /* back ridge scales -> slide up behind the spike band */
- rbM(q('mSpike'),1.5,[-1.5,0],[25,0],PI/2,1,()=>{for(let i=0;i<6;i++){const s=q('sc'+i);if(s<=0)continue;const x=-13+i*4.6,sd=i%2?1:-1;pJ(x,0,sd*(PI/2)*(1-s),()=>pP([-1.6,0,1.6,0,0,4.5*sd],'#6E8F4C',1));}},null);
- /* head + long snout -> swings down 180deg and shortens/widens into the wide flat front-on snout */
- rbM(q('mSnout'),6,[17,0],[-5.1,0],PI,1,()=>{const jl=4*q('jawL'),te=q('teeth'),len=(18+jl)*.8;pR(12,-7,8,14,5,C,1.6);
+ rbM(q('mSpike'),1.5,[-1.5,0],[0,0],0,1,()=>{for(let i=0;i<6;i++){const s=q('sc'+i);if(s<=0)continue;const x=-13+i*4.6,sd=i%2?1:-1;F('sc'+i,[x,sd*6],()=>pJ(x,0,sd*(PI/2)*(1-s),()=>pP([-1.6,0,1.6,0,0,4.5*sd],'#6E8F4C',1)))();}},null);
+ /* head + long snout -> snout pulls back in place at the top and splits into the brow spike band */
+ rbM(q('mSpike'),1,[17,0],[29,0],0,1,()=>{const jl=4*q('jawL'),te=q('teeth'),len=(18+jl)*.8;pR(12,-7,8,14,5,C,1.6);
    if(te>0)for(const s of[-1,1])for(let i=0;i<5;i++){const x=19+i*(len-3)/5;pP([x,s*(3.4-i*.25),x+1.1,s*(3.4-i*.25+1.5*te),x+2.2,s*(3.4-i*.25)],T,.6);}
    pP([18,-4.5,18+len,-2.6,18+len+1.5,0,18+len,2.6,18,4.5],C,1.6);pC(18+len-1,-1.3,.7,CD,0);pC(18+len-1,1.3,.7,CD,0);for(const s of[-1,1]){pE(15,s*4.6,3,2.6,CL,1.1);pE(15.5,s*4.6,1.5,1.3,'#7a6a2a',0);}},
-  fF(()=>{pR(-2,-16,16,32,7,'#46683A',1.8);pC(11,-3.5,1.1,CD,0);pC(11,3.5,1.1,CD,0);}));
+  fF(()=>{for(let i=0;i<7;i++){const y=-12+i*4;pP([24,y-1.8,30.5+(i%2?0:1.5),y,24,y+1.8],'#6E8F4C',1);}}));
 }
 
 const cv=document.getElementById('c');cx=cv.getContext('2d');
