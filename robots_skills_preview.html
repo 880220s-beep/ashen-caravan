@@ -241,9 +241,9 @@ function rbFire(w,L0,E,dt){const T=rbT(),R=TRNG,s=rbS(),D=rbD()*RBK[CAR][s],L=rb
   const o=(bi-(nb-1)/2)*4;if(s>=3){sh(o-3);sh(o+3);}else sh(o);
   if(s>=4){w.rbSp=(w.rbSp||0)-1;if(!(w.rbSpT>G.t)){w.rbSpT=G.t+3*T;for(const sd of[-1,1])RBP.push({k:'sp',x:P.x+sa*sd*14,y:P.y-ca*sd*14,a,sp:820,dist:0,max:R,hits:new Set(),d:D*7,t:0});beep(180,.15,'square',.07,90);}}
   w.aim=a;w.mf=.05;if(n%2===0)sndShot();return;}
- if(CAR==='croc'){if(w.cd>0)return;const rad=R*(.40+.012*Math.min(G.lv||1,20))*(s>=4?1.08:1),t=nearest(1,rad+20)[0];if(!t)return;w.cd=.9*T;w.rbN=(w.rbN||0)+1;const a=Math.atan2(t.y-P.y,t.x-P.x);
+ if(CAR==='croc'){if(w.cd>0)return;const rad=R*(.40+.012*Math.min(G.lv||1,20))*(s>=4?1.08:1),t=nearest(1,rad+20)[0];if(!t)return;const CS=s>=4?1.55:1;/* v82: awakened croc swings 1.55x slower, 1.55x harder */w.cd=.9*T*CS;w.rbN=(w.rbN||0)+1;const a=Math.atan2(t.y-P.y,t.x-P.x);
   const sweep=(a,deg,rd,n,dm,col)=>{const half=deg/2*Math.PI/180,c=[];for(const e of rbPool()){const dx=e.x-P.x,dy=e.y-P.y,d=Math.hypot(dx,dy);if(d>rd+e.r)continue;let da=Math.atan2(dy,dx)-a;da=Math.atan2(Math.sin(da),Math.cos(da));if(Math.abs(da)>half&&d>e.r+P.r*.6)continue;c.push([d,e]);}c.sort((p,q)=>p[0]-q[0]);c.slice(0,n).forEach(v=>rbHit(v[1],dm));RBP.push({k:'c',a,rad:rd,half,t:0,T:.2,col,side:w.rbN%2?1:-1});};
-  if(s>=4){for(const k of[0,1])(G.bq=G.bq||[]).push({t:G.t+k*.15,f:()=>{sweep(a,180,rad,L+3,D,'j');beep(140,.08,'square',.07,60);}});rbHit(t,D*2);RBP.push({k:'b',x:t.x,y:t.y,t:0,T:.25});}
+  if(s>=4){for(const k of[0,1])(G.bq=G.bq||[]).push({t:G.t+k*.15,f:()=>{sweep(a,180,rad,L+3,D*CS,'j');beep(140,.08,'square',.07,60);}});rbHit(t,D*2*CS);RBP.push({k:'b',x:t.x,y:t.y,t:0,T:.25});}
   else{const deg=s>=1?160:140;const nt=s===0?Math.min(2,L+1):L+1;sweep(a,deg,rad,nt,D);if(s>=3)(G.bq=G.bq||[]).push({t:G.t+.1,f:()=>sweep(a,deg,rad,nt,D)});if(s>=2&&w.rbN%3===0){rbHit(t,D*2.5);RBP.push({k:'b',x:t.x,y:t.y,t:0,T:.25});}}
   w.aim=a;beep(240,.07,'sawtooth',.05,90);}}
 function rbProj(dt){if(!RBP.length)return;const pool=rbPool();for(let i=RBP.length-1;i>=0;i--){const p=RBP[i];p.t=(p.t||0)+dt;
