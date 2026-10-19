@@ -1,4 +1,4 @@
-<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>robots preview v82i</title><style>body{margin:0;background:#26313D;color:#fff;font:14px system-ui;text-align:center}button{margin:3px;padding:8px 12px;font:700 14px system-ui;border-radius:8px;border:2px solid #FFC83D;background:#26313D;color:#FFC83D}canvas{max-width:100%}</style><div id=ui></div><canvas id=c width=420 height=520></canvas><script>const TAU=Math.PI*2;const G={t:0};const P={x:0,y:0,ang:0};let cx;
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>robots preview v82j</title><style>body{margin:0;background:#26313D;color:#fff;font:14px system-ui;text-align:center}button{margin:3px;padding:8px 12px;font:700 14px system-ui;border-radius:8px;border:2px solid #FFC83D;background:#26313D;color:#FFC83D}canvas{max-width:100%}</style><div id=ui></div><canvas id=c width=420 height=520></canvas><script>const TAU=Math.PI*2;const G={t:0};const P={x:0,y:0,ang:0};let cx;
 const WP={mg:{mf:0}};
 
 /* ===== v82 art30 preview: 3 ground-vehicle robots, lion/bull transform pattern (top-down, front=+x, face revealed at Lv20 awakening facing up) ===== */
@@ -9,7 +9,7 @@ const RBS={
  raven:{wingP:[1,.5,.9],wingF0:[1,1.0,1.3],tail5:[1,1.4,1.7],rail2:[1,1.8,2.1],
   wingF1:[2,.5,.8],wingF2:[2,.9,1.2],thr:[2,1.3,1.6],railL:[2,1.7,2.0],
   wingF3:[3,.5,.8],wingF4:[3,.65,.95],crest:[3,1.1,1.4],beakL:[3,1.5,1.8],tailL:[3,1.9,2.2],
-  turn:[4,0,.9],mTail:[4,.3,.75],mWheel:[4,.45,.9],mThr:[4,.45,.9],mFeat:[4,.6,1.05],mWing:[4,.9,1.35],mBrow:[4,1.2,1.65],mHull:[4,1.4,2.0],mPlate:[4,1.2,2.0],mHead:[4,1.2,2.0],mBeak:[4,1.6,2.1],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]},
+  turn:[4,0,.9],mTail:[4,.3,.75],mWheel:[4,.45,.9],mThr:[4,.45,.9],mFeat:[4,.6,1.05],mWing:[4,.9,1.35],mBrow:[4,1.2,1.65],mHull:[4,1.4,2.0],mPlate:[4,1.2,2.0],mHead:[4,1.0,1.7],mShell:[4,1.4,2.0],mBeak:[4,1.6,2.1],eyeH:[4,2.1,2.4],eye:[4,2.55,2.7]},
  mammoth:{domeO:[1,.5,.8],trunk0:[1,.8,1.0],trunk1:[1,.9,1.1],trunk2:[1,1.0,1.2],trunk3:[1,1.1,1.3],split:[1,1.4,1.6],tusk:[1,1.8,2.1],
   ears:[2,.5,.9],belt:[2,1.0,1.4],barL:[2,1.5,1.8],skirt:[2,1.9,2.2],
   pack:[3,.5,.9],hump:[3,1.0,1.3],tuskB:[3,1.4,1.8],guard:[3,1.9,2.2],
@@ -32,11 +32,11 @@ const L=(a,b,t)=>a+(b-a)*t;
 /* Lv20 (lion pattern): every Lv15 part slides/rotates from its Lv15 anchor a15 to its face anchor a20 and reshapes (f15 -> f20 swap while moving, both opaque mid-way); nothing fades out.
    Parts queue with a z so the end order can differ from the Lv15 order. */
 let RBQ=[],RBZ=0;
-function rbM(u,z20,a15,a20,rot,sc,f15,f20,hg){const z=u<.5?RBZ:z20;RBZ++;RBQ.push([z,()=>{if(u<=0){f15();return;}
+function rbM(u,z20,a15,a20,rot,sc,f15,f20,hg,keep){const z=u<.5?RBZ:z20;RBZ++;RBQ.push([z,()=>{if(u<=0){f15();return;}
  const x=L(a15[0],a20[0],u),y=L(a15[1],a20[1],u),a=rot*u,s=L(1,sc,u),r=f20?SSm((Math.min(u,1)-.15)/.75):0;
  if(hg){/* visible hinge arm / rail from the fixed pivot to the moving part */const ha=Math.min(1,u)<.999||(hg[2]!=null&&hg[2]<.999)?1:0;if(ha){cx.save();cx.lineCap='round';cx.strokeStyle=RBOL;cx.lineWidth=4.2;cx.beginPath();cx.moveTo(hg[0],hg[1]);cx.lineTo(x,y);cx.stroke();cx.strokeStyle='#8a8478';cx.lineWidth=2.2;cx.stroke();pC(hg[0],hg[1],2,'#C9A04A',1);pC(x,y,1.6,'#C9A04A',1);cx.restore();}}
- if(r<1){cx.save();const g=cx.globalAlpha;cx.translate(x,y);cx.rotate(a);cx.scale(s*L(1,1.2,r),s*L(1,1.2,r));cx.translate(-a15[0],-a15[1]);cx.globalAlpha=g*Math.min(1,2-2*r);f15();cx.restore();}
- if(r>0){cx.save();const g=cx.globalAlpha;cx.translate(x,y);cx.rotate(a-rot);cx.scale(s/sc*L(.72,1,r),s/sc*L(.72,1,r));cx.translate(-a20[0],-a20[1]);cx.globalAlpha=g*Math.min(1,2*r);f20();cx.restore();}}]);}
+ /* fully solid (no alpha): the old shape shrinks under the new one, which grows over it */if(keep||r<1){cx.save();cx.translate(x,y);cx.rotate(a);const k1=keep?1:L(1,.55,r);cx.scale(s*k1,s*k1);cx.translate(-a15[0],-a15[1]);f15();cx.restore();}
+ if(keep||r>0){cx.save();cx.translate(x,y);cx.rotate(a-rot);const k2=keep?1:L(.3,1,r);cx.scale(s/sc*k2,s/sc*k2);cx.translate(-a20[0],-a20[1]);f20();cx.restore();}}]);}
 function rbAdd(z,fn){RBQ.push([z,fn]);RBZ++;}
 function rbFlush(){RBQ.map((e,i)=>[e[0],i,e[1]]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]).forEach(e=>e[2]());RBQ=[];RBZ=0;}
 /* draw at P: st=stage 0..3 (4=awakened), tt=transform time to st+1 (null=idle) */
@@ -75,8 +75,12 @@ function dRaven(q,aimL,tt,st){RBOL='#06070A';const K='#16171D',B='#2A2F3E',H='#5
  /* Lv15 drill head -> slides down to the centre and turns over; its cover plates spread to beak width, so the drill becomes the hooked beak */
  {const u=q('mHead');rbM(u,8,[15,0],[-2,0],PI,1,()=>{const bl=4*q('beakL');pR(10,-7,10,14,6,K,1.6);pJ(18,0,0,()=>{for(const s of[-1,1]){pP([0,0,9+bl,0,0,s*6.5],BK,1.5);cx.strokeStyle='#55555E';cx.lineWidth=.8;cx.beginPath();cx.moveTo(1,s*2);cx.lineTo(7+bl,s*.6);cx.stroke();}});
    for(const s of[-1,1]){pC(14,s*5,2.6,'#0B0B0E',1);pC(14,s*5,1.6,'#6b5a33',0);}},
-  ()=>{const w=L(.45,1,SSm(Math.min(1,u)));cx.save();cx.scale(1,w);cx.beginPath();cx.moveTo(17,-11);cx.lineTo(4,-10.5);cx.quadraticCurveTo(-12,-8,-26,-2.4);cx.quadraticCurveTo(-34,1.5,-29.5,5.5);cx.quadraticCurveTo(-25,3.2,-20,4.4);cx.quadraticCurveTo(-4,9,4,10.5);cx.lineTo(17,11);cx.closePath();cx.fillStyle=BK;cx.fill();cx.restore();cx.save();cx.scale(1,w);cx.beginPath();cx.moveTo(17,-11);cx.lineTo(4,-10.5);cx.quadraticCurveTo(-12,-8,-26,-2.4);cx.quadraticCurveTo(-34,1.5,-29.5,5.5);cx.quadraticCurveTo(-25,3.2,-20,4.4);cx.quadraticCurveTo(-4,9,4,10.5);cx.lineTo(17,11);cx.closePath();cx.restore();oL(2);
-   cx.strokeStyle='#76768A';cx.lineWidth=1.3;cx.beginPath();cx.moveTo(15,0);cx.quadraticCurveTo(-6,-1,-26,.6);cx.stroke();cx.strokeStyle='#0B0B10';cx.lineWidth=1;cx.beginPath();cx.moveTo(-6,1*w);cx.quadraticCurveTo(-14,6*w,-20,4.6*w);cx.stroke();pC(8.5,-4*w,1,'#0B0B10',0);pC(8.5,4*w,1,'#0B0B10',0);});}
+  ()=>{/* beak shell unfolds over the drill in 3 stages (1.4-2.0s): upper plate, lower plate, then the hook; the drill tip stays visible until the hook closes */
+   const sh=q('mShell'),st3=k=>SSm(Math.min(1,Math.max(0,sh*3-k))),pU=st3(0),pL=st3(1),pH=st3(2);if(sh<=0)return;
+   const half=(s,p)=>{if(p<=0)return;cx.save();cx.scale(1,p);cx.beginPath();cx.moveTo(17,0);cx.lineTo(17,s*11);cx.lineTo(4,s*10.5);cx.quadraticCurveTo(-10,s*(s<0?8:9),L(-14,-24,pH),s*(s<0?3:4.4));cx.lineTo(L(-14,-24,pH),0);cx.closePath();cx.fillStyle=BK;cx.fill();oL(1.8);cx.restore();};
+   half(-1,pU);half(1,pL);
+   if(pH>0){cx.save();cx.translate(-22,0);cx.scale(pH,pH);cx.translate(22,0);cx.beginPath();cx.moveTo(-20,-3.2);cx.quadraticCurveTo(-34,1.5,-29.5,5.5);cx.quadraticCurveTo(-25,3.2,-20,4.4);cx.closePath();cx.fillStyle=BK;cx.fill();oL(1.8);cx.restore();}
+   if(pL>.5){cx.strokeStyle='#76768A';cx.lineWidth=1.3;cx.beginPath();cx.moveTo(15,0);cx.quadraticCurveTo(-6,-1,L(-14,-26,pH),.6);cx.stroke();pC(8.5,-4,1,'#0B0B10',0);pC(8.5,4,1,'#0B0B10',0);}},null,true);}
  /* feather launcher turret -> swings up and locks as the dark forehead cap */
  {const u=q('mBeak');rbM(u,6.5,[0,0],[19,0],PI,1,()=>pJ(0,0,aimL*(1-Math.min(1,u*3)),()=>{const r2=q('rail2'),rl=5*q('railL');pC(0,0,6,B,1.5);for(const y of r2>0?[-3.5*r2,3.5*r2]:[0]){pR(2,y-1.5,12+rl,3,1.5,K,1.2);pP([8+rl,y-1.2,15+rl,y,8+rl,y+1.2],'#BDB7A8',0);}pC(0,0,2.4,E,1);}),
   ()=>{pP([23,-7,24.5,0,23,7,18,5.5,18,-5.5],K,1.6);});}
@@ -102,7 +106,7 @@ function dMammoth(q,aimL,tt,st){RBOL='#1E140D';const F='#7A5236',FD='#4E3322',FL
  rbM(q('mBrow'),4,[-5,0],[26.5,0],PI/2,1,()=>{const o=q('domeO'),h=q('hump');pR(-15-5*o,-8,7,16,3,FL,1.3);pR(5+5*o,-8,7,16,3,FL,1.3);if(o<1)pR(-5,-8,10,16,3,FL,1.3);if(h>0)pJ(-30+20*h,0,0,()=>{pR(-6,-9,10,18,4,FD,1.4);fur(-5,-7,3,7,4);});},
   fF(()=>{pR(9,-11,6,22,3,FD,1.4);}));
  /* small ears -> fold out flat onto the big ears as the inner flaps */
- {const e=q('ears');if(e>0)for(const s of[-1,1])rbM(q('mEar'),1.5,[18,s*8],[8,s*26],0,1,()=>pJ(18,s*8,s*(PI*(1-.17*e)),()=>{pP([0,-1,12,-5,14,3,10,8,0,6].map((v,j)=>j%2?v*s:v),F,1.4);pP([2,1,10,-2,11,3,8,6,2,4.5].map((v,j)=>j%2?v*s:v),FL,0);}),null,[16,s*8,q('mDome')]);}
+ {const e=q('ears');if(e>0)for(const s of[-1,1])rbM(q('mEar'),.9,[18,s*8],[10,s*24],0,1,()=>pJ(18,s*8,s*(PI*(1-.17*e)),()=>{pP([0,-1,12,-5,14,3,10,8,0,6].map((v,j)=>j%2?v*s:v),F,1.4);pP([2,1,10,-2,11,3,8,6,2,4.5].map((v,j)=>j%2?v*s:v),FL,0);}),null,[16,s*8,q('mDome')]);}
  /* head block -> slides back and opens into the eye sockets */
  rbM(q('mEye'),5,[19.5,0],[17,0],0,1,()=>{pR(14,-9,11,18,5,F,st<=1?2.6:1.6);fur(15,-7,23,-3,3);},
   fF(()=>{const e=q('eye'),h=q('eyeH');for(const s of[-1,1]){pE(4,s*7,4.2,3.4,'#140d08',1.3);pE(4,s*7,3*Math.max(.15,h),2.3,e>0?AM:'#7a5a2a',0);if(e>0){const g=cx.globalAlpha;cx.globalAlpha=g*.4*e;pC(4,s*7,7,'#FFD58A',0);cx.globalAlpha=g;}}}));
