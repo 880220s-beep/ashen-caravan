@@ -18,7 +18,7 @@ const STAR_T=[.75,.5];
 const SKEY=Q.has('dev')?'ac_save_dev':'ac_save';/* v120: dev=1 uses its own save, real progress untouched */const SAVE=(()=>{let s={};try{s=JSON.parse(localStorage.getItem(SKEY)||'{}')||{};}catch(e){}return Object.assign({gold:0,up:{hp:0,dmg:0,spd:0,mag:0},cars:{tank:1},car:'tank',ach:{},stage:1,diff:0,mute:0,noads:0},s);})();
 function saveS(){try{localStorage.setItem(SKEY,JSON.stringify(SAVE));}catch(e){}}
 if(Q.has('dev')){SAVE.gold=SAVE.dia=999999;}/* v120: dev=1 = fresh game with infinite gold/diamonds (cars, levels, stats start locked) */
-const PLAY=Q.has('play')||Q.has('dps');function difOpen(st,d){if(d<=0)return true;const W=SAVE.wins||{};return d===1?!!W[st+'n']:!!W[st+'h'];}{SAVE.wins=SAVE.wins||{};if(!SAVE._w81){SAVE._w81=1;const S0=SAVE.stars||{};for(const k in S0)if(S0[k]>0)SAVE.wins[k]=1;try{localStorage.setItem(SKEY,JSON.stringify(SAVE));}catch(e){}}if(SAVE.diff===true)SAVE.diff=1;}const DEVQ=Q.has('dev')?'&dev=1':'';const DIFF=Q.get('diff')==='hell'?2:Q.get('diff')==='hard'?1:0;const HELL=DIFF===2;const DHP=[1,1.85,2.6][DIFF],DBHP=[1,1.7,2.0][DIFF],DDMG=[1,1.4,1.85][DIFF];const HELLK={hp:1.28,dmg:1.30,spawn:1.13,boss:1.15,xp:1.05};
+const PLAY=Q.has('play')||Q.has('dps');function difOpen(st,d){if(d<=0||Q.has('dev'))return true;/* v82: dev=1 unlocks every difficulty */const W=SAVE.wins||{};return d===1?!!W[st+'n']:!!W[st+'h'];}{SAVE.wins=SAVE.wins||{};if(!SAVE._w81){SAVE._w81=1;const S0=SAVE.stars||{};for(const k in S0)if(S0[k]>0)SAVE.wins[k]=1;try{localStorage.setItem(SKEY,JSON.stringify(SAVE));}catch(e){}}if(SAVE.diff===true)SAVE.diff=1;}const DEVQ=Q.has('dev')?'&dev=1':'';const DIFF=Q.get('diff')==='hell'?2:Q.get('diff')==='hard'?1:0;const HELL=DIFF===2;const DHP=[1,1.85,2.6][DIFF],DBHP=[1,1.7,2.0][DIFF],DDMG=[1,1.4,1.85][DIFF];const HELLK={hp:1.28,dmg:1.30,spawn:1.13,boss:1.15,xp:1.05};
 /* ===================== V79 TUNING BLOCK (edit numbers here) ===================== */
 const TUNE={
  laser:{dur:3.5,tickHz:10,dpsMul:3.2/*=2.0 x1.6*/,wPx:18.2,capBoss:.04,capMini:.10,sparkMax:24},
@@ -2481,7 +2481,7 @@ const DN=['쉬움','어려움','지옥'];
 function clrSync(){SAVE.clr=SAVE.clr||{};const W=SAVE._clr116?{}:(SAVE.wins||{});SAVE._clr116=1;for(let m=1;m<=8;m++){const c=SAVE.clr[m]=SAVE.clr[m]||{e:0,h:0,x:0};if(W[m+'x'])c.x=c.h=c.e=1;if(W[m+'h'])c.h=c.e=1;if(W[m+'n'])c.e=1;if(c.x)c.h=1;if(c.h)c.e=1;}
  if(!SAVE.hellOpen&&hardN()>=8)SAVE.hellOpen=1;SAVE.mdiff=SAVE.mdiff||{};}
 function hardN(){let n=0;for(let m=1;m<=8;m++)if(SAVE.clr&&SAVE.clr[m]&&SAVE.clr[m].h)n++;return n;}
-function dOpen(m,d){if(d===0)return true;if(d===1)return !!(SAVE.clr[m]&&SAVE.clr[m].e);return !!SAVE.hellOpen;}
+function dOpen(m,d){if(Q.has('dev'))return true;if(d===0)return true;if(d===1)return !!(SAVE.clr[m]&&SAVE.clr[m].e);return !!SAVE.hellOpen;}
 function mDiff(m){const d=SAVE.mdiff[m]||0;return dOpen(m,d)?d:0;}
 clrSync();saveS();
 function mapOpen(i){if(i===0||Q.has('dev'))return true;const c=SAVE.clr&&SAVE.clr[i];return !!(c&&c.e)||SAVE.stage>i;}
@@ -3109,8 +3109,8 @@ function stamp(e,a){if(G.t!==lastF){lastF=G.t;nf=0;}if(nf>=4)return;if(G.t-(e._s
 const _h=hit;hit=function(e,d,kb,ang,col){if(window.HFOFF)return _h.apply(this,arguments);const basic=isBasic();const r=_h.apply(this,arguments);if(!e)return r;
  const a=Math.atan2(e.y-P.y,e.x-P.x),bs=e===G.boss||!!e.mb,fz=frozen();HFX.n++;
  if(!window.HFNST)stamp(e,a);
- if(!window.HFNSQ&&!fz&&!e._sqOn&&SQ.size<16&&G.t-(e._sqT??-9)>=.15){e._sqT=G.t;e._sqOn=1;e._sqK=(bs||e.elite)||!basic?.5:1;SQ.add(e);}
- if(!window.HFNKB&&basic&&!fz&&!bs&&!e.elite&&!e.dead&&KB.size<16&&!KB.has(e)&&G.t-(e._hkT??-9)>=.16){e._hkT=G.t;e._hkA=a;e._hkD=0;KB.add(e);}
+ if(!window.HFNSQ&&!fz&&!e._sqOn&&SQ.size<16&&G.t-(e._sqT??-9)>=.15){e._sqT=G.t;e._sqOn=1;e._sqK=1;SQ.add(e);}
+ if(!window.HFNKB&&basic&&CAR!=='flame'&&!fz&&!bs&&!e.elite&&!e.dead&&KB.size<16&&!KB.has(e)&&G.t-(e._hkT??-9)>=.16){e._hkT=G.t;e._hkA=a;e._hkD=0;KB.add(e);}
  if(basic)thud();return r;};
 const _u=update;update=function(dt){_u(dt);
  if(window.HFQ&&HFQ.length){const q=HFQ;window.HFQ=[];for(const x of q){if(G.t>=x.t)x.f();else HFQ.push(x);}}
