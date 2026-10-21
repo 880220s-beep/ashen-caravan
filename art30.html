@@ -1636,7 +1636,7 @@ const FE=.36;/* v46: feet line = robot feet line */
 // ===== v48 code-drawn 성전차 (rounded), part-based 3s transform; Lv15 final, Lv20 core overcharge =====
 function RTAB(){return [22,29.7,35.2,40.7];}/* v51: v37 hitboxes *//* v50: tank hitbox up to 1.41x */
 const TKS=[1,60/48,74/60,85/72];/* v51: match v37 car max dimension 42/60/74/85 *//* v50: on-screen width 1/1.3/1.6/1.9 x Lv1 */
-const TK={O:'#F58032',O2:'#c4601e',N:'#30465C',N2:'#1d2633',B:'#4fc3ff',
+const TK={O:'#F58032',O2:'#c4601e',N:'#30465C',N2:'#1d2633',B:'#FFD54A',/* v130: no blue on the lion tank */
  TR:[7,8,8,11],/* turret radius per stage (Lv15 >= 1.3x Lv10) */
  PARTS:[[],['podL','podR','twin'],['trackL','trackR','engL','engR'],['batL','batR','shield','bigT']],
  POS:{podL:[-2,-17],podR:[-2,17],twin:[14,0],trackL:[0,-25],trackR:[0,25],engL:[-26,-7],engR:[-26,7],batL:[2,-30],batR:[2,30],shield:[25,0],bigT:[4,0]}};
@@ -1647,7 +1647,7 @@ function tkPart(n,o){const q=o.off[n];if(!o.has.has(n)&&!q)return;cx.save();if(q
  const [x,y]=TK.POS[n];cx.translate(x,y);
  if(n==='podL'||n==='podR'){cx.fillStyle=TK.O;cx.beginPath();cx.arc(0,0,7,0,TAU);cx.fill();tkO();cx.fillStyle=TK.N;cx.beginPath();cx.arc(0,0,4,0,TAU);cx.fill();cx.fillStyle=TK.B;cx.beginPath();cx.arc(0,0,1.8,0,TAU);cx.fill();cx.fillStyle=TK.N;rr(4,-1.5,6,3,1.5);cx.fill();}
  else if(n==='trackL'||n==='trackR'){cx.fillStyle=TK.N;rr(-24,-5,48,10,5);cx.fill();tkO();cx.fillStyle=TK.O;rr(-20,-3.5,40,7,3.5);cx.fill();cx.fillStyle=TK.O2;for(let i=0;i<5;i++)cx.fillRect(-16+i*8,-3.5,2,7);}
- else if(n==='engL'||n==='engR'){cx.fillStyle=TK.N;rr(-4,-4.5,9,9,3);cx.fill();tkO();const g=cx.createRadialGradient(-5,0,0,-5,0,6);g.addColorStop(0,'rgba(160,230,255,.9)');g.addColorStop(1,'rgba(79,195,255,0)');cx.fillStyle=g;cx.beginPath();cx.arc(-5,0,6,0,TAU);cx.fill();cx.fillStyle=TK.O;rr(-1,-3,5,6,2);cx.fill();}
+ else if(n==='engL'||n==='engR'){cx.fillStyle=TK.N;rr(-4,-4.5,9,9,3);cx.fill();tkO();const g=cx.createRadialGradient(-5,0,0,-5,0,6);g.addColorStop(0,'rgba(255,214,120,.9)');g.addColorStop(1,'rgba(255,170,60,0)');cx.fillStyle=g;cx.beginPath();cx.arc(-5,0,6,0,TAU);cx.fill();cx.fillStyle=TK.O;rr(-1,-3,5,6,2);cx.fill();}
  else if(n==='batL'||n==='batR'){cx.fillStyle=TK.N;cx.beginPath();cx.arc(0,0,6,0,TAU);cx.fill();tkO();cx.fillStyle=TK.O;cx.beginPath();cx.arc(0,0,4,0,TAU);cx.fill();cx.fillStyle=TK.N;rr(2,-1.4,8,2.8,1.4);cx.fill();}
  else if(n==='shield'){cx.fillStyle=TK.O;cx.beginPath();cx.moveTo(-3,-17);cx.quadraticCurveTo(8,0,-3,17);cx.lineTo(-7,15);cx.quadraticCurveTo(2,0,-7,-15);cx.closePath();cx.fill();tkO();cx.fillStyle=TK.B;cx.fillRect(-3,-1.5,3,3);}
  cx.restore();}
@@ -1661,7 +1661,7 @@ function tankDraw(o,blink,aimL){const op=o.open||0;
  cx.fillStyle=TK.N;for(const x of[-12,12])for(const y of[-14,14]){rr(x-5,y-3.5,10,7,3);cx.fill();}
  cx.fillStyle=blink?'#fff':TK.O;rr(-21,-13,42,26,11);cx.fill();tkO(0,2);
  cx.fillStyle=blink?'#fff':TK.O;for(const s of[-1,1]){cx.save();cx.translate(0,s*op*8);rr(-16,s>0?11:-17,30,6,3);cx.fill();tkO();if(op>0){cx.fillStyle=o.seam||TK.B;cx.globalAlpha=op;rr(-10,s>0?11:-14,18,3,1.5);cx.fill();cx.globalAlpha=1;cx.fillStyle=TK.O;}cx.restore();}
- if(!o.w20)for(const n of['podL','podR','batL','batR','shield'])tkPart(n,o);
+ if(!o.w20){tkMane2();for(const n of['podL','podR','batL','batR','shield'])tkPart(n,o);}
  /* v50: no blue core; small dark hatch */if(!o.w20||(o.w20.tN??1)<1){cx.save();if(o.w20)cx.globalAlpha*=1-(o.w20.tN??1);cx.fillStyle=TK.O2;rr(-14,-4,10,8,3);cx.fill();cx.strokeStyle=TK.N2;cx.lineWidth=1.2;cx.beginPath();cx.moveTo(-12,-2);cx.lineTo(-6,-2);cx.moveTo(-12,0);cx.lineTo(-6,0);cx.moveTo(-12,2);cx.lineTo(-6,2);cx.stroke();cx.restore();}
  if(o.off.twin&&!o.has.has('twin')){}
  if(o.w20){tkL20Draw(o,aimL,1);}else tkTurret(o,aimL);
@@ -1693,7 +1693,7 @@ function drawTFC(f){const u=f.t/f.D*3,v0=G.veh,v1=f.nv,cl=(a,b)=>Math.max(0,Math
  cx.save();cx.translate(P.x,P.y);{const rr0=P.r*1.15,g=cx.createRadialGradient(0,2,rr0*.2,0,2,rr0*.85);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.beginPath();cx.ellipse(0,2,rr0*.85,rr0*.7,0,0,TAU);cx.fill();}
  cx.translate(shk,-lift);cx.rotate(P.ang);{const ts=TKS[v0]+(TKS[v1]-TKS[v0])*SS(cl(2.0,2.2));cx.scale(ts,ts);}cx.scale(1+sq,1-sq);tankDraw(o,false,aimL);cx.restore();}
 // ===== v63 flame car: full redesign (round battle car -> furnace fortress), tank-grade 3s transforms =====
-const FK='#303036',FK2='#46464e',FO='#FF982D',FY='#FFD27A',FBC=['#8B2E1F','#9C3423','#AF3C28','#C2462D','#D45232'];
+const FK='#303036',FK2='#46464e',FO='#FF982D',FY='#FFD27A',FBC=['#C8361E','#CC3A20','#D03E22','#D44324','#D45232']/* v130: flame-red body Lv1-15 */;
 function fHex(c){const n=parseInt(c.slice(1),16);return[n>>16,n>>8&255,n&255];}
 function fMix(a,b,t){const A=fHex(a),B=fHex(b);return'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')+')';}
 function fSh(c,m){const A=fHex(c);return'rgb('+A.map(x=>Math.max(0,Math.min(255,Math.round(m>1?x+(255-x)*(m-1):x*m)))).join(',')+')';}
@@ -1718,7 +1718,40 @@ function fNoz(s,o,mx,my){cx.save();cx.translate(mx,my);cx.fillStyle=FK;cx.beginP
  if(o.ign>0){const L=(4+3*Math.sin(G.t*40+s))*o.ign;cx.fillStyle=FO;cx.globalAlpha*=.85;cx.beginPath();cx.moveTo(17,-2.6);cx.quadraticCurveTo(17+L*.7,-3.4,17+L,0);cx.quadraticCurveTo(17+L*.7,3.4,17,2.6);cx.fill();}
  cx.restore();}
 function fNozMounts(o){const q=o.nzOut||0;return[[15-6*q,-(10+2*q)],[15-6*q,10+2*q]];}
-function fDraw(o,fl){const C={b:fl?'#fff':o.c,d:fl?'#fff':fSh(o.c,.68),l:fl?'#fff':fSh(o.c,1.45)},H=o.has,I=FK;
+/* v130 bull head (Lv1-15): base car drawn by fDraw0, then horns/ears/head/muzzle, then the weapons */
+function fDraw(o,fl){if(o.bull)return fDraw0(o,fl);
+ const hid=o.i===0,st=o;const keepAim=o.aim;
+ /* draw the car without its Lv1 weapon, then the head, then the weapons */
+ const w0=o.stow;if(o.i===0)o.stow=1;const nz=o.has;const savedL=nz.has('nozL'),savedR=nz.has('nozR');nz.delete('nozL');nz.delete('nozR');
+ fDraw0(o,fl);o.stow=w0;if(savedL)nz.add('nozL');if(savedR)nz.add('nozR');
+ const R='#E0452A',R2='#A82A18',RT='#6A160C',RL='#FF8A5E',K=FK;
+ cx.save();
+ /* horns: thick, from the brow, spreading out then curving forward; dark-red tips */
+ for(const s of[-1,1]){cx.beginPath();cx.moveTo(8,s*8);cx.quadraticCurveTo(6,s*19,13,s*21);cx.quadraticCurveTo(19,s*22,21,s*17);cx.quadraticCurveTo(17,s*18,14,s*15.5);cx.quadraticCurveTo(12,s*13,13,s*9);cx.closePath();cx.fillStyle=R;cx.fill();fOl(1.6);
+  cx.save();cx.clip();cx.fillStyle=RT;cx.beginPath();cx.arc(21,s*18.5,4.6,0,TAU);cx.fill();cx.fillStyle='rgba(255,255,255,.18)';cx.beginPath();cx.ellipse(9,s*15,1.4,3.5,0,0,TAU);cx.fill();cx.restore();}
+ /* short ears behind the horn roots */
+ for(const s of[-1,1]){cx.beginPath();cx.ellipse(3,s*12.5,3.2,2.2,s*.5,0,TAU);cx.fillStyle=R2;cx.fill();fOl(1.2);}
+ /* wide angular bull-head armour, U-shaped front seen from above */
+ cx.beginPath();cx.moveTo(2,-11);cx.lineTo(12,-12.5);cx.lineTo(19,-8);cx.quadraticCurveTo(22,0,19,8);cx.lineTo(12,12.5);cx.lineTo(2,11);cx.quadraticCurveTo(0,0,2,-11);cx.closePath();cx.fillStyle=R;cx.fill();fOl(1.8);
+ cx.fillStyle=RL;cx.globalAlpha*=.5;rr(4,-9,8,3,1.5);cx.fill();cx.globalAlpha/=.5;
+ /* brow ridge */cx.strokeStyle=R2;cx.lineWidth=1.6;cx.beginPath();cx.moveTo(8,-9);cx.quadraticCurveTo(11,0,8,9);cx.stroke();
+ /* wide flat muzzle at the front centre */
+ cx.fillStyle=R2;rr(13,-7,8,14,4);cx.fill();fOl(1.4);cx.fillStyle=RT;for(const y of[-3.6,3.6]){cx.beginPath();cx.ellipse(18.5,y,1.2,1.6,0,0,TAU);cx.fill();}
+ cx.restore();
+ /* weapons back on top, positions unchanged */
+ if(o.i===0&&(o.stow||0)<1){const I=K;cx.save();cx.translate(6,0);cx.rotate(o.aim||0);cx.fillStyle=I;rr(-1,-5,17,10,4.2);cx.fill();cx.fillStyle=FK2;rr(0,-5,15,2.6,1.3);cx.fill();
+  cx.fillStyle=I;rr(14,-6.6,6.5,13.2,3);cx.fill();cx.strokeStyle='#55585f';cx.lineWidth=1;cx.stroke();cx.fillStyle=FO;rr(17.2,-3.6,3,7.2,1.4);cx.fill();cx.fillStyle=FY;rr(18.4,-1.8,1.3,3.6,.6);cx.fill();cx.restore();}
+ else{const M=fNozMounts(o);fPt(o,'nozL',()=>fNoz(-1,o,...M[0]));fPt(o,'nozR',()=>fNoz(1,o,...M[1]));}}
+/* lion v2: no face; four swept-back golden-orange mane plates on the hull sides + two low half-round ears at the front shoulders */
+const MP='#FFA62B',OL='#1d2633';
+function tkMane2(){cx.save();cx.lineJoin='round';cx.lineWidth=2.2;cx.strokeStyle=OL;
+ for(const s of[-1,1]){
+  for(const [xf,xr] of [[11,-1],[-1,-13]]){cx.beginPath();cx.moveTo(xf,s*8.5);cx.lineTo(xf-3,s*15.5);cx.lineTo(xr-5,s*15.5);cx.lineTo(xr,s*8.5);cx.closePath();cx.fillStyle=MP;cx.fill();cx.stroke();}
+  /* ear: small low half-round at the front shoulder, body orange */
+  cx.beginPath();cx.arc(16,s*12.5,3.6,s>0?0:Math.PI,s>0?Math.PI:TAU);cx.closePath();cx.fillStyle=TK.O;cx.fill();cx.stroke();}
+ cx.restore();}
+
+function fDraw0(o,fl){const C={b:fl?'#fff':o.c,d:fl?'#fff':fSh(o.c,.68),l:fl?'#fff':fSh(o.c,1.45)},H=o.has,I=FK;
  /* wheels */for(const x of[-11,9])for(const s of[-1,1]){cx.fillStyle=I;rr(x-6,s>0?14.5:-24,12,9.5,3.2);cx.fill();cx.strokeStyle='#1b1b20';cx.lineWidth=1;for(const k of[-3,0,3]){cx.beginPath();cx.moveTo(x+k,s>0?16:-22.5);cx.lineTo(x+k,s>0?22.5:-16);cx.stroke();}}
  /* rear module */fPt(o,'rear',()=>{const t=o.rearIn??1;cx.save();cx.translate(8*(1-t),0);cx.fillStyle=I;rr(-27,-10,9,20,3.5);cx.fill();cx.fillStyle=FK2;rr(-26,-8,2.2,16,1);cx.fill();
   cx.save();cx.translate(-27,0);cx.rotate(-(o.rearOpen||0)*.9);cx.fillStyle=C.d;rr(-1.5,-6,3.5,12,1.5);cx.fill();fOl(1);cx.restore();fBolt(-22,-7);fBolt(-22,7);cx.restore();});
@@ -2324,7 +2357,10 @@ const $=id=>document.getElementById(id);
 if(SAVE.dia==null){SAVE.dia=1000;}/* prototype test diamonds */
 const BLU='background:linear-gradient(#cfe3ff,#7fb0f0);border-color:#2a5aa8;box-shadow:0 5px 0 #2a5aa8;color:#10284a';
 const STG=[{n:'초원',sky:['#7ec8f0','#cdeefc'],g:['#5fae3e','#3f8a2a'],h:'#4f9a34',acc:'#2f6e22'},{n:'사막 협곡',sky:['#f2b36b','#fde3b5'],g:['#d9a35c','#b9803f'],h:'#c48b49',acc:'#8a5a2a'},{n:'잿빛 황야',sky:['#7d7670','#b9b2aa'],g:['#66605B','#4A4440'],h:'#59534F',acc:'#7A4632'},{n:'설원',sky:['#9fc4dc','#e6f0f6'],g:['#E6EDF2','#C9D6E0'],h:'#D3DEE7',acc:'#3E6B57'},{n:'늪지',sky:['#5b6b4a','#9aa878'],g:['#56633F','#3D4A3A'],h:'#4E5B39',acc:'#6E9A4A'},{n:'폐철도역',sky:['#8a8378','#c8c0b2'],g:['#8C857A','#6E685E'],h:'#857E73',acc:'#8A2E22'},{n:'번개 고원',sky:['#2e3450','#6a74a0'],g:['#4E566B','#363C4E'],h:'#485064',acc:'#7FD3E6'},{n:'잿빛 대성당',sky:['#3a3640','#7a7484'],g:['#6C6870','#55515B'],h:'#66626B',acc:'#B8913A'}];if(Q.has('dev'))STG.forEach(x=>delete x.lock);/* v82: dev=1 unlocks every map */
-function carSVG(id,w){if(['raven','mammoth','croc'].includes(id))return rbIcon(id,w);if(id==='flame')return '<svg viewBox="-60 -40 130 80" width="'+w+'" height="'+(w*8/13)+'"><ellipse cx="2" cy="30" rx="50" ry="8" fill="rgba(0,0,0,.35)"/>'+
+/* v130: 성전차/화염방사차 pictures are rendered from the real in-game Lv1 drawing (new shapes) */
+const CPIC={};function carPicURL(id,up){const k=id+(up?'u':'s');if(CPIC[k])return CPIC[k];const c=document.createElement('canvas');c.width=c.height=480;const m=cx;cx=c.getContext('2d');cx.translate(240,240);if(up)cx.rotate(-Math.PI/2);cx.scale(id==='flame'?6.5:7,id==='flame'?6.5:7);
+ try{if(id==='flame')fDraw(fState(0),false);else tankDraw(tkSt(0),false,0);}catch(e){}finally{cx=m;}return CPIC[k]=c.toDataURL();}
+function carSVG(id,w){if(['raven','mammoth','croc'].includes(id))return rbIcon(id,w);if(id==='tank'||id==='flame')return '<img src="'+carPicURL(id,0)+'" width="'+w+'" height="'+w+'" alt="">';if(id==='flame')return '<svg viewBox="-60 -40 130 80" width="'+w+'" height="'+(w*8/13)+'"><ellipse cx="2" cy="30" rx="50" ry="8" fill="rgba(0,0,0,.35)"/>'+
  '<path d="M34 -10 Q58 -22 70 -4 Q62 0 70 6 Q58 22 34 10 Z" fill="#ff922b" opacity=".85"/><path d="M34 -6 Q50 -12 58 0 Q50 12 34 6 Z" fill="#ffd24a"/>'+
  '<circle cx="-30" cy="-30" r="9" fill="#222"/><circle cx="-30" cy="30" r="9" fill="#222"/><circle cx="16" cy="-30" r="9" fill="#222"/><circle cx="16" cy="30" r="9" fill="#222"/>'+
  '<path d="M-46 -24 L20 -24 L30 -12 L30 12 L20 24 L-46 24 Z" fill="#7a1a0c"/><path d="M-42 -20 L18 -20 L26 -10 L26 10 L18 20 L-42 20 Z" fill="#d8401c"/>'+
@@ -2538,8 +2574,20 @@ function topBar(){return '<div class="h2top"><div class="h2pill">💰 <b>'+SAVE.
 /* v126: car pictures in the pick sheet: each PNG trimmed to its opaque bounds, then fit (aspect kept, centred) into the same 56x56 box */
 const H6BB={};function h6pic(id,cv){const im=new Image();im.onload=()=>{let bb=H6BB[id];if(!bb){const t=document.createElement('canvas');t.width=im.width;t.height=im.height;const g=t.getContext('2d');g.drawImage(im,0,0);const d=g.getImageData(0,0,t.width,t.height).data;let x0=t.width,y0=t.height,x1=-1,y1=-1;for(let y=0;y<t.height;y++)for(let x=0;x<t.width;x++)if(d[(y*t.width+x)*4+3]>100)/* v128: ignore faint soft edges */{if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}bb=H6BB[id]=x1<0?[0,0,im.width,im.height]:[x0,y0,x1-x0+1,y1-y0+1];}
  const S=cv.width,k=Math.min(S/bb[2],S/bb[3]),w=bb[2]*k,h=bb[3]*k,g=cv.getContext('2d');g.clearRect(0,0,S,S);g.drawImage(im,bb[0],bb[1],bb[2],bb[3],(S-w)/2,(S-h)/2,w,h);};im.src='assets/home_cars/'+id+'.png';}
+/* v129: equal-looking car pictures. Same square box (H9S css px) in the 출동 sheet and in 상점>차고. Each car's visible art
+   (opaque pixels, soft shadow ignored) is scaled so its visible AREA equals one shared target - the largest area at which every
+   picture (5 upright sheet PNGs + 5 sideways 차고 pictures) still fits inside the box. Centered, aspect + orientation kept. */
+const H9S=52;let H9P=null;
+function h9src(pl,id){return new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);if(pl==='s'){im.src=(id==='tank'||id==='flame')?carPicURL(id,1):'assets/home_cars/'+id+'.png';return;}
+ const h=carSVG(id,80);if(h.startsWith('<img')){im.src=h.match(/src="([^"]+)"/)[1];return;}
+ const d=document.createElement('div');d.innerHTML=h;const sv=d.firstElementChild;const vb=(sv.getAttribute('viewBox')||'0 0 100 100').split(/[ ,]+/).map(Number),k=400/Math.max(vb[2],vb[3]);sv.setAttribute('width',Math.ceil(vb[2]*k));sv.setAttribute('height',Math.ceil(vb[3]*k));sv.setAttribute('xmlns','http://www.w3.org/2000/svg');im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(sv));});}
+function h9stat(im){const w=im.naturalWidth||im.width,h=im.naturalHeight||im.height,t=document.createElement('canvas');t.width=w;t.height=h;const x=t.getContext('2d');x.drawImage(im,0,0,w,h);const d=x.getImageData(0,0,w,h).data;let x0=w,y0=h,x1=-1,y1=-1,n=0;for(let y=0;y<h;y++)for(let i=0;i<w;i++)if(d[(y*w+i)*4+3]>100){n++;if(i<x0)x0=i;if(i>x1)x1=i;if(y<y0)y0=y;if(y>y1)y1=y;}return {im:t,bb:[x0,y0,x1-x0+1,y1-y0+1],n};}
+function h9prep(){if(H9P)return H9P;const ids=CARS.map(c=>c[0]),jobs=[];for(const pl of ['s','g'])for(const id of ids)jobs.push(h9src(pl,id).then(im=>[pl+id,im?h9stat(im):null]));
+ H9P=Promise.all(jobs).then(r=>{const M={};let A=Infinity;for(const [k,v] of r){if(!v||v.bb[2]<1)continue;M[k]=v;const f=H9S/Math.max(v.bb[2],v.bb[3]);A=Math.min(A,v.n*f*f);}for(const k in M)M[k].s=Math.sqrt(A/M[k].n);window.__h9={A,M:Object.fromEntries(Object.entries(M).map(([k,v])=>[k,{bw:+(v.bb[2]*v.s).toFixed(1),bh:+(v.bb[3]*v.s).toFixed(1),area:+(v.n*v.s*v.s).toFixed(0)}]))};return M;});return H9P;}
+function h9draw(pl,id,el){const cv=document.createElement('canvas'),S=3;cv.width=cv.height=H9S*S;cv.style.cssText='width:'+H9S+'px;height:'+H9S+'px;display:block;flex:0 0 auto';el.innerHTML='';el.appendChild(cv);el.style.display='flex';el.style.alignItems='center';el.style.justifyContent='center';
+ h9prep().then(M=>{const v=M[pl+id];if(!v)return;const g=cv.getContext('2d'),[x0,y0,bw,bh]=v.bb,w=bw*v.s*S,h=bh*v.s*S;g.imageSmoothingQuality='high';g.drawImage(v.im,x0,y0,bw,bh,(cv.width-w)/2,(cv.height-h)/2,w,h);});}
 function showMenu(){G.paused=true;clrSync();SAVE.diff=mDiff(SAVE.stage);const m=$('menu');const old=m.querySelector('.h6row'),sl=old?old.scrollLeft:null;m.className='ov hm3';m.style.cssText='';const s=STG[SAVE.stage-1]||STG[0];
- m.innerHTML=topBar()+'<div class="h6map"><img src="assets/home_maps/map'+SAVE.stage+'.jpg" alt=""><div class="n">🗺️ '+SAVE.stage+'. '+s.n+'</div></div><div class="h6row">'+STG.map((t,i)=>{const op=mapOpen(i);return '<button class="h6c'+(SAVE.stage===i+1?' on':'')+(op?'':' lk')+'" data-m="'+(i+1)+'"><img src="assets/home_maps/map'+(i+1)+'.jpg" alt="">'+(op?'':'<div class="lock">🔒</div>')+'<div class="t">'+(i+1)+'. '+t.n+'</div></button>';}).join('')+'</div><div class="h6tabs">'+DN.map((n,d)=>{const o=dOpen(SAVE.stage,d);return '<button data-d="'+d+'" class="'+(SAVE.diff===d?'on':'')+(o?'':' lk')+'">'+(o?'':'🔒 ')+n+'</button>';}).join('')+'</div><button class="h6go" id="mPlay">출동</button><button class="h6gar" id="nGar">🔧 차고</button>';
+ m.innerHTML=topBar()+'<div class="h6map"><img src="assets/home_maps/map'+SAVE.stage+'.jpg" alt=""><div class="n">🗺️ '+SAVE.stage+'. '+s.n+'</div></div><div class="h6row">'+STG.map((t,i)=>{const op=mapOpen(i);return '<button class="h6c'+(SAVE.stage===i+1?' on':'')+(op?'':' lk')+'" data-m="'+(i+1)+'"><img src="assets/home_maps/map'+(i+1)+'.jpg" alt="">'+(op?'':'<div class="lock">🔒</div>')+'<div class="t">'+(i+1)+'. '+t.n+'</div></button>';}).join('')+'</div><div class="h6tabs">'+DN.map((n,d)=>{const o=dOpen(SAVE.stage,d);return '<button data-d="'+d+'" class="'+(SAVE.diff===d?'on':'')+(o?'':' lk')+'">'+(o?'':'🔒 ')+n+'</button>';}).join('')+'</div><button class="h6go" id="mPlay">출동</button><button class="h6gar" id="nGar">상점</button>';
  m.style.display='flex';m.style.height=innerHeight+'px';
  const row=m.querySelector('.h6row');if(sl!=null)row.scrollLeft=sl;else{const c=row.children[SAVE.stage-1];if(c&&SAVE.stage>2)row.scrollLeft=c.offsetLeft-16;}
  m.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const n=+b.dataset.m;if(!mapOpen(n-1)||n===SAVE.stage)return;SAVE.stage=n;SAVE.diff=mDiff(n);saveS();showMenu();});
@@ -2550,8 +2598,8 @@ function showMenu(){G.paused=true;clrSync();SAVE.diff=mDiff(SAVE.stage);const m=
 function showCarPick(){const m=$('menu');let sel=SAVE.cars[SAVE.car]?SAVE.car:(CARS.find(c=>SAVE.cars[c[0]])||CARS[0])[0];const own=CARS.filter(c=>SAVE.cars[c[0]]);
  const dim=document.createElement('div');dim.className='h6dim';const sh=document.createElement('div');sh.className='h6sh';
  const close=()=>{dim.remove();sh.remove();};dim.onclick=close;
- const render=()=>{sh.innerHTML='<div class="grab"></div><div class="tt">출동할 차량 선택</div><div class="h6g">'+own.map(c=>'<button class="h6k'+(c[0]===sel?' on':'')+'" data-c="'+c[0]+'"><div class="pic"><canvas width="112" height="112" data-p="'+c[0]+'"></canvas></div><div><div class="nm">'+c[1].replace(/^[^가-힣A-Za-z]+/,'')+'</div><div class="lv">Lv'+cLv(c[0])+'</div></div>'+(c[0]===sel?'<div class="ck">✔</div>':'')+'</button>').join('')+'</div><button class="h6start" id="cpGo">출발</button>';
-  sh.querySelectorAll('canvas[data-p]').forEach(cv=>h6pic(cv.dataset.p,cv));
+ const render=()=>{sh.innerHTML='<div class="grab"></div><div class="tt">출동할 차량 선택</div><div class="h6g">'+own.map(c=>'<button class="h6k'+(c[0]===sel?' on':'')+'" data-c="'+c[0]+'"><div class="pic" data-p="'+c[0]+'"></div><div><div class="nm">'+c[1].replace(/^[^가-힣A-Za-z]+/,'')+'</div><div class="lv">Lv'+cLv(c[0])+'</div></div>'+(c[0]===sel?'<div class="ck">✔</div>':'')+'</button>').join('')+'</div><button class="h6start" id="cpGo">출발</button>';
+  sh.querySelectorAll('.pic[data-p]').forEach(u=>h9draw('s',u.dataset.p,u));
   sh.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{sel=b.dataset.c;render();});
   sh.querySelector('#cpGo').onclick=()=>{SAVE.car=sel;saveS();goPlay();};};
  render();m.appendChild(dim);m.appendChild(sh);}
@@ -2574,11 +2622,11 @@ function h8fit(sv){try{const vb=sv.getAttribute('viewBox');if(!vb)return;const [
  im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(c));}catch(e){}}
 function h8img(img){const go=()=>{try{const w=img.naturalWidth,h=img.naturalHeight;if(!w)return;const t=document.createElement('canvas');t.width=w;t.height=h;const x=t.getContext('2d');x.drawImage(img,0,0);const d=x.getImageData(0,0,w,h).data;let x0=w,y0=h,x1=-1,y1=-1;for(let y=0;y<h;y++)for(let i=0;i<w;i++)if(d[(y*w+i)*4+3]>100){if(i<x0)x0=i;if(i>x1)x1=i;if(y<y0)y0=y;if(y>y1)y1=y;}if(x1<0)return;
  const u=img.parentNode,box=u.getBoundingClientRect(),S=3,bw=x1-x0+1,bh=y1-y0+1,BW=Math.round(box.width*S),k=BW/Math.max(bw,bh),BH=Math.round(bh*k),cv=document.createElement('canvas');cv.width=BW;cv.height=BH;cv.style.cssText='width:100%;height:auto;display:block';u.style.display='flex';u.style.alignItems='center';u.style.overflow='visible';const c=cv.getContext('2d');c.imageSmoothingQuality='high';c.drawImage(img,x0,y0,bw,bh,(BW-bw*k)/2,(BH-bh*k)/2,bw*k,bh*k);img.replaceWith(cv);}catch(e){}};if(img.complete)go();else img.onload=go;}
-function showGarage(){G.paused=true;let h='<div class="s3sec">차량</div>';/* v126: 차고 = unlock + upgrade only */
- for(const [id,n,ds,uc,udc] of CARS){if(!SAVE.cars[id]){h+='<div class="s3r"><div class="u116">'+carSVG(id,80)+'</div><div class="s3t"><b>🔒 '+n+'</b><small>'+ds.split('<br>')[0]+'</small></div><div class="s3b"><button data-ug="'+id+'"'+(SAVE.gold<uc?' disabled':'')+' style="height:auto">골드로 해금<br>💰'+uc+'</button><button class="d" data-ud="'+id+'"'+(SAVE.dia<udc?' disabled':'')+' style="height:auto">다이아로 해금<br>💎'+udc+'</button></div></div>';continue;}const L=cLv(id),mx=L>=CLMAX;h+='<div class="s3r"><div class="u116">'+carSVG(id,80)+'</div><div class="s3t"><b>'+n+' Lv'+L+'</b><small>공격력·체력 +'+(1.25*(L-1)).toFixed(2).replace(/\.?0+$/,'')+'%</small></div><div class="s3b">'+(mx?'<button disabled>최대</button>':'<button data-lg="'+id+'"'+(SAVE.gold<LGC(L)?' disabled':'')+'>💰'+(LGC(L))+'</button><button class="d" data-ld="'+id+'"'+(SAVE.dia<LDC(L)?' disabled':'')+'>💎'+(LDC(L))+'</button>')+'</div></div>';}
- h+='<div class="s3sec">영구 강화 (모든 차량)</div>';
- for(const [k,n,ds] of PU){const v=SAVE.pu[k]||0,c=v+1,mx=v>=PUMAX;h+='<div class="s3r"><div class="s3t"><b>'+n+' '+v+'/'+PUMAX+'</b><small>'+ds+'</small></div><div class="s3b">'+(mx?'<button disabled>최대</button>':'<button data-pg="'+k+'"'+(SAVE.gold<100*c?' disabled':'')+'>💰'+(100*c)+'</button><button class="d" data-pd="'+k+'"'+(SAVE.dia<5*c?' disabled':'')+'>💎'+(5*c)+'</button>')+'</div></div>';}
- const g=scr('차고',h);g.querySelectorAll('.u116 svg').forEach(h8fit);g.querySelectorAll('.u116 img').forEach(h8img);const ok=()=>{saveS();beep(880,.1,'triangle',.12);showGarage();};
+function showGarage(tab){G.paused=true;tab=tab===1?1:0;/* v129: 상점 = [차고] + [전체 강화] tabs */let h='<div class="d3r"><button data-tab="0" class="'+(tab===0?'on':'')+'">🔧 차고</button><button data-tab="1" class="'+(tab===1?'on':'')+'">↑ 전체 강화</button></div>'+(tab===0?'<div class="s3sec">차량</div>':'');/* v126: 차고 = unlock + upgrade only */
+ if(tab===0)for(const [id,n,ds,uc,udc] of CARS){if(!SAVE.cars[id]){h+='<div class="s3r"><div class="u116" data-car="'+id+'"></div><div class="s3t"><b>🔒 '+n+'</b><small>'+ds.split('<br>')[0]+'</small></div><div class="s3b"><button data-ug="'+id+'"'+(SAVE.gold<uc?' disabled':'')+' style="height:auto">골드로 해금<br>💰'+uc+'</button><button class="d" data-ud="'+id+'"'+(SAVE.dia<udc?' disabled':'')+' style="height:auto">다이아로 해금<br>💎'+udc+'</button></div></div>';continue;}const L=cLv(id),mx=L>=CLMAX;h+='<div class="s3r"><div class="u116" data-car="'+id+'"></div><div class="s3t"><b>'+n+' Lv'+L+'</b><small>공격력·체력 +'+(1.25*(L-1)).toFixed(2).replace(/\.?0+$/,'')+'%</small></div><div class="s3b">'+(mx?'<button disabled>최대</button>':'<button data-lg="'+id+'"'+(SAVE.gold<LGC(L)?' disabled':'')+'>💰'+(LGC(L))+'</button><button class="d" data-ld="'+id+'"'+(SAVE.dia<LDC(L)?' disabled':'')+'>💎'+(LDC(L))+'</button>')+'</div></div>';}
+ if(tab===1){h+='<div class="s3sec">영구 강화 (모든 차량)</div>';
+ for(const [k,n,ds] of PU){const v=SAVE.pu[k]||0,c=v+1,mx=v>=PUMAX;h+='<div class="s3r"><div class="s3t"><b>'+n+' '+v+'/'+PUMAX+'</b><small>'+ds+'</small></div><div class="s3b">'+(mx?'<button disabled>최대</button>':'<button data-pg="'+k+'"'+(SAVE.gold<100*c?' disabled':'')+'>💰'+(100*c)+'</button><button class="d" data-pd="'+k+'"'+(SAVE.dia<5*c?' disabled':'')+'>💎'+(5*c)+'</button>')+'</div></div>';}}
+ const g=scr('상점',h);g.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>showGarage(+b.dataset.tab));g.querySelectorAll('.u116[data-car]').forEach(u=>h9draw('g',u.dataset.car,u));const ok=()=>{saveS();beep(880,.1,'triangle',.12);showGarage(tab);};
  const ask=(id,dia)=>{const c=CARS.find(x=>x[0]===id),cost=dia?c[4]:c[3],bal=dia?SAVE.dia:SAVE.gold,ic=dia?'💎':'💰';if(bal<cost)return;const d=$('cfm');
   d.innerHTML='<div class="hpop"><div class="hpt">'+c[1]+' 해금</div><div class="u116" style="margin:0 auto">'+carSVG(id,160)+'</div><div>비용 '+ic+' '+cost+'</div><div>남는 잔액 '+ic+' '+(bal-cost)+'</div><div class="vbt"><button class="hbtn alt" id="cN">취소</button><button class="hbtn" id="cY">해금 확정</button></div></div>';d.style.display='flex';uniSVG(d);
   $('cN').onclick=()=>{d.style.display='none';};$('cY').onclick=()=>{if((dia?SAVE.dia:SAVE.gold)<cost)return;if(dia)SAVE.dia-=cost;else SAVE.gold-=cost;SAVE.cars[id]=1;saveS();d.style.display='none';beep(660,.2,'triangle',.15,1320);showGarage();};};
