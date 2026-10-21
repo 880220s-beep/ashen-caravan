@@ -2666,6 +2666,16 @@ goblin=function(e){if(e.elite||e.mb||e.boss)return _g(e);const k=MAP[e.type];if(
 drawBoss=function(b){if(b.st==='tele'){cx.save();cx.fillStyle='rgba(181,123,255,.22)';cx.beginPath();cx.arc(b.tx,b.ty,150,0,TAU);cx.fill();cx.strokeStyle='rgba(120,60,200,.8)';cx.lineWidth=4;cx.beginPath();cx.arc(b.tx,b.ty,150*(1-b.tm/1.1),0,TAU);cx.stroke();cx.restore();}
  const S2=STAGE===2,a=Math.atan2(P.y-b.y,P.x-b.x);drawRobo(S2?'b2':'b1',b.x,b.y,a,(S2?124:104)*TUNE.boss.size/rbLW(),b.flash||0,G.t,0);
  if(b.st==='orb'){cx.save();cx.globalAlpha=.6;cx.fillStyle='#B57BFF';cx.beginPath();cx.arc(b.x,b.y,b.r*.35*(1.7-b.tm),0,TAU);cx.fill();cx.restore();}};})();</script>
+<script>/* v124: hidden vibration diagnostic, only with &vibtest=1 */(function(){if(!new URLSearchParams(location.search).has('vibtest'))return;
+const D={n:0,ret:'-',t:'-',ms:'-'};const nv=navigator.vibrate?navigator.vibrate.bind(navigator):null;
+if(nv)navigator.vibrate=function(p){const r=nv(p);D.ret=String(r);D.t=new Date().toLocaleTimeString();D.ms=String(p);return r;};
+if(typeof vib==='function'){const ov=vib;vib=function(){D.n++;return ov.apply(this,arguments);};}
+const box=document.createElement('div');box.style.cssText='position:fixed;left:4px;bottom:4px;z-index:99999;background:rgba(0,0,0,.6);color:#cfe;font:11px/1.35 monospace;padding:4px 6px;border-radius:4px;pointer-events:auto;max-width:60vw';
+const tx=document.createElement('div');const bt=document.createElement('button');bt.textContent='TEST VIB';bt.style.cssText='margin-top:3px;font:11px monospace;padding:3px 8px';
+bt.addEventListener('click',e=>{e.stopPropagation();let r='no API';try{if(navigator.vibrate)r=String(navigator.vibrate(200));}catch(err){r='error '+err.message;}D.test=r;});
+['pointerdown','pointerup','touchstart','touchend'].forEach(k=>bt.addEventListener(k,e=>e.stopPropagation()));
+box.appendChild(tx);box.appendChild(bt);const add=()=>document.body.appendChild(box);if(document.body)add();else addEventListener('DOMContentLoaded',add);
+const ua=navigator.userActivation;setInterval(()=>{tx.textContent='vibrate API: '+(!!nv)+' | active ever: '+(ua?ua.hasBeenActive:'n/a')+' now: '+(ua?ua.isActive:'n/a')+' | touched flag: '+(typeof TAPPED!=='undefined'?TAPPED:'?')+' | vib() calls: '+D.n+' | last vibrate(): '+D.ret+' ('+D.ms+'ms) @'+D.t+(D.test?' | TEST: '+D.test:'');},250);})();</script>
 <script>/* ===== v99 maps preview: map gimmicks (supply flags / sinkholes / ember fissures) + map3 ash wasteland ===== */
 (function(){
 window.MGBF=()=>MAP===1&&MG.buff>G.t;const MG={flags:[],buff:0,pads:[],holes:[],fis:[],t:0,nextF:2.5,boost:0};window.MG=MG;
