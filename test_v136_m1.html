@@ -2841,7 +2841,7 @@ window.M1P={PAL,roles:Object.keys(DR),draw(ctx,role,u,d,a,f){g=ctx;U=u;dpr=d;fr=
 const N='#142233',SAND='#D8BC92',STEEL='#4E586A',BR='#7A5A3E',SIL='#B9C2CC',BK='#353C48',GD='#E8A93A',IV='#EFE6D2',LAMP='#FFD27A';
 function hx(c){c=c.replace('#','');return[0,2,4].map(i=>parseInt(c.slice(i,i+2),16));}
 function mix(c,t,k){return'rgb('+hx(c).map(v=>Math.round(v+(t-v)*k)).join(',')+')';}
-let g,S,dpr,lv,fr;const px=v=>v*dpr,X=v=>v*S;
+let g,S,dpr,lv,fr;/* outline scale: fixed-px navy outlines swamped colours at phone size; scale with sprite size */const OK=()=>Math.max(.3,Math.min(1,S/dpr/88)),px=v=>v*dpr*OK(),X=v=>v*S;
 /* paths (S fractions) */
 const rpoly=(pts,r)=>(ox,oy)=>{const n=pts.length/2,P=i=>[X(pts[(i%n)*2])+ox,X(pts[(i%n)*2+1])+oy];g.beginPath();const m=[(P(0)[0]+P(n-1)[0])/2,(P(0)[1]+P(n-1)[1])/2];g.moveTo(m[0],m[1]);for(let i=0;i<n;i++){const a=P(i),b=P(i+1);g.arcTo(a[0],a[1],b[0],b[1],X(r));}g.closePath();};
 const box=(x,y,w,h,bv)=>(ox,oy)=>{g.beginPath();g.roundRect(X(x-w/2)+ox,X(y-h/2)+oy,X(w),X(h),X(Math.min(w,h)*(bv??.1)));};
@@ -2849,7 +2849,7 @@ const circ=(x,y,r)=>(ox,oy)=>{g.beginPath();g.arc(X(x)+ox,X(y)+oy,X(r),0,7);};
 const ell=(x,y,rx,ry)=>(ox,oy)=>{g.beginPath();g.ellipse(X(x)+ox,X(y)+oy,X(rx),X(ry),0,0,7);};
 const rot=(P,cx,cy,an)=>(ox,oy)=>{g.save();g.translate(X(cx)+ox,X(cy)+oy);g.rotate(an);g.translate(-X(cx)-ox,-X(cy)-oy);P(ox,oy);g.restore();};
 /* part = fill + flat light/shadow bands (top-left light) + inner details + 2px navy outline immediately */
-function part(P,c,wF,inner){const wpx=X(wF)/dpr,h=Math.min(4,Math.max(1,wpx*.10))*dpr,s=Math.min(6,Math.max(2,wpx*.15))*dpr,B=4000;
+function part(P,c,wF,inner){const wpx=X(wF)/dpr,h=Math.min(4,Math.max(1*OK(),wpx*.10))*dpr,s=Math.min(6,Math.max(2*OK(),wpx*.15))*dpr,B=4000;
  g.save();P(0,0);g.clip();g.fillStyle=mix(c,255,.18);g.fillRect(-B,-B,2*B,2*B);P(lv[0]*h,lv[1]*h);g.clip();g.fillStyle=mix(c,0,.18);g.fillRect(-B,-B,2*B,2*B);P(-lv[0]*s,-lv[1]*s);g.clip();g.fillStyle=c;g.fillRect(-B,-B,2*B,2*B);g.restore();
  if(inner){g.save();P(0,0);g.clip();inner();g.restore();}
  P(0,0);g.lineWidth=px(2);g.strokeStyle=N;g.lineJoin='round';g.stroke();}
