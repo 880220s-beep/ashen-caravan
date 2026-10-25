@@ -1220,7 +1220,7 @@ let _sh=0,_sk=0,_vh=0;function sndHit(){const n=performance.now();if(n-_sh<70)re
 let TAPPED=0;addEventListener('pointerdown',()=>{TAPPED=1;},{capture:true});
 function vib(ms,th){try{if(!navigator.vibrate||!TAPPED||(navigator.userActivation&&!navigator.userActivation.hasBeenActive))return;if(th){const n=performance.now();if(n-_vh<300)return;_vh=n;}navigator.vibrate(ms);}catch(e){}}
 function sfxHit(){const a=ac();if(!a)return;const t=a.currentTime,o=a.createOscillator(),g=a.createGain();o.type='square';o.frequency.setValueAtTime(220,t);o.frequency.exponentialRampToValueAtTime(55,t+.12);g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.16);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+.18);}
-const TESTNOCD=true;/* v77 test build: no cooldown for active skill + Lv20 button */
+const TESTNOCD=false;/* v77 test build: no cooldown for active skill + Lv20 button */
 function useSkill(){if(BC.on)return;return useSkill0.apply(this,arguments);}
 function useSkill0(){if(!ACT||(SKB.cd>0&&!TESTNOCD)||G.over||G.paused||G.roul)return;const k=ACT==='shock'?shockK():ACTD[ACT].T[Math.min(2,G.veh)];SKB.cd=SKB.max=k.cd;if(TESTNOCD)SKB.cd=0;G.skUsed=(G.skUsed||0)+1;vib(20);
  if(ACT==='dash'){dashStartFx();P.dash=k.dur;P.dashK=k;P.dashHit=new Set();P.dashStop=0;P.inv=Math.max(P.inv,k.dur+1.0);P.shEnd=G.t+k.dur+1.0;FX.push({k:'ring',x:P.x,y:P.y,r:P.r*2,c:'#ffd36b',life:.25,max:.25});return;}
@@ -3660,9 +3660,9 @@ function post(dt){for(const e of EN){if(e.dead)continue;const R=role(e);if(!R)co
   else if(S==='dash'){if(!frz){const v=230/.32*dt;e.x+=Math.cos(e.ca)*v;e.y+=Math.sin(e.ca)*v;}if(Math.random()<.4)dust(e.x,e.y,e.r*.6);if(e.m2t<=0){e.m2='rest';e.m2t=.55;}}
   else if(S==='rest'&&e.m2t<=0){e.m2='walk';e.m2t=3.2;}}
  else if(R==='tank'){/* 협곡 방벽차: wide short band, push one body length */
-  if(S==='walk'){if(e.m2t<=0&&dd<e.r*2+P.r+70){e.m2='warn';e.m2t=WN;e.wk='band';e.wL=e.r*2.6;e.wW=e.r*3.4;e.ca=a;}}
+  if(S==='walk'){if(e.m2t<=0&&dd<e.r*2+P.r+70){e.m2='warn';e.m2t=WN;e.wk='band';e.wL=e.r*10.6;e.wW=e.r*3.4;e.ca=a;}}
   else if(S==='warn'){if(e.m2t<=0){e.m2='push';e.m2t=.25;M2S.push++;}}
-  else if(S==='push'){if(!frz){const v=e.r*2/.25*dt;e.x+=Math.cos(e.ca)*v;e.y+=Math.sin(e.ca)*v;}if(e.m2t<=0){e.m2='rest';e.m2t=.6;dust(e.x+Math.cos(e.ca)*e.r,e.y+Math.sin(e.ca)*e.r,e.r);}}
+  else if(S==='push'){if(!frz){const v=e.r*10/.25*dt;e.x+=Math.cos(e.ca)*v;e.y+=Math.sin(e.ca)*v;}if(e.m2t<=0){e.m2='rest';e.m2t=.6;dust(e.x+Math.cos(e.ca)*e.r,e.y+Math.sin(e.ca)*e.r,e.r);}}
   else if(S==='rest'&&e.m2t<=0){e.m2='walk';e.m2t=2.6;}}
  else if(R==='shoot'){/* 전갈포탑: stop at range, aim line, 1 slow shell */
   if(S==='walk'){if(e.m2t<=0&&dd<250){e.m2='warn';e.m2t=WN;e.wk='line';e.wL=280;e.wW=10;e.ca=a;}}
@@ -3702,7 +3702,7 @@ function warnE(e){if(e.m2!=='warn')return;const k=1-e.m2t/(e.mb?WB:WN);
 const FRM=e=>{const s=e.m2;if(e.mb)return s==='warn'?1:s==='close'?2:0;return(s==='warn'||s==='stop'||s==='push'||s==='dash'||(s==='rest'&&(role(e)==='heavy'||role(e)==='elite')))?1:0;};
 const _g=goblin;goblin=function(e){if(!role(e))return _g(e);warnE(e);window.__M2FR=FRM(e);
  if(e.elite||e.mb){const r=_g(e);window.__M2FR=0;return r;}
- const R=role(e),WPX={walk:30,fast:25,tank:39,shoot:35,heavy:52},z=zoom(),Uw=WPX[R]*(W/390)*(e.v==='big'?1.35:1)/z/2,a=e.m2&&e.m2!=='walk'?(e.ca??ang(e)):ang(e);
+ const R=role(e),WPX={walk:30,fast:25,tank:39,shoot:35,heavy:52},z=zoom(),Uw=WPX[R]*(W/390)*(e.v==='big'?1.2:1)/z/2,a=e.m2&&e.m2!=='walk'?(e.ca??ang(e)):ang(e);
  const bob=e.m2&&e.m2!=='walk'?0:Math.abs(Math.sin(G.t*9+(e.ph||0)*3))*Uw*.08;V133blit(R,e.x,e.y-bob,a,Uw,.35,window.__M2FR);window.__M2FR=0;
  if(e.burn>0||e.fsl>0||e.l2s>0){cx.save();cx.globalAlpha=.28;cx.fillStyle='#ff7a2a';cx.beginPath();cx.arc(e.x,e.y,Uw*.9,0,TAU);cx.fill();cx.restore();}
  if(e.max>60&&e.hp<e.max){const r=e.r;cx.fillStyle='rgba(0,0,0,.4)';cx.fillRect(e.x-r,e.y-r-10,r*2,4);cx.fillStyle='#ff5a4a';cx.fillRect(e.x-r,e.y-r-10,r*2*e.hp/e.max,4);}};
