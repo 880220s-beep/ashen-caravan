@@ -2960,7 +2960,7 @@ window.M1P2={roles:Object.keys(DR),animated:{tank:1,elite:1,mid:1,boss:1},turret
 window.M1P=window.M1P2;</script>
 <script>/* v137: map-2 (canyon) redesigned robots. M2P.draw(ctx,role,u,dpr,a,fr): ctx at centre, already rotated; forward = up; u = unit px (device). fr: 0 idle, 1 attack pose, 2 claws closed */
 (function(){
-const N='#1E2633',IV='#F1E8D4',IVD='#D8CCB0',CO='#2F62B3',COD='#22488A',ST='#7E8896',STD='#4C5564',BK='#2E3440',AM='#E8A93A',LAMP='#FFD27A',SIL='#C9D0D8';
+let N='#1E2633',IV='#F1E8D4',IVD='#D8CCB0',CO='#2F62B3',COD='#22488A';const ST='#7E8896',STD='#4C5564',BK='#2E3440',AM='#E8A93A',LAMP='#FFD27A',SIL='#C9D0D8';
 function hx(c){c=c.replace('#','');return[0,2,4].map(i=>parseInt(c.slice(i,i+2),16));}
 function mix(c,t,k){return'rgb('+hx(c).map(v=>Math.round(v+(t-v)*k)).join(',')+')';}
 let g,u,dpr,lv,LW;const X=v=>v*u,px=v=>v*dpr;
@@ -3031,7 +3031,9 @@ const DR={
   roller(0,-.88-d,2.3,.6,'#8A94A2');teeth(0,-1.18-d,2.1,9,.14);
   for(const [x,y] of [[-.6,-.15],[.6,-.15],[-.75,.95],[.75,.95],[0,-.15]])bolt(x,y);}
 };
-window.M2P={roles:Object.keys(DR),draw(ctx,role,U,d,a,f){g=ctx;u=U/1.0;dpr=d||1;LW=Math.max(px(1.6),Math.min(px(3),u*.085));const c=Math.cos(-a),s=Math.sin(-a),vx=Math.SQRT1_2,vy=Math.SQRT1_2;lv=[vx*c-vy*s,vx*s+vy*c];g.lineJoin='round';(DR[role]||DR.walk)(f||0);}};
+const PALA={walk:['#6B4B35','#CDBB94','#252A30'],fast:['#F2CD46','#294D59','#202833'],tank:['#24635D','#B9C7C5','#1B2B2D'],shoot:['#3569B0','#C3CCD5','#202938'],heavy:['#7C8790','#D7BD83','#242A31'],elite:['#645181','#C5A774','#252331'],mid:['#EEE5CF','#217D83','#222B32'],boss:['#30363F','#E8BE55','#111820']};/* v137g: palette A (GPT) main/accent/trim */
+const DK=(c,k)=>'#'+[1,3,5].map(i=>Math.round(parseInt(c.substr(i,2),16)*(1-k)).toString(16).padStart(2,'0')).join('');
+window.M2P={roles:Object.keys(DR),draw(ctx,role,U,d,a,f){g=ctx;u=U/1.0;dpr=d||1;LW=Math.max(px(1.6),Math.min(px(3),u*.085));const c=Math.cos(-a),s=Math.sin(-a),vx=Math.SQRT1_2,vy=Math.SQRT1_2;lv=[vx*c-vy*s,vx*s+vy*c];g.lineJoin='round';{const q=PALA[role]||PALA.walk;IV=q[0];IVD=DK(q[0],.15);CO=q[1];COD=DK(q[1],.2);N=q[2];}g.lineJoin='round';(DR[role]||DR.walk)(f||0);}};
 })();
 </script>
 <script>/* v133m: per-map enemy looks from the map drafts (enemies_map1..8). LOOKS + NAMES ONLY: no behaviour/stat/spawn change. Cached offscreen sprites (16 facings x size bucket). No flash/blink. */
