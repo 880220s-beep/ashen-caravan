@@ -3683,6 +3683,7 @@ function post(dt){for(const e of EN){if(e.dead)continue;const R=role(e);if(!R)co
 /* mid-boss: base S2 shots/dash replaced by the claw pattern above (move multiplier only) */
 const _mai=miniAI;miniAI=function(e,dt,a,dd){return e.m2&&e.m2!=='walk'?0:1;};
 /* ---- boss 협곡 분쇄왕: long charge -> stop -> wide front slam -> roller stuck ---- */
+{const _sb2=spawnBoss;spawnBoss=function(){const r=_sb2.apply(this,arguments);if(MAP===2&&G.boss&&!G.boss._hp15){G.boss._hp15=1;G.boss.hp*=1.5;G.boss.max*=1.5;}return r;};}/* v137d: map2 boss HP x1.5 (all difficulties) */
 boss2Pick=function(b){b.st='m2cw';b.tm=WB;b.ca=Math.atan2(P.y-b.y,P.x-b.x);};
 boss2Upd=function(b,dt){const L=430;
  if(b.st==='m2cw'){if(b.tm<=0){b.st='m2ch';b.tm=.7;M2S.bcharge++;}return 1;}
