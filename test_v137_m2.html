@@ -3694,7 +3694,7 @@ function post(dt){if(DIFF===1)for(const e of EN){if(e.dead||e._h2||e.mb||e===G.b
 /* mid-boss: base S2 shots/dash replaced by the claw pattern above (move multiplier only) */
 const _mai=miniAI;miniAI=function(e,dt,a,dd){return e.m2&&e.m2!=='walk'?0:1;};
 /* ---- boss 협곡 분쇄왕: long charge -> stop -> wide front slam -> roller stuck ---- */
-{const _sb2=spawnBoss;spawnBoss=function(){const r=_sb2.apply(this,arguments);if(MAP===2&&G.boss&&!G.boss._hp15){G.boss._hp15=1;G.boss.hp*=1.5;G.boss.max*=1.5;}return r;};}/* v137d: map2 boss HP x1.5 (all difficulties) */
+{const _sb2=spawnBoss;spawnBoss=function(){const r=_sb2.apply(this,arguments);if(MAP===2&&G.boss&&!G.boss._hp15){G.boss._hp15=1;G.boss.hp*=2.25;G.boss.max*=2.25;}return r;};}/* v137j: map2 boss HP x2.25 (all difficulties) */
 boss2Pick=function(b){};/* v137h: boss picks its own attacks in boss2Upd */
 /* v137h: 협곡 분쇄왕 = charge-grab (band 1.5s -> 700 @1400/s, grab r135, 24%) -> stuck -> slam -> 4-missile fan; extra volley if no charge for 6.5s (8s cd). Boss-local time, paused in awakenings with bossUpd. */
 window.M2MS=[];
