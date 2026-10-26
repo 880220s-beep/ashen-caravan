@@ -3703,7 +3703,8 @@ const _mai=miniAI;miniAI=function(e,dt,a,dd){return e.m2&&e.m2!=='walk'?0:1;};
 boss2Pick=function(b){};/* v137h: boss picks its own attacks in boss2Upd */
 /* v137h: 협곡 분쇄왕 = charge-grab (band 1.5s -> 700 @1400/s, grab r135, 24%) -> stuck -> slam -> 4-missile fan; extra volley if no charge for 6.5s (8s cd). Boss-local time, paused in awakenings with bossUpd. */
 window.M2MS=[];
-function m2vol(b){const a0=Math.atan2(P.y-b.y,P.x-b.x);b.mv=[-40,-20,20,40].map(d=>a0+d*Math.PI/180);b.st='m2mw';b.tm=.9;b._vcd=b.bt2+8;}
+function m2vol(b){const a0=Math.atan2(P.y-b.y,P.x-b.x);b.mv=[-50,-30,-10,10,30,50].map(d=>a0+d*Math.PI/180);b.st='m2mw';b.tm=.9;b._vcd=b.bt2+8;}
+{const _smh=spawnMini0;spawnMini0=function(){const r=_smh.apply(this,arguments);if(STAGE===2){const m=EN.filter(e=>e.mb&&!e.dead&&!e._m2hp).pop();if(m){m._m2hp=1;m.hp*=1.5;m.max*=1.5;}}return r;};}/* v137l: map2 mid-boss HP x1.5 */
 boss2Upd=function(b,dt){const L=700,V=1400,GR=135;b.bt2=(b.bt2||0)+dt;if(b._lc==null){b._lc=b.bt2;b._ccd=0;b._vcd=0;}
  for(const m of M2MS){if(m.d>=650)continue;const v=400*dt;m.x+=Math.cos(m.a)*v;m.y+=Math.sin(m.a)*v;m.d+=v;if(!m.vol.hit&&inCirc(m.x,m.y,11)){m.vol.hit=1;m.d=650;hitP(MHP(.08),'m2missile');M2S.mhit=(M2S.mhit||0)+1;}}
  for(let k=M2MS.length-1;k>=0;k--)if(M2MS[k].d>=650)M2MS.splice(k,1);
