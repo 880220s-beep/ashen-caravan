@@ -3906,7 +3906,12 @@ miniAI=function(e,dt){if(AW())return 0;e._bc=(e._bc??2.5)-dt;e._pc=(e._pc??4)-dt
 boss2Pick=function(b){};
 boss2Upd=function(b,dt){if(b.st!=='walk')b.st='walk';b.tm=99;b._busy=busy(b);if(AW())return 0;b._hc=(b._hc??3)-dt;b._zc=(b._zc??6)-dt;b._kc=(b._kc??9)-dt;
  if(!b._busy){if(b._hc<=0){hail(b);b._hc=8;}else if(b._zc<=0){bliz(b);b._zc=10;}else if(b._kc<=0){brk(b);b._kc=12;}}return 0;};
-const _up=update;update=function(dt){const t0=G.t;_up(dt);if(P._sp0==null&&P.spd)P._sp0=P.spd;const d=G.t-t0;if(d<=0)return;pjUpd(d);if(AW())return;skills(d);pwUpd(d);hold();zUpd(d);M4S.maxWarn=Math.max(M4S.maxWarn,groups());};
+/* v139b: map-4 strength (GPT mild plan, 영태 OK): regular + 압설기 HP x1.56 atk x1.32; elite x1.80/x1.43; mid x1.56/x1.32 (9266); boss HP x1.56 (18954), contact x1.32. Hard: regular 4 types extra x1.25/x1.2. Skill % unchanged. */
+function str4(){for(const e of EN){if(e.dead||e._s4)continue;e._s4=1;const el=e.elite&&!e.mb,h=el?1.8:1.56,k=el?1.43:1.32;e.hp*=h;if(e.max)e.max*=h;e.dmg*=k;
+  if(DIFF===1&&!e.mb&&!e.elite&&['grunt','runner','shield','shaman'].includes(e.type)){e.hp*=1.25;if(e.max)e.max*=1.25;e.dmg*=1.2;}}
+ const b=G.boss;if(b&&!b._s4){b._s4=1;b.hp*=1.56;b.max*=1.56;}}
+{const _h=hurt;hurt=function(d){if(G._src==='boss'||G._src==='bossbul')d*=1.32;return _h.call(this,d);};}
+const _up=update;update=function(dt){const t0=G.t;_up(dt);if(P._sp0==null&&P.spd)P._sp0=P.spd;const d=G.t-t0;if(d<=0)return;str4();pjUpd(d);if(AW())return;skills(d);pwUpd(d);hold();zUpd(d);M4S.maxWarn=Math.max(M4S.maxWarn,groups());};
 /* ---------- drawing ---------- */
 function pjDraw(p){cx.save();if(p.k==='snow'){cx.fillStyle='#F4F8FB';cx.strokeStyle='#142233';cx.lineWidth=px(3);cx.beginPath();cx.arc(p.x,p.y,p.r,0,TAU);cx.fill();cx.stroke();cx.fillStyle='#6F8FA8';cx.beginPath();cx.arc(p.x,p.y,p.r-px(1.5),Math.PI*.15,Math.PI*.85);cx.fill();}
  else if(p.k==='puck'){cx.fillStyle='#142233';cx.strokeStyle='#A9C3D6';cx.lineWidth=px(2);cx.beginPath();cx.arc(p.x,p.y,p.r,0,TAU);cx.fill();cx.stroke();}
