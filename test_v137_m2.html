@@ -315,7 +315,7 @@ function rbSkill(){const K=RBSK[CAR];G.bq=G.bq||[];BC.on=1;BC.t0=G.t;BC.lanes=[]
  v75tone(160,60,.5,'sawtooth',.07);v75noise(.4,.05,700);
  G.bq.push({t:G.t+K.hit,f:rbFin});G.bq.push({t:G.t+6.5,f:rbEnd});}
 function rbFin(){const B=TUNE.bull,vh=viewHalf(),mg=48,cX=P.x,cY=P.y;BC.fin=1;RBSS.fin=G.t;
- for(const e of rbPool()){if(!bcStrong(e))continue;const p=e===G.boss?B.finBossP:e.mb?B.finMiniP:B.finEliteP;e.hp=Math.max(1,e.hp-(e.max||e.hp)*p/100);e.flash=.15;}
+ for(const e of rbPool()){if(!bcStrong(e))continue;const p=e===G.boss?B.finBossP:e.mb?B.finMiniP:B.finEliteP;e.hp=Math.max(1,e.hp-(e.max||e.hp)*p/100);if(e._bt0===BC.t0)e._bhp=e.hp;/* v137n: finale damage survives HP-hold */e.flash=.15;}
  let vic=EN.filter(e=>!e.dead&&!bcStrong(e)&&Math.abs(e.x-CV.x)<=vh.w+mg&&Math.abs(e.y-CV.y)<=vh.h+mg).map(e=>({e,d:Math.hypot(e.x-cX,e.y-cY)}));
  if(RBSS.car==='raven'&&RBSS.mkd){for(const e of RBSS.mkd)if(!e.dead&&!bcStrong(e)&&!vic.some(v=>v.e===e))vic.push({e,d:0});}if(RBSS.car==='raven'){const ord=new Map();RBSS.marks.forEach((m,i)=>{if(!ord.has(m.e))ord.set(m.e,i);});vic.forEach(v=>v.d=ord.has(v.e)?ord.get(v.e):999);}
  vic.sort((a,b)=>a.d-b.d);const dm=Math.max(1,...vic.map(v=>v.d===999?0:v.d));
