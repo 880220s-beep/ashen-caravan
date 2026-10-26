@@ -3803,10 +3803,7 @@ function regAdd(e,parts,dmg,o){if(REGN()>=CAP())return false;add(ms(parts,dmg,Ob
 Object.assign(M3S,{ash:0,boom:0,cross:0,tri:0,frag:0,block:0,six:0,walls:0});
 function skills(dt){for(const e of EN){if(e.dead||e.mb||e===G.boss)continue;const dd=Math.hypot(P.x-e.x,P.y-e.y),a=Math.atan2(P.y-e.y,P.x-e.x);e._k3=(e._k3??1+Math.random())-dt;if(e._k3>0)continue;let ok=null,cd=0;
  if(e.elite){if(dd<380){const px_=P.x+(P.vx||0)*.9,py=P.y+(P.vy||0)*.9;ok=regAdd(e,[{s:[px_-60,py,0,120,120]}],.12,{nm:'block'});cd=7;if(ok)M3S.block++;}}
- else if(e.type==='grunt'){if(dd<100){ok=regAdd(e,[{c:[e.x,e.y,45]}],.05,{nm:'ash',cx:()=>false});cd=5;if(ok)M3S.ash++;}}
- else if(e.type==='runner'){if(dd<60&&!e._bm){ok=regAdd(e,[{c:[e.x,e.y,70]}],.09,{nm:'boom',on:()=>{if(!e.dead){e.dead=1;e.hp=0;}}});if(ok){e._bm=1;e._hx=e.x;e._hy=e.y;M3S.boom++;}cd=1e9;}}
- else if(e.type==='shield'){if(dd<260){const c=Math.cos(a),s_=Math.sin(a);ok=regAdd(e,[{s:[P.x-c*130,P.y-s_*130,a,260,40]},{s:[P.x+s_*130,P.y-c*130,a+Math.PI/2,260,40]}],.08,{nm:'cross'});cd=7;if(ok)M3S.cross++;}}
- else if(e.type==='shaman'){if(dd<420){const nx=-Math.sin(a),ny=Math.cos(a);ok=regAdd(e,[-1,0,1].map(i=>({c:[P.x+nx*90*i,P.y+ny*90*i,45]})),.07,{nm:'tri'});cd=6;if(ok)M3S.tri++;}}
+ /* v138c: 잿더미/자폭/균열 십자/세발 포격 removed (영태) */
  else if(e.type==='brute'){if(dd<150){const pr=[];for(let i=0;i<5;i++){const q=a+i*TAU/5;pr.push({c:[e.x+Math.cos(q)*120,e.y+Math.sin(q)*120,40]});}ok=regAdd(e,pr,.10,{nm:'frag'});cd=8;if(ok)M3S.frag++;}}
  if(ok===true)e._k3=cd;else if(ok===false)e._k3=1;}}
 function six(e){const a=Math.atan2(P.y-e.y,P.x-e.x),pr=[];for(let i=0;i<6;i++)pr.push({s:[e.x,e.y,a+i*TAU/6,420,40]});add(ms(pr,.13,{src:e,nm:'six'}));M3S.six++;}
