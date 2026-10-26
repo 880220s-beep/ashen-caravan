@@ -879,6 +879,7 @@ function flt0(a,fn){let j=0;for(let i=0;i<a.length;i++)if(fn(a[i]))a[j++]=a[i];a
 // ---------- active skills: picked from a level-up card, UPGRADED (never swapped) by transforms. Tier = G.veh.
 const ACTD={shock:{n:'충격파',d:'앞쪽으로 충격파를 내서 적을 밀쳐내요',T:[{arc:90,rad:180,dmg:75,kb:270,cd:8},{arc:110,rad:240,dmg:180,kb:350,cd:10},{arc:130,rad:300,dmg:240,kb:470,cd:5.5}]},
  dash:{n:'돌진',d:'돌진 중 무적 · 부딪힌 적을 날려요 · 끝나고 1초 무적',T:[{dur:2.3,dmg:60,ring:90,kb:300,cd:8},{dur:2.4,dmg:180,ring:150,kb:350,cd:10},{dur:2.45,dmg:240,ring:170,kb:460,cd:5.5}]}};
+/* v137m: 영태 — all active skills (충격파/돌진) cooldown 30s */for(const k in ACTD)for(const t of ACTD[k].T)t.cd=30;
 let ACT=null,SKL=0;const SKB={cd:0,max:8};
 // shock skill-upgrade: each upgrade (max 2) widens toward the next transform tier; tier 3 (135/305) is the hard cap, always a cone
 function shockK(){const T=ACTD.shock.T,v=Math.min(2,G.veh),a=T[v],n=T[Math.min(2,v+1)],f=v<2?SKL/3:0;return{...a,arc:a.arc+(n.arc-a.arc)*f,rad:(a.rad+(n.rad-a.rad)*f)*.8,dmg:a.dmg*(1+SKL*.15)};}
@@ -1086,7 +1087,7 @@ function poolScorchLayer(){if(!POOL.length)return;if(!PSL)PSL=document.createEle
 let _v75l=0;function v75Frame(){const n=performance.now(),dt=_v75l?Math.min(.05,(n-_v75l)/1000)*(G.paused||G.upause||G.over?0:(G.stop>0?0:SPEED)):0;_v75l=n;dashUpdate(dt);barUpdate(dt);bcUpdate(dt);}
 
 /* ===== v74art: feedback batch ===== */
-function bskMax(){return CAR==='flame'||RBCAR?35.5:35.8;/* v76 flame 5.8+29 *//* v75: tank 5.8s skill + 30s */}
+function bskMax(){return 60;/* v137m: 영태 — all awakening skills 60s cooldown (was flame/robot 35.5, others 35.8) *//* v76 flame 5.8+29 *//* v75: tank 5.8s skill + 30s */}
 /* --- firebomb landing fx --- */
 const MLF=[];function MLAND(x,y){const z=Math.max(.3,zoom());MLF.push({k:'f',x,y,t:0,T:.12,r:18/z});for(let i=0;i<6;i++){const a=Math.random()*TAU,v=(60+Math.random()*60)/z;MLF.push({k:'d',x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,t:0,T:.2,c:i%2?'#30465C':'#FFE066'});}}
 function drawMolo(s){const z=Math.max(.3,zoom()),u=Math.min(1,s.t/s.T),gx=s.x+(s.tx-s.x)*u,gy=s.y+(s.ty-s.y)*u,h=(44/z)*4*u*(1-u);
