@@ -35,6 +35,7 @@ const TUNE={
  drone:{col:'#F5F7FC',colEvo:'#FFFFFF',out:'#142233',trail:'#8793A5',lenPx:12,widPx:5,zRef:.6/*px sizes are at this zoom; drawing scales with b.r like the hitbox*/,baseR:3.5,evoBaseR:5,evo:{scale:1.3,body:'#454A53',shadow:'#2B2E33',hi:'#B4BBC4',out:'#142233',light:'#FFFFFF',barrel:'#D6DBE3',bLen:16,bWid:7,stripe:'#45484E',trail:'#3C3F44',trailLen:22,orbit:1.15}},
  boss:{size:1.80,hp:1.35,hitR:1.40,zoomOut:1.18/*view 18% wider while boss alive*/,zoomT:1.0},mini:{size:1.55,hp:3.3/*range 3.3-4.5; 3.3 still above 9-12s target, see report. replaces stage/diff-free base 1200 S1 / 1800 S2*/,hitR:1.2}
 };
+/* v137m: all awakening skills (tank 사자 포격 / flame 홍염 대심판 / raven·mammoth·croc finales) damage x1.5, incl. %-of-HP caps and finale % */{const K=1.5,A=TUNE.awk,B=TUNE.bull;A.bullDmg*=K;A.barDmg*=K;for(const g in A.bullCapBoss)A.bullCapBoss[g]*=K;for(const g in A.bullCapMini)A.bullCapMini[g]*=K;A.barCapBoss*=K;A.barHitBoss*=K;A.barFinBoss*=K;A.barCapMini*=K;A.barFinMini*=K;B.finEliteP*=K;B.finMiniP*=K;B.finBossP*=K;}
 /* =============================================================================== */
 
 const CAR=(()=>{const c=Q.get('car')||(PLAY?SAVE.car:'tank');if(['raven','mammoth','croc'].includes(c)&&(SAVE.cars[c]||Q.has('car')))return c;return c==='flame'&&(SAVE.cars.flame||Q.has('car'))?'flame':'tank';})();
