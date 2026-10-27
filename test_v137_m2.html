@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v88';
+const BUILD='v89';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -3142,9 +3142,9 @@ D[8]=M(['종탑 순찰기','걷는형',p=>{wh(-.55,.55);wh(.55,.55);Pg([-.3,-1,.
 const P0=MAPS[MAP].p,DM=D[MAP];window.__V133={map:MAP,names:Object.fromEntries(Object.entries(DM).map(([k,v])=>[k,v[0]]))};
 if(MAP>1){RBN.m2=DM.mid[0];RBN.b2=DM.boss[0];}else{RBN.m1=DM.mid[0];RBN.b1=DM.boss[0];}
 const CCH=new Map(),ND=16;
-function spr(role,ang,Upx,fr){fr=fr||0;const dpr=window.DPR||1,u=Math.max(2,Math.round(Upx*dpr*2)/2),d=((Math.round((ang+Math.PI/2)/(2*Math.PI)*ND)%ND)+ND)%ND,key=role+'|'+d+'|'+u+'|'+fr;let c=CCH.get(key);if(c)return c;
+function spr(role,ang,Upx,fr){fr=fr||0;const dpr=window.DPR||1,u=Math.max(2,MAP===5?Math.round(Upx*dpr)/* v89: whole device px on map 5 so idle/attack frames don't double cache misses */:Math.round(Upx*dpr*2)/2),d=((Math.round((ang+Math.PI/2)/(2*Math.PI)*ND)%ND)+ND)%ND,key=role+'|'+d+'|'+u+'|'+fr;let c=CCH.get(key);if(c)return c;
  if(CCH.size>1500)CCH.clear();const n=Math.ceil(u*4.2+8);c=document.createElement('canvas');c.width=c.height=n;g=c.getContext('2d');g.translate(n/2,n/2);g.rotate(d/ND*2*Math.PI);U=u;LW=Math.max(1.5,2*dpr*Math.min(1,u/(10*dpr))+.3);
- try{if(MAP===1&&window.M1P)M1P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===2&&window.M2P)M2P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===3&&window.M3P)M3P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===4){const c4={walk:'#2E5FD4',fast:'#0C8EA6',tank:'#3E8E2E',shoot:'#A87810',heavy:'#7A4A26',elite:'#6E6E6E',mid:'#2E5A47',boss:'#34495C'};LW=1.5*dpr;/* c15 */DM[role][2]({a:c4[role]||P0.a,b:'#A9C3D6',d:P0.d,k:role==='elite'?'#25323F':P0.k},fr);}else DM[role][2](P0);}catch(err){console.error(err)}CCH.set(key,c);return c;}
+ try{if(MAP===1&&window.M1P)M1P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===2&&window.M2P)M2P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===3&&window.M3P)M3P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===5&&window.M5P)M5P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===4){const c4={walk:'#2E5FD4',fast:'#0C8EA6',tank:'#3E8E2E',shoot:'#A87810',heavy:'#7A4A26',elite:'#6E6E6E',mid:'#2E5A47',boss:'#34495C'};LW=1.5*dpr;/* c15 */DM[role][2]({a:c4[role]||P0.a,b:'#A9C3D6',d:P0.d,k:role==='elite'?'#25323F':P0.k},fr);}else DM[role][2](P0);}catch(err){console.error(err)}CCH.set(key,c);return c;}
 function blit(role,x,y,ang,Uw,shy,fr){const T=cx.getTransform(),sc=Math.hypot(T.a,T.b)/(window.DPR||1),c=spr(role,ang,Uw*sc,fr),dpr=window.DPR||1,w=c.width/dpr/sc;
  cx.fillStyle='rgba(0,0,0,.25)';cx.beginPath();cx.ellipse(x+Uw*.1,y+Uw*(shy||.35),Uw*1.1,Uw*.55,0,0,TAU);cx.fill();
  /* v137k perf: the cached sprite is already 1:1 device size; stamp it on whole device pixels (no resampling) for the boss and for everything frozen in the raven awakening */
@@ -3155,13 +3155,13 @@ const WPX={walk:30,fast:25,tank:39,shoot:35,heavy:52};
 const _g=goblin;goblin=function(e){if(e.elite||e.mb||e.boss)return _g(e);const role=RM[e.type];if(!role||!DM[role])return _g(e);
  const z=zoom(),Uw=WPX[role]*(W/390)*(e.v==='big'?1.35:1)/z/2,a=Math.atan2(P.y-e.y,P.x-e.x);
  if(e.tg){cx.fillStyle='rgba(255,106,42,.45)';cx.beginPath();cx.arc(e.x,e.y,e.r*1.6,0,TAU);cx.fill();}
- const bob=Math.abs(Math.sin(G.t*9+(e.ph||0)*3))*Uw*.08;blit(role,e.x,e.y-bob,a,Uw);
+ const m5f=MAP===5?(window.__M2FR||0):0,bob=m5f?0:Math.abs(Math.sin(G.t*9+(e.ph||0)*3))*Uw*.08;blit(MAP===5&&e.sm5?'summon':role,e.x,e.y-bob,a,Uw,.35,m5f);
  if(e.burn>0||e.fsl>0||e.l2s>0){cx.save();cx.globalAlpha=.28;cx.fillStyle='#ff7a2a';cx.beginPath();cx.arc(e.x,e.y,Uw*.9,0,TAU);cx.fill();cx.restore();}
  if(e.max>60&&e.hp<e.max){const r=e.r;cx.fillStyle='rgba(0,0,0,.4)';cx.fillRect(e.x-r,e.y-r-10,r*2,4);cx.fillStyle='#ff5a4a';cx.fillRect(e.x-r,e.y-r-10,r*2*e.hp/e.max,4);}};
 if(MAP>1){const KM={e1:['elite',.85],e2:['elite',.85],m2:['mid',.78],b2:['boss',.72]};const _dr=drawRobo;
  drawRobo=function(kind,x,y,ang,size,flash,t,warn){const k=KM[kind];if(!k)return _dr.apply(this,arguments);
   if(kind[0]==='b'||kind[0]==='m'){if(BC.on){BC.fa=BC.fa||{};if(BC.fa[kind]===undefined)BC.fa[kind]=ang;ang=BC.fa[kind];}else if(BC.fa)BC.fa=null;}
-  blit(k[0],x,y,ang,size/2*k[1],.3,(MAP===2||MAP===3||MAP===4)?(window.__M2FR||0):0);};}
+  blit(k[0],x,y,ang,size/2*k[1],.3,(MAP===2||MAP===3||MAP===4||MAP===5)?(window.__M2FR||0):0);};}
 })();</script>
 
 <script>/* v124: hidden vibration diagnostic, only with &vibtest=1 */(function(){if(!new URLSearchParams(location.search).has('vibtest'))return;
@@ -4022,6 +4022,113 @@ function topDraw(){for(const z of Z){if(z.t<0||z.t>=z.wn||z.brk)continue;cx.save
 if(window.POSTEN){const _pe=POSTEN;window.POSTEN=function(){_pe();try{topDraw();}catch(err){console.error(err);}};}else window.POSTEN=function(){topDraw();};
 })();
 </script>
+<script>/* v89: map-5 sprites (M5P) + poses + own look for the boss's shield summons. MAP===5 only. Cached per facing/size/frame like the other maps; drawn with the whole-pixel blit. */
+/* M5P draft: map-5 (swamp) robots in the adopted map-2 M2P style (part(): fill + light band + shade band + worn chips + outline; bolts, seams, lamps, attack pose fr).
+   M5P.draw(ctx,role,u,dpr,a,fr) — same signature as M2P.draw: ctx at centre, already rotated; forward = up; u = unit px (device). fr 0 idle / 1 attack pose. v89: in the game for MAP===5 (spr branch). */
+(function(){
+let N,MC,MCD,AC,ACD,HL;const MUD='#4E3626',ST='#8E8781',STD='#5B544F',BK='#2F2A27',SIL='#D8D0C6',LAMP='#FFC766',IRON='#4A4440',REED='#E2CF8E';
+function hx(c){c=c.replace('#','');return[0,2,4].map(i=>parseInt(c.slice(i,i+2),16));}
+function mix(c,t,k){return'rgb('+hx(c).map(v=>Math.round(v+(t-v)*k)).join(',')+')';}
+const DK=(c,k)=>'#'+hx(c).map(v=>Math.round(v*(1-k)).toString(16).padStart(2,'0')).join('');
+let g,u,dpr,lv,LW;const X=v=>v*u,px=v=>v*dpr;
+const box=(x,y,w,h,r)=>(ox,oy)=>{g.beginPath();g.roundRect(X(x-w/2)+ox,X(y-h/2)+oy,X(w),X(h),X(Math.min(w,h)*(r??.18)));};
+const circ=(x,y,r)=>(ox,oy)=>{g.beginPath();g.arc(X(x)+ox,X(y)+oy,X(r),0,7);};
+const ell=(x,y,rx,ry)=>(ox,oy)=>{g.beginPath();g.ellipse(X(x)+ox,X(y)+oy,X(rx),X(ry),0,0,7);};
+const poly=(pts)=>(ox,oy)=>{g.beginPath();for(let i=0;i<pts.length;i+=2)g[i?'lineTo':'moveTo'](X(pts[i])+ox,X(pts[i+1])+oy);g.closePath();};
+function part(P,c,inner,wear){const h=Math.max(px(1),X(.05)),s=Math.max(px(1.5),X(.09)),B=4000;
+ g.save();P(0,0);g.clip();g.fillStyle=mix(c,255,.22);g.fillRect(-B,-B,2*B,2*B);P(lv[0]*h,lv[1]*h);g.clip();g.fillStyle=mix(c,0,.2);g.fillRect(-B,-B,2*B,2*B);P(-lv[0]*s,-lv[1]*s);g.clip();g.fillStyle=c;g.fillRect(-B,-B,2*B,2*B);g.restore();
+ if(inner){g.save();P(0,0);g.clip();inner();g.restore();}
+ if(wear){g.save();P(0,0);g.clip();g.strokeStyle='rgba(255,255,255,.55)';g.lineWidth=Math.max(px(1),X(.035));g.lineCap='round';for(const w of wear){g.beginPath();g.moveTo(X(w[0]),X(w[1]));g.lineTo(X(w[2]),X(w[3]));g.stroke();}g.restore();}
+ P(0,0);g.lineWidth=LW;g.strokeStyle=N;g.lineJoin='round';g.stroke();}
+const bolt=(x,y,c)=>{const r=Math.max(px(1),X(.045));g.fillStyle=c||SIL;g.beginPath();g.arc(X(x),X(y),r,0,7);g.fill();g.strokeStyle=N;g.lineWidth=Math.max(px(.8),LW*.45);g.stroke();};
+const seam=(x1,y1,x2,y2,a)=>{g.strokeStyle='rgba(30,20,15,'+(a||.5)+')';g.lineWidth=Math.max(px(1),LW*.55);g.lineCap='round';g.beginPath();g.moveTo(X(x1),X(y1));g.lineTo(X(x2),X(y2));g.stroke();};
+const lamp=(x,y,r,c)=>{g.fillStyle=c||LAMP;g.beginPath();g.arc(X(x),X(y),Math.max(px(1.2),X(r)),0,7);g.fill();g.strokeStyle=N;g.lineWidth=Math.max(px(.8),LW*.5);g.stroke();};
+/* mean face: two amber lamp-eyes under slanted visor brows (down toward the centre), no teeth */
+function eyes(x,y,sp,r){for(const sx of[-1,1]){lamp(x+sx*sp,y,r);part(poly([x+sx*(sp+r*1.5),y-r*1.9,x+sx*(sp-r*1.6),y-r*.7,x+sx*(sp-r*1.6),y-r*1.35,x+sx*(sp+r*1.6),y-r*2.7]),N);}}
+function leg(x1,y1,x2,y2,w,c){g.lineCap='round';g.lineJoin='round';g.beginPath();g.moveTo(X(x1),X(y1));g.lineTo(X(x2),X(y2));g.strokeStyle=N;g.lineWidth=X(w)+LW*2;g.stroke();g.strokeStyle=c;g.lineWidth=X(w);g.stroke();g.strokeStyle='rgba(255,255,255,.3)';g.lineWidth=Math.max(px(1),X(w*.25));g.stroke();}
+function track(x,y,w,h){part(box(x,y,w,h,.25),BK,()=>{for(let t=-h/2;t<h/2;t+=h/7)seam(x-w/2,y+t,x+w/2,y+t,.7);});part(box(x,y,w*.35,h*.85,.3),STD);}
+function paddle(x,y,w,h){part(box(x,y,w,h,.3),BK,()=>{for(let i=-2;i<=2;i++){g.fillStyle=ST;g.fillRect(X(x-w/2),X(y+i*h/5.5)-Math.max(px(1),X(.025)),X(w),Math.max(px(2),X(.05)));}});part(circ(x,y,w*.28),STD);}
+function valve(x,y,r){part(circ(x,y,r),AC,()=>{g.fillStyle=mix(AC,0,.25);g.beginPath();g.arc(X(x),X(y),X(r*.55),0,7);g.fill();});for(let k=0;k<4;k++){const a=k*Math.PI/4;seam(x-Math.cos(a)*r*.9,y-Math.sin(a)*r*.9,x+Math.cos(a)*r*.9,y+Math.sin(a)*r*.9,.8);}bolt(x,y);}
+function chain(x1,y1,x2,y2,n){for(let i=0;i<=n;i++){const t=i/n,x=x1+(x2-x1)*t,y=y1+(y2-y1)*t;part(ell(x,y,i%2?.05:.075,i%2?.085:.06),IRON);}}
+function hook(x,y,s){part(poly([x,y-.06,x+s*.16,y+.02,x+s*.12,y+.2,x-s*.02,y+.24,x-s*.06,y+.14,x+s*.04,y+.12,x+s*.06,y+.04]),ST);}
+function reeds(x,y,w,n,len){for(let i=0;i<n;i++){const tx=x-w/2+(i+.5)*w/n;part(poly([tx-.035,y,tx+.035,y,tx+.012,y-len,tx-.012,y-len]),REED);}}
+const DR={
+ /* every role keeps the silhouette of its map-5 draft in /workspace/preview/enemies/prev.html D[5] (same table as the game's v133m D[5]); only detail + colour are new */
+ walk(fr){/* 진흙 준설기: round body, 2 side wheels, U-shaped dredge bucket in front */const d=fr?.14:0;
+  paddle(-.75,.3,.26,.42);paddle(.75,.3,.26,.42);
+  part(box(0,-.78-d,.62,.42,.2),MUD,()=>{for(const y of[-.88,-.72])seam(-.3,y-d,.3,y-d,.35);});
+  part(poly([-.5,-.55,-.5,-1.15-d,.5,-1.15-d,.5,-.55,.3,-.55,.3,-.95-d,-.3,-.95-d,-.3,-.55]),ST,()=>{seam(-.5,-1.02-d,.5,-1.02-d,.45);},[[-.45,-1.1-d,-.45,-.65],[-.4,-1.1-d,.2,-1.1-d]]);
+  for(let i=0;i<4;i++){const tx=-.375+i*.25;part(poly([tx-.065,-1.15-d,tx+.065,-1.15-d,tx,-1.28-d]),SIL);}
+  part(circ(0,.1,.8),MC,()=>{g.strokeStyle='rgba(30,20,15,.45)';g.lineWidth=Math.max(px(1),LW*.55);g.beginPath();g.arc(0,X(.1),X(.58),0,7);g.stroke();seam(-.8,.1,-.58,.1);seam(.58,.1,.8,.1);},[[-.55,-.3,-.25,-.55],[-.7,.0,-.7,.35]]);
+  for(const sx of[-1,1])part(box(sx*.4,-.6,.16,.18,.3),STD);
+  part(circ(0,.32,.3),AC,()=>{seam(-.3,.32,.3,.32,.4);},[[-.18,.15,.02,.07]]);bolt(0,.2);for(const a of[0,1,2,3,4,5]){const t=a*Math.PI/3;bolt(Math.cos(t)*.68,.1+Math.sin(t)*.68);}
+  eyes(0,-.2,.24,.075);},
+ fast(fr){/* 수면 소금쟁이기: slim oval body on 4 X-legs ending in float pads */const k=fr?.82:1;
+  for(const[a,b]of[[-1,-1],[1,-1],[-1,1],[1,1]]){const mx=a*.62*k,my=b*.6*k;leg(a*.25,b*.2,mx,my,.1,ACD);leg(mx,my,a*1.0*k,b*1.0*k,.07,ST);part(circ(mx,my,.075),SIL);part(ell(a*1.0*k,b*1.0*k,.13,.1),AC,()=>{seam(a*k-.13,b*k,a*k+.13,b*k);});}
+  part(ell(0,0,.35,.55),MC,()=>{seam(-.35,.12,.35,.12,.4);seam(0,.12,0,.55,.4);},[[-.22,-.3,-.25,.1]]);
+  part(box(0,.3,.14,.36,.4),AC);bolt(0,.22);bolt(0,.42);
+  eyes(0,-.2,.12,.06);},
+ tank(fr){/* 늪지 부교차: two long side pontoons, plank deck, front hatch */const L=fr?LAMP:'#FFB24A';
+  for(const sx of[-1,1])part(box(sx*.85,0,.4,1.9,.5),AC,()=>{for(const y of[-.55,0,.55])g.fillStyle=ACD,g.fillRect(X(sx*.85-.2),X(y-.045),X(.4),X(.09));},[[sx*.85-.11,-.75,sx*.85-.11,-.2]]);
+  for(const sx of[-1,1])for(const y of[-.6,.6])part(box(sx*.66,y,.14,.16,.3),IRON);
+  part(box(0,0,1.3,1.5,.08),MC,()=>{for(let y=-.55;y<.75;y+=.21)seam(-.65,y,.65,y,.5);seam(-.22,-.75,-.22,.75,.25);seam(.3,-.75,.3,.75,.25);},[[-.58,-.68,.05,-.68],[-.6,-.6,-.6,-.1]]);
+  part(box(0,-.2,.8,.6,.12),HL,()=>{seam(-.4,-.05,.4,-.05,.4);},[[-.34,-.44,.0,-.44]]);
+  for(const [x,y] of[[-.32,-.43],[.32,-.43],[-.32,.03],[.32,.03],[-.5,.62],[.5,.62]])bolt(x,y);
+  part(box(0,.5,.36,.16,.4),STD);lamp(0,.5,.05,L);eyes(0,-.25,.2,.065);},
+ shoot(fr){/* 갈대 세발포: round body, three reed barrels fanned forward */const r=fr?.12:0;
+  for(const a of[-.25,0,.25]){g.save();g.translate(0,X(.2));g.rotate(a);const l=1.6-r;
+   part(box(0,-l/2,.12,l,.5),REED,()=>{for(const y of[-.3,-.62,-.95,-1.28])if(-y<l)seam(-.07,y,.07,y,.65);},[[-.03,-l+.1,-.03,-.4]]);part(box(0,-l,.17,.12,.35),fr?LAMP:STD);g.restore();}
+  part(circ(0,.2,.7),MC,()=>{seam(-.7,.3,.7,.3,.35);},[[-.45,-.15,-.15,-.4],[-.6,.1,-.6,.45]]);
+  for(const sx of[-1,1])part(box(sx*.58,.55,.18,.16,.3),STD);
+  part(circ(0,.2,.3),AC,()=>{seam(-.3,.2,.3,.2,.4);},[[-.18,.05,.02,-.04]]);part(circ(0,.2,.1),STD);
+  for(const a of[.5,1.57,2.64]){bolt(Math.cos(a)*.52,.2+Math.sin(a)*.52);}eyes(0,-.12,.4,.065);},
+ heavy(fr){/* 수문 압착기: rear roller base, square body, wide slatted sluice gate in front */const d=fr?.16:0;
+  part(box(0,.85,1.8,.3,.4),IRON,()=>{for(let x=-.8;x<.85;x+=.2)seam(x,.7,x,1.0,.55);g.fillStyle='rgba(255,255,255,.25)';g.fillRect(X(-.9),X(.74),X(1.8),X(.05));});
+  part(box(0,.2,1.3,1.1,.1),MC,()=>{seam(-.65,.0,.65,.0,.4);seam(0,.0,0,.75,.35);for(const x of[-.45,-.3,.3,.45])seam(x,.35,x,.65,.5);},[[-.58,-.28,.05,-.28],[-.6,-.2,-.6,.3]]);
+  for(const sx of[-1,1])part(box(sx*.58,-.4,.16,.4,.3),STD);
+  part(box(0,-.75-d,1.9,.5,.06),AC,()=>{for(const x of[-.5,0,.5]){g.fillStyle=ACD;g.fillRect(X(x-.035),X(-.98-d),X(.07),X(.46));}seam(-.95,-.75-d,.95,-.75-d,.3);},[[-.88,-.96-d,-.1,-.96-d]]);
+  for(const x of[-.78,-.25,.25,.78])bolt(x,-.75-d);bolt(-.45,.5);bolt(.45,.5);eyes(0,-.08,.24,.075);},
+ elite(fr){/* 철갑 수문기: copper base, dark iron body, wide banded steel gate */const d=fr?.18:0;
+  part(box(0,.85,1.9,.32,.4),AC,()=>{for(let x=-.85;x<.9;x+=.19)seam(x,.7,x,1.0,.5);});
+  part(box(0,.2,1.3,1.1,.1),MC,()=>{seam(-.65,.0,.65,.0,.5);seam(-.65,.52,.65,.52,.5);},[[-.58,-.28,.05,-.28]]);
+  part(box(0,.55,.5,.24,.3),MCD,()=>{lamp(-.12,.55,.055);lamp(.12,.55,.055);});
+  for(const sx of[-1,1])part(poly([sx*.65,-.2,sx*.85,-.05,sx*.85,.55,sx*.65,.7]),AC);
+  part(box(0,-.75-d,2.0,.55,.06),HL,()=>{for(const y of[-.9,-.6]){g.fillStyle=AC;g.fillRect(X(-1),X(y-d-.04),X(2),X(.08));}for(const x of[-.35,.35])seam(x,-1.02-d,x,-.48-d,.5);},[[-.92,-.98-d,-.1,-.98-d]]);
+  for(const x of[-.7,0,.7])bolt(x,-.75-d,AC);bolt(-.4,.3);bolt(.4,.3);eyes(0,-.12,.25,.08);},
+ mid(fr){/* 삼발 준설기: triangle hub with three dredge arms and scoop buckets (fr1 buckets open) */const op=fr?.34:0;
+  for(const a of[0,2.09,4.19]){g.save();g.rotate(a);
+   leg(0,0,0,-1.1,.16,ACD);for(const y of[-.5,-.8])seam(-.08,y,.08,y,.7);part(circ(0,-1.0,.1),STD);
+   for(const sx of[-1,1]){g.save();g.translate(0,X(-1.05));g.rotate(sx*op);g.translate(0,X(1.05));part(poly([0,-1.05,sx*.3,-1.05,sx*.25,-1.45,0,-1.45]),ST,()=>{seam(sx*.14,-1.12,sx*.14,-1.4,.4);},[[sx*.04,-1.09,sx*.24,-1.09]]);for(let i=0;i<2;i++){const tx=sx*(.07+i*.12);part(poly([tx-.05,-1.45,tx+.05,-1.45,tx,-1.56]),SIL);}g.restore();}
+   g.restore();}
+  part(poly([0,-.75,.65,.4,-.65,.4]),MC,()=>{seam(-.33,-.18,.33,-.18,.35);seam(-.5,.25,.5,.25,.35);},[[-.08,-.6,-.45,.15]]);
+  valve(0,0,.2);for(const [x,y] of[[0,-.5],[.42,.27],[-.42,.27]])bolt(x,y);eyes(0,-.32,.13,.05);},
+ boss(fr){/* 철갑 수문왕: twin tracks, body, wide slatted gate across the front (fr1 gate lowered) */const d=fr?.14:0;
+  track(-1.05,.3,.3,1.2);track(1.05,.3,.3,1.2);
+  part(box(0,.4,1.5,1.0,.08),MC,()=>{seam(-.75,.15,.75,.15,.45);seam(-.4,.15,-.4,.9,.35);seam(.4,.15,.4,.9,.35);},[[-.68,-.04,.0,-.04],[-.7,.05,-.7,.6]]);
+  for(const sx of[-1,1]){part(box(sx*.62,.72,.18,.26,.3),STD);part(circ(sx*.62,.7,.06),BK);}
+  valve(0,.45,.22);
+  for(const sx of[-1,1]){part(box(sx*1.24,-.55-d,.14,.7,.4),IRON);chain(sx*1.24,-.2-d,sx*1.3,.25,4);hook(sx*1.3,.32,sx);}
+  part(box(0,-.55-d,2.4,.6,.05),AC,()=>{for(const x of[-.8,-.4,0,.4,.8]){g.fillStyle=ACD;g.fillRect(X(x-.04),X(-.8-d),X(.08),X(.5));}g.fillStyle=IRON;g.fillRect(X(-1.2),X(-.84-d),X(2.4),X(.08));},[[-1.1,-.78-d,-.2,-.78-d]]);
+  for(const x of[-1.0,-.6,-.2,.2,.6,1.0])bolt(x,-.42-d,SIL);eyes(0,.05,.32,.09);},
+ summon(fr){/* 방패 소환체: the game draws summons with the tank sprite (늪지 부교차); this is that silhouette at its own colour so it reads as a summon */return DR.tank(fr);}
+};
+/* map-5 palette: rust · clay · reed · bone · copper (warm family; maps 1-4 are mostly blue/teal/green/ivory-cobalt). main / accent / outline */
+const PAL5={walk:['#D8A563','#EADBB6','#2A1A14'],fast:['#EEE3C0','#B5532F','#2A1D16'],tank:['#8E3F2B','#E5C46A','#241612','#EADBB6'],shoot:['#C23B2E','#EADBB6','#2A1210'],heavy:['#EFE6D2','#C9582E','#2A1B15'],elite:['#45403B','#E2893E','#17110E','#B9B4AE'],mid:['#D9A93A','#5A4A3A','#26170F'],boss:['#6E2C25','#E6B65A','#160C0A'],summon:['#E8DDBF','#B5532F','#241612','#8E3F2B']};
+window.M5P={roles:Object.keys(DR),PAL:PAL5,draw(ctx,role,U,d,a,f){g=ctx;u=U;dpr=d||1;LW=Math.max(px(1.6),Math.min(px(3),u*.085));const c=Math.cos(-(a||0)),s=Math.sin(-(a||0)),v=Math.SQRT1_2;lv=[v*c-v*s,v*s+v*c];const q=PAL5[role]||PAL5.walk;MC=q[0];MCD=DK(q[0],.18);AC=q[1];ACD=DK(q[1],.3);N=q[2];HL=q[3]||mix(q[0],255,.35);g.lineJoin='round';(DR[role]||DR.walk)(f||0);}};
+})();
+
+(function(){if(MAP!==5)return;
+const busy=e=>!!(window.M5Z&&M5Z.some(z=>z.src===e&&z.t<z.wn));
+const near=e=>Math.hypot(P.x-e.x,P.y-e.y)<e.r+P.r+45;
+/* mark the shield summons the boss spawns (every 9 s, 5 at a time) */
+const _up=update;update=function(dt){const b=G.boss,s0=b&&!b.dead?b.sum:null,n0=EN.length;_up(dt);if(s0!=null&&b.sum>s0+1)for(let i=n0;i<EN.length;i++){const e=EN[i];if(e&&e.type==='shield'&&!e.elite&&!e.mb)e.sm5=1;}};
+const _g=goblin;goblin=function(e){if(e.mb){window.__M2FR=busy(e)?1:0;const r=_g(e);window.__M2FR=0;return r;}
+ if(e.elite){window.__M2FR=(busy(e)||near(e))?1:0;const r=_g(e);window.__M2FR=0;return r;}
+ window.__M2FR=(busy(e)||near(e))?1:0;const r=_g(e);window.__M2FR=0;return r;};
+const _db=drawBoss;drawBoss=function(b){if(b)window.__M2FR=b._busy?1:0;const r=_db(b);window.__M2FR=0;return r;};
+})();
+</script>
+
 
 <script>/* c16: skip drawing raven-doomed enemies */(function(){const _g=goblin;goblin=function(e){if(e&&e._doom&&!e.dead&&G.t-e._doom<1.5&&e!==G.boss&&!e.mb)return;return _g.apply(this,arguments);};})();</script>
 <script>/* c15: difficulty table HP + mid/boss x1.3 */(function(){const _u=update;update=function(dt){_u(dt);for(const e of EN){if(e.dead||e._t15)continue;e._t15=1;const k=e.mb?(T15?T15K('B'):1)*1.3:T15?(e.elite?T15K('E'):T15K('N')):1;if(k!==1){e.hp*=k;if(e.max)e.max*=k;}}const b=G.boss;if(b&&!b._t15){b._t15=1;const k=(T15?T15K('B'):1)*1.3;b.hp*=k;b.max*=k;}};})();</script>
