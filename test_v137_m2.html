@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v93';
+const BUILD='v94';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4514,7 +4514,7 @@ function path(z,k){const T=cx;T.beginPath();
  else if(z.sh==='chain'){T.arc(z.x,z.y,z.R*k,0,TAU);}}
 function zDraw(z){if(z.t<0||z.brk)return;cx.save();
  if(z.t<z.wn){const k=Math.max(0,Math.min(1,z.t/z.wn));path(z,1);cx.fillStyle='rgba('+RC+',.12)';cx.fill('evenodd');if(k>0){path(z,k);cx.fillStyle='rgba('+RC+',.4)';cx.fill('evenodd');}
-  path(z,1);cx.strokeStyle='#3A0E0A';cx.lineWidth=px(6);cx.stroke();cx.strokeStyle='#C8372D';cx.lineWidth=px(3);cx.stroke();
+  path(z,1);cx.strokeStyle='#3A0E0A';cx.lineWidth=px(8);cx.stroke();cx.strokeStyle='#FFFFFF';cx.lineWidth=px(5.5);cx.stroke();/* v94: white outline so map-8 warnings read on the red carpet (steady) */cx.strokeStyle='#C8372D';cx.lineWidth=px(3);cx.stroke();
 }
  else{const k=Math.max(0,1-(z.t-z.wn)/.3);path(z,1);cx.fillStyle='rgba(206,222,196,'+(.45*k)+')';cx.fill('evenodd');cx.strokeStyle='rgba(111,138,106,'+k+')';cx.lineWidth=px(3);cx.stroke();}
  cx.restore();}
