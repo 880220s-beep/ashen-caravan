@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v102';
+const BUILD='v103';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -817,7 +817,7 @@ function autoVec(){let x=0,y=0;wander+=.004;const cxw=WORLD/2+Math.cos(wander)*4
  return{x,y};}
 // ---------- weapon update
 let GRID=new Map();const SEP=new Map();function buildGrid(){GRID.clear();for(const e of EN){if(e.dead)continue;const k=((e.x/80)|0)*4096+((e.y/80)|0);let c=GRID.get(k);if(!c)GRID.set(k,c=[]);c.push(e);}}
-function nearest(n,range){const arr=[];const pad=range+120,cx0=((P.x-pad)/80)|0,cx1=((P.x+pad)/80)|0,cy0=((P.y-pad)/80)|0,cy1=((P.y+pad)/80)|0;/* v96: big targets (r>=30: mid-bosses, bosses, big elites) are in range when their body edge is, not their centre */const ED=e=>{let dd=d2(e,P);if((e.r||0)>=30){const q=Math.max(0,Math.sqrt(dd)-e.r);dd=q*q;}return dd;};for(let gx=cx0;gx<=cx1;gx++)for(let gy=cy0;gy<=cy1;gy++){const c=GRID.get(gx*4096+gy);if(!c)continue;for(const e of c){if(e.dead)continue;const dd=(e.r||0)>=30?ED(e):d2(e,P);if(dd<range*range)arr.push([dd,e]);}}if(G.boss){const dd=ED(G.boss);if(dd<range*range)arr.push([dd*0.5,G.boss]);}arr.sort((a,b)=>a[0]-b[0]);return arr.slice(0,n).map(a=>a[1]);}
+function nearest(n,range){const arr=[];const pad=range+120,cx0=((P.x-pad)/80)|0,cx1=((P.x+pad)/80)|0,cy0=((P.y-pad)/80)|0,cy1=((P.y+pad)/80)|0;/* v96: big targets (r>=30: mid-bosses, bosses, big elites) are in range when their body edge is, not their centre */const ED=e=>{let dd=d2(e,P);if((e.r||0)>=30){const q=Math.max(0,Math.sqrt(dd)-e.r*(e.tgK||1));dd=q*q;}return dd;};for(let gx=cx0;gx<=cx1;gx++)for(let gy=cy0;gy<=cy1;gy++){const c=GRID.get(gx*4096+gy);if(!c)continue;for(const e of c){if(e.dead)continue;const dd=(e.r||0)>=30?ED(e):d2(e,P);if(dd<range*range)arr.push([dd,e]);}}if(G.boss){const dd=ED(G.boss);if(dd<range*range)arr.push([dd*0.5,G.boss]);}arr.sort((a,b)=>a[0]-b[0]);return arr.slice(0,n).map(a=>a[1]);}
 function allTargets(){const a=[];for(const e of EN)if(!e.dead)a.push(e);if(G.boss)a.push(G.boss);return a;}
 // grid query (80px cells, built once per frame): enemies near (x,y) within r (+pad) plus boss
 function qT(x,y,r){const a=[];r+=40;const x0=((x-r)/80)|0,x1=((x+r)/80)|0,y0=((y-r)/80)|0,y1=((y+r)/80)|0;for(let gx=x0;gx<=x1;gx++)for(let gy=y0;gy<=y1;gy++){const c=GRID.get(gx*4096+gy);if(c)for(const e of c)if(!e.dead)a.push(e);}if(G.boss)a.push(G.boss);return a;}
@@ -4003,7 +4003,7 @@ function skills(dt){for(const e of EN){if(e.dead||e.mb||e===G.boss)continue;if(!
   if(dd<260){if(groups()<CAP()){pud(e);e._k5=e.elite?6:7;}else e._k5=1;}}}
 /* big enemies stand still while their warning is up */
 function hold(){for(const e of EN){if(e.dead||e.mb||e===G.boss)continue;if(busy(e)){if(e._hx5==null){e._hx5=e.x;e._hy5=e.y;}e.x=e._hx5;e.y=e._hy5;}else e._hx5=null;}}
-{const _sb5=spawnBoss;spawnBoss=function(){const r=_sb5.apply(this,arguments);const b=G.boss;if(b&&!b._m5v96){b._m5v96=1;b.hp*=1.6;b.max*=1.6;b.spd=80;}return r;};}/* v96: 철갑 수문왕 HP x1.6, walk speed 50->80 (skills unchanged) */
+{const _sb5=spawnBoss;spawnBoss=function(){const r=_sb5.apply(this,arguments);const b=G.boss;if(b&&!b._m5v96){b._m5v96=1;b.hp*=1.6;b.max*=1.6;b.spd=80;b.tgK=2.1;}return r;};}/* v96: 철갑 수문왕 HP x1.6, walk speed 50->80 (skills unchanged) */
 /* v100: mid-boss = 토사 분사 / 늪뿌리 들추기, a new warning every 3.5s alternating (3s under 50% HP), each skill cd 6s */
 miniAI=function(e,dt){if(AW())return 0;e._nx5=(e._nx5??2)-dt;e._sc5=(e._sc5??0)-dt;e._rt5=(e._rt5??0)-dt;if(busy(e))return 0;const dd=Math.hypot(P.x-e.x,P.y-e.y);if(dd>=600||groups()>=CAP()||e._nx5>0)return 1;
  const A=e._alt5?'root':'spray',B=A==='root'?'spray':'root',ok=k=>k==='spray'?e._sc5<=0:e._rt5<=0,k=ok(A)?A:ok(B)?B:null;
