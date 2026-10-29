@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v97';
+const BUILD='v98';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -460,7 +460,7 @@ const WD={
  mortar:{n:'박격포',e:'멸망 탄두',ed:'포탄 6발이 더 크게 터져요',d:'적 무리에 포탄이 떨어져요'},
  laser:{n:'룬 레이저',e:'심판 광선',ed:'관통 광선이 회전하며 적을 공격해요',d:'적을 관통하는 광선이 나가요'},
  saw:{n:'회전 톱날',e:'분쇄 고리',ed:'톱날이 6개로 늘고 더 크고 빠르게 돌아요',d:'차 주위를 돌며 적 총알을 지워요'}};
-const PD={armor:{n:'철갑 장갑',d:'받는 피해가 12% 줄어들어요'},engine:{n:'터보 엔진',d:'이동속도가 8% 빨라져요 · 최대 275'},magnet:{n:'흡입 자석',d:'경험치 흡수 범위가 40% 넓어져요'},core:{n:'룬 코어',d:'모든 피해가 15% 더 세져요'},repair:{n:'수리 키트',d:'최대 체력이 20 늘고 체력이 가득 차요'}};
+const PD={armor:{n:'철갑 장갑',d:'받는 피해가 12% 줄어들어요'},engine:{n:'터보 엔진',d:'이동속도가 10% 빨라져요 · 최대 300'},magnet:{n:'흡입 자석',d:'경험치 흡수 범위가 40% 넓어져요'},core:{n:'룬 코어',d:'모든 피해가 15% 더 세져요'},repair:{n:'수리 키트',d:'최대 체력이 20 늘고 체력이 가득 차요'}};
 const WP={};const PV={};const ST={dmg:0,spd:0,big:0,area:0,crit:0,xp:0};const SZB=()=>1+.15*Math.min(3,ST.big),SZA=()=>1+.10*ST.area;
 const SD={dmg:{n:'강화 탄두',d:'모든 피해가 8% 더 세져요'},spd:{n:'공격 속도',d:'모든 무기가 8% 더 자주 공격해요'},big:{n:'대형 탄체',d:'탄환 크기가 15% 커져요'},area:{n:'확산 코어',d:'톱날·포탄 폭발 범위가 10% 넓어져요'},crit:{n:'치명 코어',d:'치명타 확률이 5%p 올라요 · 치명타 피해는 1.5배예요'},xp:{n:'경험치 코어',d:'얻는 경험치가 10% 늘어나요'}};
 function addS(k){ST[k]++;if(k==='big'){G.bigFx=.4;POPS.push({s:'탄환 크기 UP!',c:'#FFD86B',life:1.2});}if(k==='dmg')P.dmgMul*=1.08;if(k==='spd')P.cdMul*=.92;}let MAXW=6;const WSZ=()=>G.veh>=2?1.2:1;
@@ -469,7 +469,7 @@ const TFS=()=>[1,1.15,1.3,1.45][G.veh]||1;const VIS=k=>{const w=WP[k];return TFS
 const GS=k=>{const w=WP[k];return w?(1+.06*(w.lv-1))*(w.evo?1.25:1):1;};
 function addW(k){if(!WP[k])WP[k]={lv:1,cd:0,evo:false,a:0,t:0};else WP[k].lv++;if(WP[k].lv>=5&&!WP[k].evo&&G.veh>=1)evolve(k);}
 function evolve(k,q){WP[k].evo=true;G.evo[k]=1;G.log.push('evo:'+k+'@'+G.t.toFixed(0));if(q){G.evoQ=(G.evoQ||[]);G.evoQ.push(k);return;}G.gflash=Math.max(G.gflash||0,.12);shk(14,1);G.stop=.12;ring(P.x,P.y,260,'#7fd0ff',.6);shockDmg(260,80);banner(WD[k].e+'!');}
-function addP(k){PV[k]=(PV[k]||0)+1;if(k==='armor')P.armor=Math.min(.6,P.armor+.12);if(k==='engine'&&PV.engine<=4)P.spd=Math.min(275,P.spd*1.08);if(k==='magnet')P.magnet*=1.4;if(k==='core')P.dmgMul*=1.15;if(k==='cool')P.cdMul*=.92;if(k==='repair'){G.maxhp+=20;G.hp=G.maxhp;}}
+function addP(k){PV[k]=(PV[k]||0)+1;if(k==='armor')P.armor=Math.min(.6,P.armor+.12);if(k==='engine'&&PV.engine<=4)P.spd=Math.min(300,P.spd*1.10);/* v98: turbo +10%, cap 300 */if(k==='magnet')P.magnet*=1.4;if(k==='core')P.dmgMul*=1.15;if(k==='cool')P.cdMul*=.92;if(k==='repair'){G.maxhp+=20;G.hp=G.maxhp;}}
 // ---------- enemies
 const ET={
  grunt:{hp:30,def:0,spd:62,r:15,xp:1,dmg:8,col:'#6cbf3a',kb:1},// green basic
@@ -769,7 +769,7 @@ function options(){const own=Object.keys(WP);const W1=[],P1=[],S1=[];
  const CC=ccPool(),RC=G.awk?rcPool():[],NS=(CC.length||RC.length)?2:3;/* v108: 1 car card + 2 shared */let guard=0;while(pick.length<NS&&guard++<20){const r=Math.random()*100;let src=early?(r<60?W1:S1):(r<50?W1:r<75?P1:S1);if(!src.length)src=W1.length?W1:S1.length?S1:P1;if(!src.length)break;pick.push(src.shift());}
  if(G.t<120&&own.length<3&&!pick.some(x=>x.w&&!WP[x.k])){const nw=W1.find(x=>!WP[x.k]);if(nw)pick[pick.length-1]=nw;}
  if(SH.lv>0&&SH.lv<3&&!pick.some(x=>x.s)&&Math.random()<.4)pick[pick.length-1]={k:'shield',sh:1};
- if((PV.engine||0)<4&&P.spd<275&&!pick.some(x=>x.k==='engine')&&Math.random()<.25)pick[pick.length-1]={k:'engine',p:1};/* c15 engine: any time, 25%, max 4 */
+ if((PV.engine||0)<4&&P.spd<300&&!pick.some(x=>x.k==='engine')&&Math.random()<.25)pick[pick.length-1]={k:'engine',p:1};/* c15 engine: any time, 25%, max 4 */
  pick.splice(NS);{const CP=CC.concat(RC);if(CP.length)pick.unshift(CP[Math.random()*CP.length|0]);}
  G.cards=(G.cards||0)+1;return pick;}
 let DIA=Infinity;const RR_FREE=2,RR_COST=[20,40,80,80,80];G.rr=0;
