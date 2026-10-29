@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v98';
+const BUILD='v99';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -3402,7 +3402,7 @@ function floor2(v){const vis=(x,y,m)=>Math.abs(x-CV.x)<v.w+m&&Math.abs(y-CV.y)<v
    cx.scale(sc,sc);cx.fillStyle='rgba(0,0,0,.2)';cx.beginPath();cx.ellipse(0,14,26,9,0,0,TAU);cx.fill();cx.fillStyle='#6E8A3A';cx.strokeStyle='#142233';cx.lineWidth=2.5;cx.beginPath();cx.ellipse(0,0,24,18,0,0,TAU);cx.fill();cx.stroke();
    const th=a.done?0:Math.min(1,Math.max(0,(k-.6)/1));cx.fillStyle='#E8D8A0';cx.beginPath();cx.ellipse(0,10+th*6,8+th*12,5+th*9,0,0,TAU);cx.fill();cx.stroke();
    cx.fillStyle='#F2E6B0';for(const s of[-1,1]){cx.beginPath();cx.arc(s*10,-12,6,0,TAU);cx.fill();cx.stroke();}cx.fillStyle='#142233';for(const s of[-1,1]){cx.fillRect(s*10-3,-13,6,2);}cx.restore();}
- if(MAP===5)for(const e of EN){if(!(e.slp>G.t)||e.dead||!vis(e.x,e.y,40))continue;cx.fillStyle='rgba(216,204,234,.9)';cx.strokeStyle='#142233';cx.lineWidth=1.5;cx.font='bold 14px sans-serif';const y=e.y-e.r-16-((G.t*8)%10);cx.strokeText('z',e.x+e.r*.6,y);cx.fillText('z',e.x+e.r*.6,y);}
+ if(MAP===5)for(const e of EN){if(!(e.slp>G.t)||e.dead||!vis(e.x,e.y,40))continue;/* v99: two Z's, deep navy with a white outline (clear on swamp green), steady drift, no blink */const y=e.y-e.r-14-((G.t*8)%10),x0=e.x+e.r*.5;cx.save();cx.lineJoin='round';cx.fillStyle='#16206E';cx.strokeStyle='#FFFFFF';cx.lineWidth=3.5;for(const [dx,dy,fs] of[[0,0,15],[10,-13,19]]){cx.font='900 '+fs+'px sans-serif';cx.strokeText('Z',x0+dx,y+dy);cx.fillText('Z',x0+dx,y+dy);}cx.restore();}
  if(MAP===6&&a){const W2=WORLD;if(a.t<2){const k=a.t/2;cx.fillStyle='rgba(232,69,44,'+(.08+.12*k)+')';cx.fillRect(0,a.ty-56,W2,112);cx.strokeStyle='rgba(232,69,44,.6)';cx.lineWidth=3;cx.setLineDash([16,12]);for(const o of[-56,56]){cx.beginPath();cx.moveTo(0,a.ty+o);cx.lineTo(W2,a.ty+o);cx.stroke();}cx.setLineDash([]);}
    else if(a.head!=null){const dir=a.dir,h=a.head;const car=(x0,len,c,loco)=>{const x1=x0-dir*len,lo=Math.min(x0,x1),w=Math.abs(len);cx.fillStyle='rgba(0,0,0,.25)';cx.fillRect(lo+6,a.ty-36,w,84);cx.fillStyle=c;cx.strokeStyle='#142233';cx.lineWidth=3;cx.beginPath();cx.roundRect(lo,a.ty-42,w,84,loco?18:8);cx.fill();cx.stroke();cx.fillStyle='rgba(0,0,0,.18)';cx.fillRect(lo+10,a.ty-8,w-20,16);
      if(loco){cx.fillStyle='#2E2A28';cx.beginPath();cx.arc(x0-dir*70,a.ty,18,0,TAU);cx.fill();cx.fillStyle='#F2C94C';cx.beginPath();cx.arc(x0-dir*12,a.ty-26,6,0,TAU);cx.arc(x0-dir*12,a.ty+26,6,0,TAU);cx.fill();}};
