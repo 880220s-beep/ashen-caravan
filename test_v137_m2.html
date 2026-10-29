@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v101';
+const BUILD='v102';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -380,7 +380,7 @@ function rbSkDraw(){rbFxDraw();if(!RBSS)return;rbBoomWarm();const t=G.t-RBSS.t0;
  if(RBSS.car==='mammoth'&&RBSS.herd){const B=vh.w*.3;
   for(const f of RBSS.prints){if(t>4.5&&af<.3){const k=Math.min(1,(t-4.5)/.3)*(af>0?1-af/.3:1),lit=t<5.3||af>=0?1:.6;cx.globalAlpha=.75*k*lit;cx.fillStyle='#FFF6DC';cx.shadowColor='#FFE9A8';cx.shadowBlur=8;cx.beginPath();cx.ellipse(f.x,f.y,f.s,f.s*.7,0,0,TAU);cx.fill();cx.shadowBlur=0;}else if(af<0){cx.globalAlpha=.18;cx.fillStyle='#3A2E22';cx.beginPath();cx.ellipse(f.x,f.y,f.s,f.s*.7,0,0,TAU);cx.fill();}if(f.cr&&af<.8){cx.globalAlpha=.55;cx.strokeStyle='#2A2018';cx.lineWidth=2;cx.beginPath();for(let q=0;q<4;q++){const an=f.cr+q*1.6;cx.moveTo(f.x,f.y);cx.lineTo(f.x+Math.cos(an)*f.s*2.6,f.y+Math.sin(an)*f.s*2.6);}cx.stroke();}}cx.globalAlpha=1;
   const ord=RBSS.herd.filter(m=>t>=m.t&&t<m.t+m.dur+.05).sort((a,b)=>a.sz-b.sz);
-  for(const m of ord){const k=(t-m.t)/m.dur,s=B*m.sz,y0=P.y-vh.h-s*2.2,y=y0+(vh.h*2+s*4.4)*k;let x=P.x+m.xo*vh.w+Math.sin(k*3+m.ph)*vh.w*.04;if(G.boss&&!G.boss.dead&&Math.abs(G.boss.y-y)<G.boss.r+s*2){const dx=x-G.boss.x;if(Math.abs(dx)<G.boss.r+s*1.1)x=G.boss.x+Math.sign(dx||1)*(G.boss.r+s*1.1);}
+  for(const m of ord){const k=(t-m.t)/m.dur,s=B*m.sz,y0=P.y-vh.h-s*2.2,y=y0+(vh.h*2+s*4.4)*k;let x=P.x+m.xo*vh.w+Math.sin(k*3+m.ph)*vh.w*.04;
    if(y>P.y+vh.h*.4)x=Math.min(x,P.x+vh.w*.55-s);   const st=Math.floor((t-m.t)*m.gf);if(st!==m.lp){m.lp=st;if(RBSS.prints.length<160)RBSS.prints.push({x:x+(st%2?s*.4:-s*.4),y:y+s*.85,s:s*.16,cr:m.ld&&st%2?Math.random()*6.3:0});if(Math.random()<.5&&RFX.length<60)RFX.push({k:'sm',x:x+rnd(-s*.6,s*.6),y:y-s*1.1,vx:rnd(-15,15),vy:-25,life:.45,max:.45,s:10+s*.12});}
    rbMam(x,y+Math.abs(Math.sin((t-m.t)*m.gf*Math.PI))*-s*.05,s,m.ld,Math.sin((t-m.t)*m.gf*Math.PI));}
   if(af>=0&&af<.9){const k=af/.9;cx.globalAlpha=(1-k)*.9;cx.strokeStyle='#C9A04A';cx.lineWidth=10*(1-k)+2;cx.beginPath();cx.arc(P.x,P.y,30+Math.hypot(vh.w,vh.h)*.8*Math.min(1,af/.5),0,TAU);cx.stroke();cx.strokeStyle='#2A2018';cx.lineWidth=3;cx.globalAlpha=.7*(1-k);cx.beginPath();for(let q=0;q<12;q++){const an=q*TAU/12+.2,L=vh.w*(.5+((q*7)%5)*.12)*Math.min(1,af/.15);let px=P.x,py=P.y;cx.moveTo(px,py);for(let z=1;z<=4;z++){const r=L*z/4,j=((q*13+z*5)%7-3)*.04;cx.lineTo(P.x+Math.cos(an+j)*r,P.y+Math.sin(an+j)*r);}}cx.stroke();cx.globalAlpha=1;}
