@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v100';
+const BUILD='v101';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -3985,7 +3985,7 @@ function lotus(b){const c=cast(b),a0=Math.random()*TAU,pads=[];for(let i=0;i<3;i
 function gate(b){const c=cast(b),sd=(P.x>=b.x)?1:-1,Wd=420/* v96: 280->420 longer */,Hh=280;hz({sh:'rect',x:b.x,y:b.y,x0:sd>0?b.x:b.x-Wd,x1:sd>0?b.x+Wd:b.x,y0:b.y-Hh,y1:b.y+Hh,wn:1.6,dmg:.17,nm:'gate',g:c.g,src:b,c});M5S.gate++;}
 function chain(b){const c=cast(b);hz({sh:'chain',x:b.x,y:b.y,R:210,wn:1.55,dmg:.16,nm:'chain',g:c.g,src:b,c});M5S.chain++;}
 /* v100: new map-5 skills. Position/direction locked when the warning starts; one hit per cast (shared st); 2s fire after each. */
-function spray(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x);hz({sh:'cone',x:e.x,y:e.y,an,R:520,h:50*Math.PI/180,wn:1.2,dmg:.17,nm:'spray',g:c.g,src:e,c});M5S.spray++;}
+function spray(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x);hz({sh:'cone',x:e.x,y:e.y,an,R:400,h:35*Math.PI/180,wn:1.2,dmg:.17,nm:'spray',g:c.g,src:e,c});M5S.spray++;}
 function root(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x),ux=Math.cos(an),uy=Math.sin(an),S=260,BL=320,ha=Math.asin(180/BL),fx=e.x+ux*S,fy=e.y+uy*S;
  hz({sh:'band',x:e.x,y:e.y,an,L:S+20,w:80,wn:1.2,dmg:.18,nm:'root',st:0,g:c.g,src:e,c});for(const sd of[-1,1])hz({sh:'band',x:fx,y:fy,an:an+sd*ha,L:BL,w:80,wn:1.2,dmg:.18,nm:'root',st:0,g:c.g,src:e,c});M5S.root++;}
 function mire(b){const c=cast(b);hz({sh:'circ',x:P.x,y:P.y,r:220,wn:2.7,pl:1.5,dmg:.22,nm:'mire',g:c.g,src:b,c});M5S.mire++;}
