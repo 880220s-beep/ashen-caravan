@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v111';
+const BUILD='v112';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4708,5 +4708,16 @@ window.WV7=(function(){const OR='#FF9A2E',DK='rgba(20,10,5,.85)',FL='rgba(255,15
 (function(){if(MAP!==6)return;const _d=drawBoss;drawBoss=function(b){if(!b)return _d.apply(this,arguments);
  if(b._vx6!=null){const dx=b.x-b._vx6,dy=b.y-b._vy6;if(dx*dx+dy*dy>.04)b._tv6=Math.atan2(dy,dx);}b._vx6=b.x;b._vy6=b.y;
  const a=(b._tfaT>G.t&&b._tfa!=null)?b._tfa:b._tv6;if(a==null)return _d.apply(this,arguments);const px=P.x,py=P.y;P.x=b.x+Math.cos(a)*1e4;P.y=b.y+Math.sin(a)*1e4;try{return _d.apply(this,arguments);}finally{P.x=px;P.y=py;}};})();
+</script>
+<script>/* v112: ALL maps - every enemy (regular, big, elite, mid-boss, boss) faces its actual travel direction from its position change (smoothed); standing still keeps the last travel heading; never turns to the player. Draw-only: sprite aims come from P / e.ang, so both point along the heading for that one draw call. */
+(function(){const ST=window.V112ST={n:0,ok:0};
+ function head(e){if(e._hx12==null){e._hx12=e.x;e._hy12=e.y;e._vx12=0;e._vy12=0;return e._hd12;}
+  const dx=e.x-e._hx12,dy=e.y-e._hy12;e._hx12=e.x;e._hy12=e.y;const d2=dx*dx+dy*dy;
+  if(d2>900){e._vx12=0;e._vy12=0;return e._hd12;}/* teleport/respawn: ignore */
+  e._vx12=e._vx12*.7+dx*.3;e._vy12=e._vy12*.7+dy*.3;const v2=e._vx12*e._vx12+e._vy12*e._vy12;
+  if(v2>.0025)e._hd12=Math.atan2(e._vy12,e._vx12);return e._hd12;}
+ const W=f=>function(e){if(!e||typeof e.x!=='number'||e.ally)return f.apply(this,arguments);const tfa=window.V105TFA?V105TFA(e):null,h=head(e),a=tfa!=null?tfa:h;if(a==null)return f.apply(this,arguments);
+  ST.n++;const px=P.x,py=P.y,ea=e.ang,ec=e.ca,hc='ca' in e;P.x=e.x+Math.cos(a)*1e4;P.y=e.y+Math.sin(a)*1e4;e.ang=a;if(hc&&!(e.m2&&e.m2!=='walk'))e.ca=a;try{return f.apply(this,arguments);}finally{P.x=px;P.y=py;e.ang=ea;if(hc)e.ca=ec;}};
+ goblin=W(goblin);drawBoss=W(drawBoss);window.V112HEAD=head;})();
 </script>
 </body></html>
