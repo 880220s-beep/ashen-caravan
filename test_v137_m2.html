@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v110';
+const BUILD='v111';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4177,7 +4177,7 @@ function fork(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x);for(const d of[-
 function cross(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x),ux=Math.cos(an),uy=Math.sin(an),px=-uy,py=ux;
  for(const [k,dist,dl] of[[0,120,0],[1,230,.6]]){const cx0=e.x+ux*dist,cy0=e.y+uy*dist;hz({sh:'band',x:cx0-px*190,y:cy0-py*190,an:Math.atan2(py,px),L:380,w:40,wn:1.2,dl,dmg:.12,nm:'cross',st:k,g:c.g,src:e,c});}M6S.cross++;}
 function derail(b){const c=cast(b),an=Math.atan2(P.y-b.y,P.x-b.x),L=645,ux=Math.cos(an),uy=Math.sin(an);band(b,c,an,L,96,1.6,.20,'derail',{dash:1,dT:.375,ex:b.x+ux*(L-b.r),ey:b.y+uy*(L-b.r)});M6S.derail++;}
-function cars(b){const c=cast(b);for(let i=0;i<3;i++){const a=Math.random()*TAU,r=i?55+Math.random()*60:0,x=P.x+Math.cos(a)*r,y=P.y+Math.sin(a)*r,an=Math.random()*Math.PI,L=130;
+function cars(b){const c=cast(b);for(let i=0;i<5;i++){/* v111: 3 -> 5 drops */const a=Math.random()*TAU,r=i?55+Math.random()*60:0,x=P.x+Math.cos(a)*r,y=P.y+Math.sin(a)*r,an=Math.random()*Math.PI,L=130;
   hz({sh:'band',x:x-Math.cos(an)*L/2,y:y-Math.sin(an)*L/2,an,L,w:62,wn:1.3,dl:i*.35,dmg:.15,nm:'cars',g:c.g,src:b,c});}M6S.cars++;}
 function steam(b){const c=cast(b);hz({sh:'ann',x:b.x,y:b.y,r0:b.r+75,r1:b.r+215,wn:1.5,dmg:.17,nm:'steam',g:c.g,src:b,c});M6S.steam++;}
 /* ---------- update ---------- */
@@ -4650,7 +4650,7 @@ window.FIRE96=function(z){const o={sh:z.sh||'circ',x:z.x,y:z.y,a:z.a,b:z.b,ro:z.
 let FS=null;function fsp(){if(FS)return FS;const c=document.createElement('canvas');c.width=48;c.height=80;const g=c.getContext('2d');const flame=(w,h,col)=>{g.beginPath();g.moveTo(24,78);g.bezierCurveTo(24-w,76,24-w*.9,78-h*.45,24-w*.15,78-h*.75);g.bezierCurveTo(24-w*.05,78-h*.85,24+w*.1,78-h*.9,24,78-h);g.bezierCurveTo(24+w*.4,78-h*.7,24+w,78-h*.4,24+w*.8,72);g.bezierCurveTo(24+w*.6,77,24+w*.3,78,24,78);g.fillStyle=col;g.fill();};flame(21,76,'rgba(190,55,18,.9)');flame(14,56,'rgba(242,125,30,.95)');flame(7,32,'rgba(255,208,95,.95)');FS=c;return c;}
 function bbx(z){if(z.sh==='rect')return[z.x0,z.y0,z.x1,z.y1];if(z.sh==='band'){const ux=Math.cos(z.an),uy=Math.sin(z.an),h=z.w/2,xs=[z.x-uy*h,z.x+uy*h,z.x+ux*z.L-uy*h,z.x+ux*z.L+uy*h],ys=[z.y+ux*h,z.y-ux*h,z.y+uy*z.L+ux*h,z.y+uy*z.L-ux*h];return[Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)];}const r=z.sh==='ell'?Math.max(z.a,z.b):(z.sh==='lotus'||z.sh==='fan'||z.sh==='cone')?z.R:z.sh==='ann'?z.r1:z.r;return[z.x-r,z.y-r,z.x+r,z.y+r];}
 function fl100(o){const bb=bbx(o),A=(bb[2]-bb[0])*(bb[3]-bb[1]),n=Math.max(9,Math.min(26,Math.round(A/2400)));o.fl=[];/* v110: denser, livelier fire */for(let k=0;k<n*8&&o.fl.length<n;k++){const x=bb[0]+Math.random()*(bb[2]-bb[0]),y=bb[1]+Math.random()*(bb[3]-bb[1]);if(!inF(o,x,y,-6))continue;o.fl.push({x,y,s:.6+Math.random()*.6,ph:Math.random()*TAU,w:3+Math.random()*2.4});}o.fl.sort((p,q)=>p.y-q.y);o.em=o.fl.slice(0,6).map((f,i)=>({x:f.x,y:f.y,ph:i/6}));}
-FIRE96.nm={hail:1,brk:1,gate:1,cars:1,storm:1,over:1,fall:1,/* v97 mid-bosses: m5 comb/rip, m6 fork/cross, m7 dipole/cross, m8 door/chime */comb:1,rip:1,spray:1,root:1,mire:1,sweep:1,gas:1,fork:1,cross:1,dipole:1,door:1,chime:1};
+FIRE96.nm={hail:1,brk:1,gate:1,cars:1,storm:1,over:1,fall:1,/* v97 mid-bosses: m5 comb/rip, m6 fork/cross, m7 dipole/cross, m8 door/chime */steam:1,/* v111: map-6 boss steam ring leaves fire */comb:1,rip:1,spray:1,root:1,mire:1,sweep:1,gas:1,fork:1,cross:1,dipole:1,door:1,chime:1};
 const _u=update;update=function(dt){const t0=G.t;_u(dt);const d=G.t-t0;if(d<=0)return;let hit=0;
  for(const f of F){f.t+=d;f.tk-=d;if(f.tk<=0){f.tk+=.5;if(!hit&&f.t<=2.05&&inF(f)){hit=1;G._src='fire';hurt(.02*G.maxhp/(DDMG*MAPK*1.1));G._src=0;FIRES.hits++;}}}
  for(let i=F.length-1;i>=0;i--)if(F[i].t>=2)F.splice(i,1);};
@@ -4703,5 +4703,10 @@ window.WV7=(function(){const OR='#FF9A2E',DK='rgba(20,10,5,.85)',FL='rgba(255,15
 </script>
 <script>/* v110: HP on every map/difficulty - mid-bosses x0.6, regular enemies x1.2 (not big/elite, not mid-boss, not boss). Applied once per enemy, hp and max together. */
 (function(){const _u=update;update=function(dt){_u(dt);for(const e of EN){if(e._hp110||e.dead)continue;e._hp110=1;if(e===G.boss||e.boss)continue;const k=e.mb?.6:(e.elite||e.v==='big')?1:1.2;if(k!==1){e.hp*=k;if(e.max)e.max*=k;}}};})();
+</script>
+<script>/* v111: map-6 boss always faces its travel direction while it moves (never the player); holds the last travel facing while standing still */
+(function(){if(MAP!==6)return;const _d=drawBoss;drawBoss=function(b){if(!b)return _d.apply(this,arguments);
+ if(b._vx6!=null){const dx=b.x-b._vx6,dy=b.y-b._vy6;if(dx*dx+dy*dy>.04)b._tv6=Math.atan2(dy,dx);}b._vx6=b.x;b._vy6=b.y;
+ const a=(b._tfaT>G.t&&b._tfa!=null)?b._tfa:b._tv6;if(a==null)return _d.apply(this,arguments);const px=P.x,py=P.y;P.x=b.x+Math.cos(a)*1e4;P.y=b.y+Math.sin(a)*1e4;try{return _d.apply(this,arguments);}finally{P.x=px;P.y=py;}};})();
 </script>
 </body></html>
