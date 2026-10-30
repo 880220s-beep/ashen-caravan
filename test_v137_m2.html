@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v103';
+const BUILD='v104';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4171,21 +4171,21 @@ function inZ(z){const pr=PR(),dx=P.x-z.x,dy=P.y-z.y,d=Math.hypot(dx,dy);
  if(z.sh==='chain')return d<z.R+pr;return false;}
 /* ---------- skills ---------- */
 function band(e,c,an,L,w,wn,dmg,nm,o){const ux=Math.cos(an),uy=Math.sin(an),x=e.x+ux*e.r*.5,y=e.y+uy*e.r*.5;return hz(Object.assign({sh:'band',x,y,an,L,w,wn,dmg,nm,g:c.g,src:e,c},o||{}));}
-function rush(e){const el=!!e.elite,c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x),L=el?300:250,ux=Math.cos(an),uy=Math.sin(an);
- band(e,c,an,L,el?56:46,1.2,el?.14:.12,'rush',{dash:1,ex:e.x+ux*(L-e.r),ey:e.y+uy*(L-e.r)});M6S.rush++;}
+function rush(e){const el=!!e.elite,c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x),L=el?450:375,ux=Math.cos(an),uy=Math.sin(an);
+ band(e,c,an,L,el?56:46,1.2,el?.14:.12,'rush',{dash:1,dT:.375,ex:e.x+ux*(L-e.r),ey:e.y+uy*(L-e.r)});M6S.rush++;}
 function fork(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x);for(const d of[-.38,.38])band(e,c,an+d,340,40,1.2,.14,'fork');M6S.fork++;}
 function cross(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x),ux=Math.cos(an),uy=Math.sin(an),px=-uy,py=ux;
  for(const [k,dist,dl] of[[0,120,0],[1,230,.6]]){const cx0=e.x+ux*dist,cy0=e.y+uy*dist;hz({sh:'band',x:cx0-px*190,y:cy0-py*190,an:Math.atan2(py,px),L:380,w:40,wn:1.2,dl,dmg:.12,nm:'cross',st:k,g:c.g,src:e,c});}M6S.cross++;}
-function derail(b){const c=cast(b),an=Math.atan2(P.y-b.y,P.x-b.x),L=430,ux=Math.cos(an),uy=Math.sin(an);band(b,c,an,L,96,1.6,.20,'derail',{dash:1,ex:b.x+ux*(L-b.r),ey:b.y+uy*(L-b.r)});M6S.derail++;}
+function derail(b){const c=cast(b),an=Math.atan2(P.y-b.y,P.x-b.x),L=645,ux=Math.cos(an),uy=Math.sin(an);band(b,c,an,L,96,1.6,.20,'derail',{dash:1,dT:.375,ex:b.x+ux*(L-b.r),ey:b.y+uy*(L-b.r)});M6S.derail++;}
 function cars(b){const c=cast(b);for(let i=0;i<3;i++){const a=Math.random()*TAU,r=i?55+Math.random()*60:0,x=P.x+Math.cos(a)*r,y=P.y+Math.sin(a)*r,an=Math.random()*Math.PI,L=130;
   hz({sh:'band',x:x-Math.cos(an)*L/2,y:y-Math.sin(an)*L/2,an,L,w:62,wn:1.3,dl:i*.35,dmg:.15,nm:'cars',g:c.g,src:b,c});}M6S.cars++;}
 function steam(b){const c=cast(b);hz({sh:'ann',x:b.x,y:b.y,r0:b.r+75,r1:b.r+215,wn:1.5,dmg:.17,nm:'steam',g:c.g,src:b,c});M6S.steam++;}
 /* ---------- update ---------- */
 function zUpd(dt){for(const z of Z){z.t+=dt;
   if(z.sh==='chain'&&z.t>=0&&z.t<z.wn&&!inZ(z)){z.t=z.wn+.3;z.done=1;z.brk=1;M6S.chainBreak++;continue;}
-  if(z.dash&&z.t>=z.wn&&z.t<z.wn+.25&&z.src&&!z.src.dead){const e=z.src,k=Math.min(1,dt/Math.max(.016,z.wn+.25-z.t+dt));e.x+=(z.ex-e.x)*k;e.y+=(z.ey-e.y)*k;}
+  if(z.dash&&z.t>=z.wn&&z.t<z.wn+(z.dT||.25)&&z.src&&!z.src.dead){const e=z.src,k=Math.min(1,dt/Math.max(.016,z.wn+(z.dT||.25)-z.t+dt));e.x+=(z.ex-e.x)*k;e.y+=(z.ey-e.y)*k;}
   if(z.t>=z.wn&&!z.done){z.done=1;if(window.FIRE96&&FIRE96.nm[z.nm])FIRE96(z);/* v96 lingering fire */const k=z.st||0;if(inZ(z)&&!z.c.hit[k]){z.c.hit[k]=1;hitP(z.dmg,z.nm);}}}
- for(let i=Z.length-1;i>=0;i--)if(Z[i].t>=Z[i].wn+.3)Z.splice(i,1);}
+ for(let i=Z.length-1;i>=0;i--)if(Z[i].t>=Z[i].wn+Math.max(.3,Z[i].dT||0))Z.splice(i,1);}
 /* toad sleep cancels a big enemy's cast (strong enemies never sleep) */
 function toad(){for(let i=Z.length-1;i>=0;i--){const z=Z[i],e=z.src;if(z.nm==='rush'&&z.t<z.wn&&e&&e.slp>G.t){Z.splice(i,1);M6S.toadCancel++;e._k6=e.elite?6:7;}}}
 function skills(dt){for(const e of EN){if(e.dead||e.mb||e===G.boss)continue;if(!(e.elite||e.type==='brute'))continue;if(e.slp>G.t)continue;e._k6=(e._k6??1+Math.random())-dt;if(e._k6>0||busy(e))continue;const dd=Math.hypot(P.x-e.x,P.y-e.y);
@@ -4216,6 +4216,7 @@ function zDraw(z){if(z.t<0||z.brk)return;cx.save();
  else{const k=Math.max(0,1-(z.t-z.wn)/.3);path(z,1);cx.fillStyle='rgba(206,222,196,'+(.45*k)+')';cx.fill('evenodd');cx.strokeStyle='rgba(111,138,106,'+k+')';cx.lineWidth=px(3);cx.stroke();}
  cx.restore();}
 {const _pp=window.POSTPOOL;window.POSTPOOL=function(){if(_pp)_pp();for(const z of Z)zDraw(z);};}
+{const _dd6=drawBoss;drawBoss=function(b){const z=b&&Z.find(z=>z.nm==='derail'&&z.src===b&&z.t>=z.wn&&z.t<z.wn+(z.dT||.25));if(!z)return _dd6(b);const s=b.st,c=b.ca;b.st='m2ch';b.ca=z.an;try{return _dd6(b);}finally{b.st=s;b.ca=c;}};}/* v104: boss faces its locked 탈선 돌진 direction during the dash */
 })();
 </script>
 <script>/* v90: map-6 sprites (M6P) + poses + own look for the boss's shield summons. MAP===6 only. Cached per facing/size/frame like the other maps; drawn with the whole-pixel blit. */
