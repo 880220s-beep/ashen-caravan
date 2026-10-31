@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v117';
+const BUILD='v118';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4795,8 +4795,7 @@ function garage(){if(!GSEL||!CARS.find(c=>c[0]===GSEL))GSEL=myCar();const id=GSE
  else if(mx)bt='<button class="v15b g" disabled style="color:#C8D2E0">최대 레벨</button>';
  else bt='<button class="v15b" data-lg'+(SAVE.gold<LGC(L)?' disabled':'')+'><small>강화 Lv'+(L+1)+'</small>💰 '+fmt(LGC(L))+'</button><button class="v15b c" data-ld'+(SAVE.dia<LDC(L)?' disabled':'')+'><small>강화 Lv'+(L+1)+'</small>💎 '+fmt(LDC(L))+'</button>';
  const m=frame('<div class="v15st"><div class="v15car'+(own?'':' v15lk')+'" data-c="'+id+'"><div class="v15sh"></div></div><div class="v15nm">'+cname(c)+'</div><div class="v15sub">'+sub+'</div></div>'
- +'<div class="v15bb">'+bt+'</div>'+(own?'<div class="v15bb"><button class="v15b g" id="v15use"'+(use?' disabled style="color:#FFC93C"':'')+'>'+(use?'✔ 사용 중':'이 차량 사용')+'</button></div>':'')
- +'<div class="v15pk">'+CARS.map(x=>'<button class="v15p'+(x[0]===id?' on':'')+(SAVE.cars[x[0]]?'':' lk')+'" data-c="'+x[0]+'" data-pk="'+x[0]+'">'+(SAVE.cars[x[0]]?'<span class="u">'+(myCar()===x[0]?'✔':'')+'</span>':'<span class="k">🔒</span>')+'</button>').join('')+'</div>');
+ +'<div class="v15pk">'+CARS.map(x=>'<button class="v15p'+(x[0]===id?' on':'')+(SAVE.cars[x[0]]?'':' lk')+'" data-c="'+x[0]+'" data-pk="'+x[0]+'">'+(SAVE.cars[x[0]]?'<span class="u">'+(myCar()===x[0]?'✔':'')+'</span>':'<span class="k">🔒</span>')+'</button>').join('')+'</div>'+'<div class="v15bb">'+bt+'</div>'+(own?'<div class="v15bb"><button class="v15b'+(use?' g':'')+'" id="v15use"'+(use?' disabled style="color:#FFC93C;opacity:1;border:2px solid #C9A24A"':' style="color:#141A24"')+'>'+(use?'✔ 사용 중':'이 차량 사용')+'</button></div>':''));
  m.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{GSEL=b.dataset.pk;garage();});
  const u=$('v15use');if(u)u.onclick=()=>{SAVE.car=id;saveS();garage();};
  const ok=()=>{saveS();beep(880,.1,'triangle',.12);garage();};
