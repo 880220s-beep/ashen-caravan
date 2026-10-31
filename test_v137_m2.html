@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v131';
+const BUILD='v132';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -3373,8 +3373,8 @@ function tick2(dt){if(!dt||G.over)return;M2.t+=dt;const a=M2.act,lock=lockNow();
     const ps=shove(P,P.r,1);/* v126: no once-per-train limit; side (body) hit = damage + vibration, min 0.6s apart; front or side contact = extra 150px push over 0.25s */if(ps&&G.t>=(M2.pHT??-9)+.6)/* v127: front (plow) contact also damages + vibrates, same 0.6s spacing */{M2.pHT=G.t;a.ph=1;plHit();}if(ps&&G.t>=(M2.pkT??-9)+.6){M2.pkT=G.t;M2.pk={s:Math.sign(P.y-a.ty)||1,t:0};}if(ps)M2.pPush=(M2.pPush||0)+1;
     if((a.dir>0&&tail>WORLD+200)||(a.dir<0&&tail<-200)){M2.tcd[a.ty]=G.t+120;M2.act=null;}}}}
  if(MAP===7){if(!a&&!lock){for(const o of OBJ)if(G.t>=(o.cdT||0)&&near(o,80)){/* c17: 3 power lines, each 2 min cooldown */M2.act={k:'wire',o,t:0,hit:new Set()};M2.n=(M2.n||0)+1;break;}}
-  if(a){a.t+=dt;const L=Math.hypot(P.x-a.o.x,P.y-a.o.y);if(a.t>=7){/* v109: lasts a full 7s, no distance cutoff (was 10s but ended when L>Wc()*6) */a.o.cdT=G.t+120;M2.act=null;}else{const ax=a.o.x,ay=a.o.y,bx=P.x,by=P.y,dx=bx-ax,dy=by-ay,l2=dx*dx+dy*dy||1;const dmg=(typeof bskBasic==='function'?bskBasic():12)*2.5;
-    for(const e of EN){if(e.dead||a.hit.has(e))continue;let u=((e.x-ax)*dx+(e.y-ay)*dy)/l2;u=Math.max(0,Math.min(1,u));const d=Math.hypot(e.x-(ax+dx*u),e.y-(ay+dy*u));if(d<Wc()*.25+e.r){a.hit.add(e);HITSRC='';hit(e,dmg*(e===G.boss?.3:1),0,0,'#7FD3E6');M2.wHits=(M2.wHits||0)+1;}}}}}
+  if(a){a.t+=dt;const L=Math.hypot(P.x-a.o.x,P.y-a.o.y);if(a.t>=7){/* v109: lasts a full 7s, no distance cutoff (was 10s but ended when L>Wc()*6) */a.o.cdT=G.t+120;M2.act=null;}else{const ax=a.o.x,ay=a.o.y,bx=P.x,by=P.y,dx=bx-ax,dy=by-ay,l2=dx*dx+dy*dy||1;const dmg=(typeof bskBasic==='function'?bskBasic():12)*12.5;/* v132: x2.5->x12.5 */
+    for(const e of EN){if(e.dead||a.hit.has(e))continue;let u=((e.x-ax)*dx+(e.y-ay)*dy)/l2;u=Math.max(0,Math.min(1,u));const d=Math.hypot(e.x-(ax+dx*u),e.y-(ay+dy*u));if(d<Wc()*.25+e.r){a.hit.add(e);HITSRC='';hit(e,dmg*(e===G.boss?.5:1),0,0,'#7FD3E6')/* v132: boss x.3->x.5 */;M2.wHits=(M2.wHits||0)+1;}}}}}
  if(MAP===8){if(!lock){for(const o of OBJ)if(!o.act&&G.t>=(o.cdT||0)&&near(o,80)){/* v115: bells activate independently; per-bell 2-minute cooldown */o.act={k:'bell',o,t:0,cv:0};M2.n=(M2.n||0)+1;}}
   for(const o0 of OBJ){const A=o0.act;if(!A)continue;A.t+=dt;const R=Wc()*3.45,o=A.o;/* v104: bell range 4->2.3 Wc (57.5%) */if(A.cv<5){const c=EN.filter(e=>!e.dead&&!strong(e)&&Math.hypot(e.x-o.x,e.y-o.y)<R).sort((p,q)=>Math.hypot(p.x-o.x,p.y-o.y)-Math.hypot(q.x-o.x,q.y-o.y)).slice(0,A.t-(A.lt??0)>=.35?1:0);/* v104: one conversion per 0.35s so the 5-4-3-2-1 countdown reads */
     for(const e of c){const i=EN.indexOf(e);if(i>=0)EN.splice(i,1);e.ally=G.t+6;e.acd=0;e.slp=0;e._bell=o;M2.al.push(e);A.cv++;A.lt=A.t;M2.conv=(M2.conv||0)+1;}}
