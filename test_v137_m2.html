@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v122';
+const BUILD='v123';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -3995,6 +3995,7 @@ function sweep(b){const c=cast(b),an=Math.atan2(P.y-b.y,P.x-b.x);hz({sh:'cone',x
 function gas(b){const c=cast(b),an=Math.atan2(P.y-b.y,P.x-b.x),px_=-Math.sin(an),py_=Math.cos(an),x=P.x,y=P.y;[[0,1.3],[1,1.65],[-1,2.0]].forEach(([k,w])=>hz({sh:'circ',x:x+px_*170*k,y:y+py_*170*k,r:100,wn:w,dmg:.24,nm:'gas',st:0,g:c.g,src:b,c}));M5S.gas++;}
 /* ---------- update ---------- */
 function zUpd(dt){for(const z of Z){z.t+=dt;
+  if(z.fol&&z.t<z.wn&&!z.fol.dead){z.x=z.fol.x;z.y=z.fol.y;}/* v123: chain stays on the boss */
   if(z.pl!=null&&z.t>=z.pl&&z.t<z.wn&&inZ(z)){const dx=z.x-P.x,dy=z.y-P.y,d=Math.hypot(dx,dy);if(d>2){const m=Math.min(d,70*dt);P.x+=dx/d*m;P.y+=dy/d*m;}M5S.pull=(M5S.pull||0)+dt;}/* v100 mire pull */
   if(z.sh==='chain'&&z.t>=0&&z.t<z.wn&&!inZ(z)){z.t=z.wn+.3;z.done=1;z.brk=1;M5S.chainBreak++;continue;}
   if(z.t>=z.wn&&!z.done){z.done=1;if(window.FIRE96&&FIRE96.nm[z.nm])FIRE96(z);/* v96 lingering fire */const k=z.st||0;if(inZ(z)&&!z.c.hit[k]){z.c.hit[k]=1;hitP(z.dmg,z.nm);}}}
@@ -4027,7 +4028,13 @@ function path(z,k){const T=cx;T.beginPath();
  else if(z.sh==='chain'){T.arc(z.x,z.y,z.R*k,0,TAU);}
  else if(z.sh==='circ'){T.arc(z.x,z.y,z.r*k,0,TAU);}
  else if(z.sh==='cone'){const r0=z.r0||0,r1=r0+(z.R-r0)*k;T.arc(z.x,z.y,r1,z.an-z.h,z.an+z.h);if(r0>0)T.arc(z.x,z.y,r0,z.an+z.h,z.an-z.h,true);else T.lineTo(z.x,z.y);T.closePath();}}
-function zDraw(z){if(z.t<0||z.brk)return;cx.save();const V=WV7;/* v107 shared warning look */
+function chainD(z){/* v123 고압선 결박: break ring (rim only) + boss-car cable: dark/orange double line, fill rising boss->car; ash after */const V=WV7,k=Math.max(0,Math.min(1,z.t/z.wn)),done=z.t>=z.wn||z.brk,q=done?Math.min(1,(z.t-z.wn)/.3):0;if(q>=1)return;
+ const x2=z.brk?z.bx:P.x,y2=z.brk?z.by:P.y;cx.save();cx.lineCap='round';
+ if(!done){cx.beginPath();cx.arc(z.x,z.y,z.R,0,TAU);V.rim(px);cx.beginPath();cx.moveTo(z.x,z.y);cx.lineTo(x2,y2);cx.strokeStyle='rgba(20,10,5,.85)';cx.lineWidth=px(14);cx.stroke();cx.strokeStyle='#FF9A2E';cx.lineWidth=px(8);cx.stroke();
+  if(k>0){cx.beginPath();cx.moveTo(z.x,z.y);cx.lineTo(z.x+(x2-z.x)*k,z.y+(y2-z.y)*k);cx.strokeStyle='#FFD08A';cx.lineWidth=px(4);cx.stroke();}}
+ else{const a=1-q;cx.beginPath();cx.moveTo(z.x,z.y);cx.lineTo(x2,y2);cx.strokeStyle='rgba(52,46,42,'+(.9*a)+')';cx.lineWidth=px(8);cx.stroke();}
+ cx.restore();}
+function zDraw(z){if(z.sh==='chain'){if(z.t>=0)chainD(z);return;}if(z.t<0||z.brk)return;cx.save();const V=WV7;/* v107 shared warning look */
  if(z.t<z.wn){const k=Math.max(0,Math.min(1,z.t/z.wn));if(z.sh==='band')V.band(z.x,z.y,z.an,z.L,z.w,k,px,z.dash);else V.warn(m=>path(z,m),k,px);}
  else{const q=Math.min(1,(z.t-z.wn)/.3);if(z.sh==='band')V.bandCool(z.x,z.y,z.an,z.L,z.w,q,px,z.dash);else V.cool(m=>path(z,m),q,px);}
  cx.restore();}
@@ -4343,9 +4350,15 @@ function cross7(e){const c=cast(e),a0=Math.atan2(P.y-e.y,P.x-e.x);for(const [k,o
 function storm(b){const c=cast(b);for(let i=0;i<5;i++){const a=Math.random()*TAU,r=i?50+Math.random()*110:0;circ7(P.x+Math.cos(a)*r,P.y+Math.sin(a)*r,58,{wn:1.1,dl:i*.25,dmg:.15,nm:'storm',g:c.g,src:b,c});}M7S.storm++;}
 function xarm(b){const c=cast(b),a0=Math.atan2(P.y-b.y,P.x-b.x);for(let i=0;i<4;i++)hz({sh:'band',x:b.x,y:b.y,an:a0+i*Math.PI/2,L:600,w:70,wn:1.5,dmg:.18,nm:'xarm',g:c.g,src:b,c});M7S.xarm++;}
 function over(b){const c=cast(b);circ7(b.x,b.y,235,{wn:1.8,dmg:.22,nm:'over',g:c.g,src:b,c});M7S.over++;}
+/* v123: 송전 첨탑왕 new set (영태 OK): 고압선 결박 / 철탑 쓰러짐 / 송전팔 회전 / 첨탑 과부하 (낙뢰 폭풍·송전 십자 removed) */
+function bind(b){const c=cast(b);hz({sh:'chain',x:b.x,y:b.y,R:330,wn:1.8,dmg:.24,nm:'bind',fol:b,g:c.g,src:b,c});M7S.bind=(M7S.bind||0)+1;}
+function tower(b){const c=cast(b),an=Math.atan2(P.y-b.y,P.x-b.x),ux=Math.cos(an),uy=Math.sin(an),L=430,TW=280,ex=b.x+ux*(b.r*.5+L),ey=b.y+uy*(b.r*.5+L);
+ hz({sh:'band',x:b.x+ux*b.r*.5,y:b.y+uy*b.r*.5,an,L,w:56,wn:1.5,dmg:.20,nm:'tower',g:c.g,src:b,c});
+ hz({sh:'band',x:ex+uy*TW/2,y:ey-ux*TW/2,an:Math.atan2(ux,-uy),L:TW,w:70,wn:1.5,dmg:.20,nm:'tower',g:c.g,src:b,c});M7S.tower=(M7S.tower||0)+1;}
+function arm(b){const c=cast(b),a0=Math.atan2(P.y-b.y,P.x-b.x),sg=Math.random()<.5?-1:1;for(let i=0;i<3;i++)hz({sh:'band',x:b.x,y:b.y,an:a0+sg*i*Math.PI/3,L:560,w:60,wn:1.2,dl:i*.8,dmg:.12,nm:'arm',st:i,g:c.g,src:b,c});M7S.arm=(M7S.arm||0)+1;}
 /* ---------- update ---------- */
 function zUpd(dt){for(const z of Z){z.t+=dt;
-  if(z.sh==='chain'&&z.t>=0&&z.t<z.wn&&!inZ(z)){z.t=z.wn+.3;z.done=1;z.brk=1;M7S.chainBreak++;continue;}
+  if(z.sh==='chain'&&z.t>=0&&z.t<z.wn&&!inZ(z)){z.bt=z.t;z.bx=P.x;z.by=P.y;z.t=z.wn;z.done=1;z.brk=1;M7S.chainBreak=(M7S.chainBreak||0)+1;continue;}
   if(z.dash&&z.t>=z.wn&&z.t<z.wn+.25&&z.src&&!z.src.dead){const e=z.src,k=Math.min(1,dt/Math.max(.016,z.wn+.25-z.t+dt));e.x+=(z.ex-e.x)*k;e.y+=(z.ey-e.y)*k;}
   if(z.t>=z.wn&&!z.done){z.done=1;if(window.FIRE96&&FIRE96.nm[z.nm])FIRE96(z);/* v96 lingering fire */const k=z.st||0;if(inZ(z)&&!z.c.hit[k]){z.c.hit[k]=1;hitP(z.dmg,z.nm);}}}
  for(let i=Z.length-1;i>=0;i--)if(Z[i].t>=Z[i].wn+.3)Z.splice(i,1);}
@@ -4359,9 +4372,9 @@ function hold(){for(const e of EN){if(e.dead||e.mb||e===G.boss)continue;if(busy(
 miniAI=function(e,dt){if(AW())return 0;e._dc7=(e._dc7??2.5)-dt;e._xc7=(e._xc7??5)-dt;if(busy(e))return 0;const dd=Math.hypot(P.x-e.x,P.y-e.y);if(dd>=300||groups()>=CAP())return 1;
  if(e._dc7<=0){dipole(e);e._dc7=6;}else if(e._xc7<=0&&dd<260){cross7(e);e._xc7=7.5;}return busy(e)?0:1;};
 boss2Pick=function(b){};
-boss2Upd=function(b,dt){b._sc7=(b._sc7??3)-dt;b._xc7=(b._xc7??5.5)-dt;b._oc7=(b._oc7??8)-dt;b._busy=busy(b);
+boss2Upd=function(b,dt){b._bc7=(b._bc7??3)-dt;b._tc7=(b._tc7??4.5)-dt;b._xc7=(b._xc7??6.5)-dt;b._oc7=(b._oc7??8)-dt;b._busy=busy(b);
  if(!b._busy&&!AW()&&groups()<CAP()){const dd=Math.hypot(P.x-b.x,P.y-b.y);
-  if(b._oc7<=0&&dd<200){over(b);b._oc7=11;}else if(b._xc7<=0&&dd<520){xarm(b);b._xc7=9;}else if(b._sc7<=0&&dd<600){storm(b);b._sc7=10;}b._busy=busy(b);}
+  if(b._oc7<=0&&dd<200){over(b);b._oc7=11;}else if(b._bc7<=0&&dd<280){bind(b);b._bc7=10;}else if(b._tc7<=0&&dd<480){tower(b);b._tc7=9;}else if(b._xc7<=0&&dd<520){arm(b);b._xc7=9;}b._busy=busy(b);}
  if(b._busy){b.st='m7';}else{b.st='walk';b.tm=99;}return 0;};
 const _up=update;update=function(dt){const t0=G.t;_up(dt);const d=G.t-t0;if(d<=0)return;toad();if(AW())return;skills(d);hold();zUpd(d);M7S.maxWarn=Math.max(M7S.maxWarn,groups());};
 /* ---------- drawing ---------- */
