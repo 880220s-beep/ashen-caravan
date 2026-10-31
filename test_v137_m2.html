@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v115';
+const BUILD='v116';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('ac_rl_'+m[1])){sessionStorage.setItem('ac_rl_'+m[1],'1');const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4765,7 +4765,7 @@ window.WV7=(function(){const OR='#FF9A2E',DK='rgba(20,10,5,.85)',FL='rgba(255,15
 .v15u .tx{flex:1;min-width:0}.v15u .tx b{display:block;font:900 19px system-ui}.v15u .tx span{display:block;font:700 14px system-ui;color:#A3AEBF;margin-top:3px}
 .v15u .tx .bar{height:8px;border-radius:4px;background:#0A0D12;margin-top:6px;overflow:hidden}.v15u .tx .bar i{display:block;height:100%;background:#FFC93C}
 .v15u .v15b{flex:0 0 112px;min-height:58px;font-size:18px}
-.v15h{flex:0 0 auto;font:900 22px system-ui;margin:2px 0 8px;color:#FFC93C}
+.v15cf{position:fixed;inset:0;z-index:30;background:rgba(5,8,12,.7);display:flex;align-items:center;justify-content:center}.v15cf .bx{width:min(340px,86vw);background:linear-gradient(#1E2633,#141A24);border:3px solid #C9A24A;border-radius:20px;padding:20px 16px 16px;text-align:center;color:#fff;box-sizing:border-box}.v15cf .q{font:900 21px system-ui;line-height:1.3}.v15cf .i{font:800 16px system-ui;color:#FFC93C;margin-top:8px;line-height:1.4}.v15cf .i span{color:#A3AEBF}.v15cf .pc{width:120px;height:120px;margin:8px auto 0}.v15cf .pc canvas{width:100%;height:100%}.v15cf .r{display:flex;gap:12px;margin-top:16px}.v15u{flex-wrap:wrap;flex-shrink:0}.v15u .bb{flex:1 0 100%;display:flex;gap:10px}.v15u .bb .v15b{flex:1;min-height:48px;font-size:18px}.v15b:disabled{opacity:.55}.v15h{flex:0 0 auto;font:900 22px system-ui;margin:2px 0 8px;color:#FFC93C}
 `;document.head.appendChild(st);
 const $=id=>document.getElementById(id),fmt=n=>n===Infinity?'∞':(+n).toLocaleString('en-US');
 let TAB='home',GSEL=null;
@@ -4775,6 +4775,7 @@ function tabs(){return '<div class="v15tb">'+[['gar','🔧','차고'],['home','�
 function draw(id,el,pl){const cv=document.createElement('canvas'),r=el.getBoundingClientRect(),S=Math.max(64,Math.round(Math.max(r.width,r.height)*(devicePixelRatio||1)));cv.width=cv.height=S;el.prepend(cv);
  h9prep().then(M=>{const v=M[(pl||'g')+id]||M['s'+id];if(!v)return;const g=cv.getContext('2d'),[x0,y0,bw,bh]=v.bb,k=S*.92/Math.max(bw,bh);g.imageSmoothingQuality='high';g.drawImage(v.im,x0,y0,bw,bh,(S-bw*k)/2,(S-bh*k)/2,bw*k,bh*k);});}
 const cname=c=>c[1].replace(/^[^가-힣A-Za-z]+/,'');
+function cfm(q,info,yes,car){const d=document.createElement('div');d.className='v15cf';d.innerHTML='<div class="bx"><div class="q">'+q+'</div>'+(car?'<div class="pc" data-c="'+car+'"></div>':'')+'<div class="i">'+info+'</div><div class="r"><button class="v15b g" data-n>아니오</button><button class="v15b" data-y>예</button></div></div>';document.body.appendChild(d);const pc=d.querySelector('.pc');if(pc)draw(car,pc);d.querySelector('[data-n]').onclick=()=>d.remove();d.querySelector('[data-y]').onclick=()=>{d.remove();yes();};}window.V116CF=cfm;
 function myCar(){return SAVE.cars[SAVE.car]?SAVE.car:(CARS.find(c=>SAVE.cars[c[0]])||CARS[0])[0];}
 function frame(body){const m=$('menu');$('gar').style.display='none';G.paused=true;m.className='ov v15';m.style.cssText='';m.innerHTML='<div class="v15w">'+bar()+body+tabs()+'</div>';m.style.display='flex';m.style.height=innerHeight+'px';
  m.querySelectorAll('[data-tb]').forEach(b=>b.onclick=()=>{TAB=b.dataset.tb;render();});$('hSet').onclick=showSettings;m.querySelectorAll('.v15car[data-c],.v15p[data-c]').forEach(u=>draw(u.dataset.c,u));return m;}
@@ -4787,7 +4788,7 @@ function home(){clrSync();SAVE.diff=mDiff(SAVE.stage);const m0=$('menu'),old=m0.
  m.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const n=+b.dataset.m;if(!mapOpen(n-1)||n===SAVE.stage)return;SAVE.stage=n;SAVE.diff=mDiff(n);saveS();home();});
  m.querySelectorAll('.v15d [data-d]').forEach(b=>b.onclick=()=>{const d=+b.dataset.d;if(!dOpen(SAVE.stage,d))return;SAVE.mdiff[SAVE.stage]=d;SAVE.diff=d;saveS();home();});
  $('v15car').onclick=()=>{TAB='gar';GSEL=myCar();render();};
- $('mPlay').onclick=()=>{SAVE.car=myCar();saveS();goPlay();};}
+ $('mPlay').onclick=()=>{const id=myCar(),c=CARS.find(x=>x[0]===id);cfm('지금 차로 출동할까요?',cname(c)+' · Lv '+cLv(id),()=>{SAVE.car=id;saveS();goPlay();},id);};}
 function garage(){if(!GSEL||!CARS.find(c=>c[0]===GSEL))GSEL=myCar();const id=GSEL,c=CARS.find(x=>x[0]===id),[,,ds,uc,udc]=c,own=!!SAVE.cars[id],L=cLv(id),mx=L>=CLMAX,use=own&&myCar()===id;
  const sub=own?'Lv '+L+' · 공격력·체력 +'+(1.25*(L-1)).toFixed(2).replace(/\.?0+$/,'')+'%<br>어려움 +'+(3*(L-1))+'%':'🔒 '+ds.split('<br>')[0];
  let bt;if(!own)bt='<button class="v15b" data-ug'+(SAVE.gold<uc?' disabled':'')+'><small>골드로 해금</small>💰 '+fmt(uc)+'</button><button class="v15b c" data-ud'+(SAVE.dia<udc?' disabled':'')+'><small>다이아로 해금</small>💎 '+fmt(udc)+'</button>';
@@ -4799,18 +4800,16 @@ function garage(){if(!GSEL||!CARS.find(c=>c[0]===GSEL))GSEL=myCar();const id=GSE
  m.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{GSEL=b.dataset.pk;garage();});
  const u=$('v15use');if(u)u.onclick=()=>{SAVE.car=id;saveS();garage();};
  const ok=()=>{saveS();beep(880,.1,'triangle',.12);garage();};
- const ask=dia=>{const cost=dia?udc:uc,bal=dia?SAVE.dia:SAVE.gold,ic=dia?'💎':'💰';if(bal<cost)return;const d=$('cfm');
-  d.innerHTML='<div class="hpop"><div class="hpt">'+c[1]+' 해금</div><div class="u116" style="margin:0 auto">'+carSVG(id,160)+'</div><div>비용 '+ic+' '+cost+'</div><div>남는 잔액 '+ic+' '+(bal-cost)+'</div><div class="vbt"><button class="hbtn alt" id="cN">취소</button><button class="hbtn" id="cY">해금 확정</button></div></div>';d.style.display='flex';uniSVG(d);
-  $('cN').onclick=()=>{d.style.display='none';};$('cY').onclick=()=>{if((dia?SAVE.dia:SAVE.gold)<cost)return;if(dia)SAVE.dia-=cost;else SAVE.gold-=cost;SAVE.cars[id]=1;saveS();d.style.display='none';beep(660,.2,'triangle',.15,1320);garage();};};
+ const ask=dia=>{const cost=dia?udc:uc,bal=dia?SAVE.dia:SAVE.gold,ic=dia?'💎':'💰';if(bal<cost)return;cfm((dia?'다이아':'골드')+'로 해금할까요?',cname(c)+'<br>'+ic+' '+fmt(cost)+' <span>(남는 '+ic+' '+fmt(bal-cost)+')</span>',()=>{if((dia?SAVE.dia:SAVE.gold)<cost)return;if(dia)SAVE.dia-=cost;else SAVE.gold-=cost;SAVE.cars[id]=1;saveS();beep(660,.2,'triangle',.15,1320);garage();},id);};
  const q=s=>m.querySelector(s);if(q('[data-ug]'))q('[data-ug]').onclick=()=>ask(0);if(q('[data-ud]'))q('[data-ud]').onclick=()=>ask(1);
- if(q('[data-lg]'))q('[data-lg]').onclick=()=>{const L=cLv(id),c2=LGC(L);if(L>=CLMAX||SAVE.gold<c2)return;SAVE.gold-=c2;SAVE.clv[id]=L+1;ok();};
- if(q('[data-ld]'))q('[data-ld]').onclick=()=>{const L=cLv(id),c2=LDC(L);if(L>=CLMAX||SAVE.dia<c2)return;SAVE.dia-=c2;SAVE.clv[id]=L+1;ok();};}
+ if(q('[data-lg]'))q('[data-lg]').onclick=()=>{const L=cLv(id),c2=LGC(L);if(L>=CLMAX||SAVE.gold<c2)return;cfm('골드로 업그레이드 할까요?',cname(c)+' Lv'+L+' → Lv'+(L+1)+'<br>💰 '+fmt(c2),()=>{if(cLv(id)!==L||SAVE.gold<c2)return;SAVE.gold-=c2;SAVE.clv[id]=L+1;ok();});};
+ if(q('[data-ld]'))q('[data-ld]').onclick=()=>{const L=cLv(id),c2=LDC(L);if(L>=CLMAX||SAVE.dia<c2)return;cfm('다이아로 업그레이드 할까요?',cname(c)+' Lv'+L+' → Lv'+(L+1)+'<br>💎 '+fmt(c2),()=>{if(cLv(id)!==L||SAVE.dia<c2)return;SAVE.dia-=c2;SAVE.clv[id]=L+1;ok();});};}
 function upg(){const m=frame('<div class="v15h">⬆️ 영구 강화 · 모든 차량</div><div class="v15ls">'+PU.map(([k,n,ds])=>{const v=SAVE.pu[k]||0,c=v+1,mx=v>=PUMAX,gc=100*c,dc=5*c,useD=!mx&&SAVE.gold<gc&&SAVE.dia>=dc;const ic=n.split(' ')[0],nm=n.replace(/^\S+\s/,'');
-  const b=mx?'<button class="v15b g" disabled style="color:#C8D2E0">최대</button>':useD?'<button class="v15b c" data-pd="'+k+'">💎 '+fmt(dc)+'</button>':'<button class="v15b" data-pg="'+k+'"'+(SAVE.gold<gc?' disabled':'')+'>💰 '+fmt(gc)+'</button>';
+  const b='<div class="bb">'+(mx?'<button class="v15b g" disabled style="color:#C8D2E0">최대</button>':'<button class="v15b" data-pg="'+k+'"'+(SAVE.gold<gc?' disabled':'')+'>💰 '+fmt(gc)+'</button><button class="v15b c" data-pd="'+k+'"'+(SAVE.dia<dc?' disabled':'')+'>💎 '+fmt(dc)+'</button>')+'</div>';
   return '<div class="v15u"><div class="ic">'+ic+'</div><div class="tx"><b>'+nm+' '+v+'/'+PUMAX+'</b><span>'+ds+'</span><div class="bar"><i style="width:'+(100*v/PUMAX)+'%"></i></div></div>'+b+'</div>';}).join('')+'</div>');
  const ok=()=>{saveS();beep(880,.1,'triangle',.12);const l=m.querySelector('.v15ls'),y=l?l.scrollTop:0;upg();const l2=$('menu').querySelector('.v15ls');if(l2)l2.scrollTop=y;};
- m.querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{const k=b.dataset.pg,v=SAVE.pu[k]||0,c=100*(v+1);if(v>=PUMAX||SAVE.gold<c)return;SAVE.gold-=c;SAVE.pu[k]=v+1;ok();});
- m.querySelectorAll('[data-pd]').forEach(b=>b.onclick=()=>{const k=b.dataset.pd,v=SAVE.pu[k]||0,c=5*(v+1);if(v>=PUMAX||SAVE.dia<c)return;SAVE.dia-=c;SAVE.pu[k]=v+1;ok();});}
+ const pn=k=>(PU.find(x=>x[0]===k)||[,''])[1];m.querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{const k=b.dataset.pg,v=SAVE.pu[k]||0,c=100*(v+1);if(v>=PUMAX||SAVE.gold<c)return;cfm('골드로 업그레이드 할까요?',pn(k)+' '+v+' → '+(v+1)+'<br>💰 '+fmt(c),()=>{if((SAVE.pu[k]||0)!==v||SAVE.gold<c)return;SAVE.gold-=c;SAVE.pu[k]=v+1;ok();});});
+ m.querySelectorAll('[data-pd]').forEach(b=>b.onclick=()=>{const k=b.dataset.pd,v=SAVE.pu[k]||0,c=5*(v+1);if(v>=PUMAX||SAVE.dia<c)return;cfm('다이아로 업그레이드 할까요?',pn(k)+' '+v+' → '+(v+1)+'<br>💎 '+fmt(c),()=>{if((SAVE.pu[k]||0)!==v||SAVE.dia<c)return;SAVE.dia-=c;SAVE.pu[k]=v+1;ok();});});}
 function render(){if(TAB==='gar')garage();else if(TAB==='up')upg();else home();}
 window.V115={render,set:t=>{TAB=t;render();}};
 showMenu=function(){TAB='home';render();};
