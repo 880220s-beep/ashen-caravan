@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v133';
+const BUILD='v134';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -17,7 +17,7 @@ const Q=new URLSearchParams(location.search);
 const STAR_T=[.75,.5];
 const SKEY=Q.has('dev')?'ac_save_dev':'ac_save';/* v120: dev=1 uses its own save, real progress untouched */const SAVE=(()=>{let s={};try{s=JSON.parse(localStorage.getItem(SKEY)||'{}')||{};}catch(e){}return Object.assign({gold:0,up:{hp:0,dmg:0,spd:0,mag:0},cars:{tank:1},car:'tank',ach:{},stage:1,diff:0,mute:0,noads:0},s);})();
 function saveS(){try{localStorage.setItem(SKEY,JSON.stringify(SAVE));}catch(e){}}
-if(Q.has('dev')){SAVE.gold=SAVE.dia=999999;}/* v120: dev=1 = fresh game with infinite gold/diamonds (cars, levels, stats start locked) */
+if(Q.has('dev')){SAVE.gold=SAVE.dia=999999;if(!Q.has('play'))SAVE.clv={};/* v134: opening the dev link resets every car to level 1 (garage upgrades made after that still carry into the run) */}/* v120: dev=1 = fresh game with infinite gold/diamonds (cars, levels, stats start locked) */
 const PLAY=Q.has('play')||Q.has('dps');function difOpen(st,d){if(d<=0||Q.has('dev'))return true;/* v82: dev=1 unlocks every difficulty */const W=SAVE.wins||{};return d===1?!!W[st+'n']:!!W[st+'h'];}{SAVE.wins=SAVE.wins||{};if(!SAVE._w81){SAVE._w81=1;const S0=SAVE.stars||{};for(const k in S0)if(S0[k]>0)SAVE.wins[k]=1;try{localStorage.setItem(SKEY,JSON.stringify(SAVE));}catch(e){}}if(SAVE.diff===true)SAVE.diff=1;}const DEVQ=(Q.has('dev')?'&dev=1':'')+(Q.has('vibtest')?'&vibtest=1':'');/* v124: keep vibtest across home/run */const DIFF=Q.get('diff')==='hell'?2:Q.get('diff')==='hard'?1:0;const HELL=DIFF===2;const DHP=DIFF<2?1:[1,1.85,2.6][DIFF],DBHP=DIFF<2?1:[1,1.7,2.0][DIFF],DDMG=[1,1.4,1.85][DIFF];const HELLK={hp:1.28,dmg:1.30,spawn:1.13,boss:1.15,xp:1.05};
 /* ===================== V79 TUNING BLOCK (edit numbers here) ===================== */
 const TUNE={
@@ -4531,7 +4531,7 @@ function slam(e){const el=!!e.elite,c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x);hz(
 function door(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x)+Math.PI/2,L=360;hz({sh:'band',x:P.x-Math.cos(an)*L/2,y:P.y-Math.sin(an)*L/2,an,L,w:60,wn:1.25,dmg:.14,nm:'door',g:c.g,src:e,c});M8S.door++;}
 function chime(e){const c=cast(e);hz({sh:'ann',x:e.x,y:e.y,r0:40,r1:140,wn:1.2,dmg:.12,nm:'chime',st:0,g:c.g,src:e,c});hz({sh:'ann',x:e.x,y:e.y,r0:140,r1:260,wn:1.2,dl:.6,dmg:.12,nm:'chime',st:1,g:c.g,src:e,c});M8S.chime++;}
 function bell(b){const c=cast(b);[[60,170],[170,280],[280,390]].forEach(([r0,r1],i)=>hz({sh:'ann',x:b.x,y:b.y,r0,r1,wn:1.2,dl:i*.45,dmg:.16,nm:'bell',g:c.g,src:b,c}));M8S.bell++;}
-function glass(b){const c=cast(b),o=(Math.random()-.5)*60;for(const k of[-1,0,1]){const x=P.x+o+k*140;hz({sh:'rect',x0:x-35,x1:x+35,y0:P.y-260,y1:P.y+260,x,y:P.y,wn:1.4,dmg:.18,nm:'glass',g:c.g,src:b,c});}M8S.glass++;}
+function glass(b){const c=cast(b),o=(Math.random()-.5)*60;for(const k of[-1,0,1]){const x=P.x+o+k*210;/* v134: gap 70->140 (bar w70 unchanged) */hz({sh:'rect',x0:x-35,x1:x+35,y0:P.y-260,y1:P.y+260,x,y:P.y,wn:1.4,dmg:.18,nm:'glass',g:c.g,src:b,c});}M8S.glass++;}
 function fall(b){const c=cast(b),a0=Math.random()*TAU,pads=[0,1,2].map(i=>[b.x+Math.cos(a0+i*TAU/3)*150,b.y+Math.sin(a0+i*TAU/3)*150,45]);hz({sh:'lotus',x:b.x,y:b.y,R:260,pads,wn:2.0,dmg:.22,nm:'fall',g:c.g,src:b,c});M8S.fall++;}
 /* ---------- update ---------- */
 function zUpd(dt){for(const z of Z){z.t+=dt;
