@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v130';
+const BUILD='v131';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4733,16 +4733,17 @@ const TINT={bolt:'rgba(150,195,240,.16)',frost:'rgba(95,165,210,.26)',bog:'rgba(
 window.AFTD=function(f,k){const P_=window.FIREPATH;cx.save();if(P_){P_(f);cx.globalAlpha=k;cx.fillStyle=TINT[f.st]||'rgba(0,0,0,.1)';cx.fill('evenodd');}if(f.pt&&D[f.st])D[f.st](f,k,G.t);cx.restore();};
 })();
 </script>
-<script>/* v130: map-7 boss lingering lightning (AFTV, boss skills only) now damages like other bosses' fire (2% max-HP-scaled per .5s tick, shared v96 loop), lasts 1.5s (was 2s), area ~-20% (radius/side x.894, band width x.8; visual points moved in too). Mid-boss/big-enemy lightning unchanged. */
-(function(){if(MAP!==7||!window.AFTV||!window.FIREL)return;const F=window.FIREL,_a=window.AFTV,S=Math.sqrt(.8);window.M7L130={n:0};
-window.AFTV=function(z){const n0=F.length;_a.apply(this,arguments);if(F.length<=n0)return;const o=F[F.length-1];if(o._z!==z||!o.nd)return;
- o.nd=0;FIRES.n++;o.t=.5;o.tk=.5;/* ends at t=2 -> 1.5s life; damage ticks at .5s steps while inside */
+<script>/* v131 (was v130 map-7 only): EVERY map's BOSS aftermath (v128 per-boss styles, maps 2-8) damages like fire (2% max-HP-scaled per .5s shared tick), lasts 1.5s (last .5s fades), area ~-20% (radius/side x.894, band width x.8; visual points moved in too). Mid-boss/big-enemy aftermaths unchanged. */
+(function(){if(!window.AFTV||!window.FIREL||!window.FIRE96)return;const F=window.FIREL,_a=window.AFTV,S=Math.sqrt(.8);window.M7L130={n:0};window.BA131={n:0,fire:0};
+function adj(o){if(o._b131)return;o._b131=1;if(o.nd){o.nd=0;FIRES.n++;}o.t=.5;o.tk=.5;/* removed at t=2 -> 1.5s life */
  let cx0=o.x,cy0=o.y,mv;
  if(o.sh==='band'){const ux=Math.cos(o.an),uy=Math.sin(o.an);o.w*=.8;mv=q=>{const dx=q.x-o.x,dy=q.y-o.y,l=dx*ux+dy*uy,w=(-dx*uy+dy*ux)*.8;q.x=o.x+ux*l-uy*w;q.y=o.y+uy*l+ux*w;};}
  else{if(o.sh==='rect'){cx0=(o.x0+o.x1)/2;cy0=(o.y0+o.y1)/2;const hw=(o.x1-o.x0)/2*S,hh=(o.y1-o.y0)/2*S;o.x0=cx0-hw;o.x1=cx0+hw;o.y0=cy0-hh;o.y1=cy0+hh;}
-  else{if(o.a)o.a*=S;if(o.b)o.b*=S;if(o.r)o.r*=S;}mv=q=>{q.x=cx0+(q.x-cx0)*S;q.y=cy0+(q.y-cy0)*S;};}
- if(o.pt)o.pt.forEach(mv);if(o.fl)o.fl.forEach(mv);o._in=0;M7L130.n++;};
-for(const k in _a)window.AFTV[k]=_a[k];})();
+  else{for(const k of['a','b','r','R','r0','r1'])if(o[k])o[k]*=S;if(o.pads)o.pads=o.pads.map(p=>[cx0+(p[0]-cx0)*S,cy0+(p[1]-cy0)*S,p[2]*S]);}mv=q=>{q.x=cx0+(q.x-cx0)*S;q.y=cy0+(q.y-cy0)*S;};}
+ if(o.pt)o.pt.forEach(mv);if(o.fl)o.fl.forEach(mv);if(o.em)o.em.forEach(mv);o._in=0;BA131.n++;M7L130.n++;}
+window.AFTV=function(z){const n0=F.length;_a.apply(this,arguments);if(F.length<=n0)return;const o=F[F.length-1];if(o._z===z)adj(o);};for(const k in _a)window.AFTV[k]=_a[k];
+const _f=window.FIRE96;window.FIRE96=function(z){const n0=F.length,r=_f.apply(this,arguments);if(F.length>n0&&z&&G.boss&&z.src===G.boss){const o=F[F.length-1];if(o.st){adj(o);BA131.fire++;}}return r;};for(const k in _f)window.FIRE96[k]=_f[k];
+window.AFT131=adj;})();
 </script>
 
 
