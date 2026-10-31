@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v129';
+const BUILD='v130';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -3143,8 +3143,8 @@ const P0=MAPS[MAP].p,DM=D[MAP];window.__V133={map:MAP,names:Object.fromEntries(O
 if(MAP>1){RBN.m2=DM.mid[0];RBN.b2=DM.boss[0];}else{RBN.m1=DM.mid[0];RBN.b1=DM.boss[0];}
 const CCH=new Map(),ND=16;
 const SPRB={f:-1,n:0};function spr(role,ang,Upx,fr){fr=fr||0;const dpr=window.DPR||1,u=Math.max(2,(MAP>=5&&MAP<=8)?Math.round(Upx*dpr)/* v89: whole device px on map 5 so idle/attack frames don't double cache misses */:Math.round(Upx*dpr*2)/2),d=((Math.round((ang+Math.PI/2)/(2*Math.PI)*ND)%ND)+ND)%ND,key=role+'|'+d+'|'+u+'|'+fr;let c=CCH.get(key);if(c)return c;/* v96: at most 2 new sprite rasters per frame; over budget, reuse the nearest cached size (1-3px off) for that frame */{const fn=window.__fc|0;if(SPRB.f!==fn){SPRB.f=fn;SPRB.n=0;}if(SPRB.n>=2){for(let k=1;k<=4;k++)for(const s of[-1,1]){const q=CCH.get(role+'|'+d+'|'+(u+s*k)+'|'+fr);if(q)return q;}}SPRB.n++;}
- if(CCH.size>1500)CCH.clear();const n=Math.ceil(u*4.2+8);c=document.createElement('canvas');c.width=c.height=n;const V129=!window.__NOV129&&window.V129D,c0=c;if(V129){c=document.createElement('canvas');c.width=c.height=n;}g=c.getContext('2d');g.translate(n/2,n/2);if(!V129)g.rotate(d/ND*2*Math.PI);U=u;LW=Math.max(1.5,2*dpr*Math.min(1,u/(10*dpr))+.3);
- try{if(MAP===1&&window.M1P)M1P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===2&&window.M2P)M2P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===3&&window.M3P)M3P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===5&&window.M5P)M5P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===6&&window.M6P)M6P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===7&&window.M7P)M7P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===8&&window.M8P)M8P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===4){const c4={walk:'#2E5FD4',fast:'#0C8EA6',tank:'#3E8E2E',shoot:'#A87810',heavy:'#7A4A26',elite:'#6E6E6E',mid:'#2E5A47',boss:'#34495C'};LW=1.5*dpr;/* c15 */DM[role][2]({a:c4[role]||P0.a,b:'#A9C3D6',d:P0.d,k:role==='elite'?'#25323F':P0.k},fr);}else DM[role][2](P0);}catch(err){console.error(err)}if(V129){try{c=V129D(c,c0,d/ND*2*Math.PI,role,u,dpr,MAP);}catch(err){console.error(err);c=c0;}}CCH.set(key,c);return c;}window.V129spr=spr;window.V129roles=()=>Object.keys(DM);
+ if(CCH.size>1500)CCH.clear();const n=Math.ceil(u*4.2+8);c=document.createElement('canvas');c.width=c.height=n;const V129=false,c0=c;/* v130: v129 auto pass removed */if(V129){c=document.createElement('canvas');c.width=c.height=n;}g=c.getContext('2d');g.translate(n/2,n/2);if(!V129)g.rotate(d/ND*2*Math.PI);U=u;LW=Math.max(1.5,2*dpr*Math.min(1,u/(10*dpr))+.3);
+ try{if(MAP===1&&window.M1P)M1P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===2&&window.M2P)M2P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===3&&window.M3P)M3P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===5&&window.M5P)M5P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===6&&window.M6P)M6P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===7&&window.M7P)M7P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===8&&window.M8P)M8P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===4&&window.M4P)M4P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===4){const c4={walk:'#2E5FD4',fast:'#0C8EA6',tank:'#3E8E2E',shoot:'#A87810',heavy:'#7A4A26',elite:'#6E6E6E',mid:'#2E5A47',boss:'#34495C'};LW=1.5*dpr;/* c15 */DM[role][2]({a:c4[role]||P0.a,b:'#A9C3D6',d:P0.d,k:role==='elite'?'#25323F':P0.k},fr);}else DM[role][2](P0);}catch(err){console.error(err)}if(V129){try{c=V129D(c,c0,d/ND*2*Math.PI,role,u,dpr,MAP);}catch(err){console.error(err);c=c0;}}CCH.set(key,c);return c;}window.V129spr=spr;window.V129roles=()=>Object.keys(DM);
 function blit(role,x,y,ang,Uw,shy,fr){const T=cx.getTransform(),sc=Math.hypot(T.a,T.b)/(window.DPR||1),c=spr(role,ang,Uw*sc,fr),dpr=window.DPR||1,w=c.width/dpr/sc;
  cx.fillStyle='rgba(0,0,0,.25)';cx.beginPath();cx.ellipse(x+Uw*.1,y+Uw*(shy||.35),Uw*1.1,Uw*.55,0,0,TAU);cx.fill();
  /* v137k perf: the cached sprite is already 1:1 device size; stamp it on whole device pixels (no resampling) for the boss and for everything frozen in the raven awakening */
@@ -4733,41 +4733,100 @@ const TINT={bolt:'rgba(150,195,240,.16)',frost:'rgba(95,165,210,.26)',bog:'rgba(
 window.AFTD=function(f,k){const P_=window.FIREPATH;cx.save();if(P_){P_(f);cx.globalAlpha=k;cx.fillStyle=TINT[f.st]||'rgba(0,0,0,.1)';cx.fill('evenodd');}if(f.pt&&D[f.st])D[f.st](f,k,G.t);cx.restore();};
 })();
 </script>
-<script>/* v129: villain detail pass for every map (visual only). Each cached sprite: rivets on the inner rim, glowing eye/core, per-map surface texture (rotate with the body), then world-fixed top-left light, bottom-right shade and a bevel rim. Silhouette/hitbox untouched (all paint is inside the sprite's own alpha). Cached once per direction/size/frame. */
+<script>/* v130: map-7 boss lingering lightning (AFTV, boss skills only) now damages like other bosses' fire (2% max-HP-scaled per .5s tick, shared v96 loop), lasts 1.5s (was 2s), area ~-20% (radius/side x.894, band width x.8; visual points moved in too). Mid-boss/big-enemy lightning unchanged. */
+(function(){if(MAP!==7||!window.AFTV||!window.FIREL)return;const F=window.FIREL,_a=window.AFTV,S=Math.sqrt(.8);window.M7L130={n:0};
+window.AFTV=function(z){const n0=F.length;_a.apply(this,arguments);if(F.length<=n0)return;const o=F[F.length-1];if(o._z!==z||!o.nd)return;
+ o.nd=0;FIRES.n++;o.t=.5;o.tk=.5;/* ends at t=2 -> 1.5s life; damage ticks at .5s steps while inside */
+ let cx0=o.x,cy0=o.y,mv;
+ if(o.sh==='band'){const ux=Math.cos(o.an),uy=Math.sin(o.an);o.w*=.8;mv=q=>{const dx=q.x-o.x,dy=q.y-o.y,l=dx*ux+dy*uy,w=(-dx*uy+dy*ux)*.8;q.x=o.x+ux*l-uy*w;q.y=o.y+uy*l+ux*w;};}
+ else{if(o.sh==='rect'){cx0=(o.x0+o.x1)/2;cy0=(o.y0+o.y1)/2;const hw=(o.x1-o.x0)/2*S,hh=(o.y1-o.y0)/2*S;o.x0=cx0-hw;o.x1=cx0+hw;o.y0=cy0-hh;o.y1=cy0+hh;}
+  else{if(o.a)o.a*=S;if(o.b)o.b*=S;if(o.r)o.r*=S;}mv=q=>{q.x=cx0+(q.x-cx0)*S;q.y=cy0+(q.y-cy0)*S;};}
+ if(o.pt)o.pt.forEach(mv);if(o.fl)o.fl.forEach(mv);o._in=0;M7L130.n++;};
+for(const k in _a)window.AFTV[k]=_a[k];})();
+</script>
+
+
+<script>/* v130: maps 3 & 4 villains hand-redrawn in the map-7 (M7P) style: part() fill + light band + shade band + wear chips + outline, bolts, seams, lamp eyes/cores, layered parts. Same silhouettes/sizes as v128; map 7 is the reference and is untouched. */
 (function(){
-const TH={1:{rv:'#C9963A',rd:'#4E3A20',tx:'grain'},2:{rv:'#E0B060',rd:'#5A3A22',tx:'rust'},3:{rv:'#B8B2AA',rd:'#2E2A26',tx:'soot'},4:{rv:'#D8E4EC',rd:'#2A3A48',tx:'frost'},5:{rv:'#C98E3A',rd:'#36402A',tx:'moss'},6:{rv:'#9A8E80',rd:'#2A201C',tx:'streak'},7:{rv:'#C8D2E0',rd:'#1E2230',tx:'circuit'},8:{rv:'#E2C25A',rd:'#3A2C1C',tx:'gild'}};
-const CAP={boss:20,mid:14,elite:12,heavy:9,tank:9,shoot:7,walk:6,fast:5,summon:5};
-function rnd(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x);}
-window.V129D=function(t,c0,ang,role,u,dpr,map){const n=t.width,g=t.getContext('2d',{willReadFrequently:true}),id=g.getImageData(0,0,n,n).data,A=(x,y)=>(x<0||y<0||x>=n||y>=n)?0:id[((y|0)*n+(x|0))*4+3];
- const th=TH[map]||TH[1];g.setTransform(1,0,0,1,0,0);
- /* texture (inside only) */g.save();g.globalCompositeOperation='source-atop';const tx=th.tx;
- if(tx==='grain'||tx==='streak'||tx==='rust'||tx==='soot'||tx==='moss'){for(let i=0;i<Math.min(60,n*.5);i++){const x=rnd(i)*n,y=rnd(i+9)*n;if(A(x,y)<200)continue;
-   if(tx==='grain'){g.strokeStyle='rgba(60,40,20,.18)';g.lineWidth=Math.max(1,dpr*.8);g.beginPath();g.moveTo(x-u*.4,y);g.quadraticCurveTo(x,y+u*.08,x+u*.4,y);g.stroke();}
-   else if(tx==='streak'){g.fillStyle='rgba(120,56,24,.22)';g.fillRect(x,y,Math.max(1,u*.06),u*(.3+rnd(i+3)*.5));}
-   else if(tx==='rust'){g.fillStyle='rgba(140,70,30,.25)';g.beginPath();g.arc(x,y,u*(.04+rnd(i+5)*.07),0,7);g.fill();}
-   else if(tx==='soot'){g.fillStyle='rgba(20,18,16,.16)';g.beginPath();g.arc(x,y,u*(.08+rnd(i+5)*.12),0,7);g.fill();}
-   else {if(y<n*.55)continue;g.fillStyle='rgba(70,84,40,.32)';g.beginPath();g.arc(x,y,u*(.06+rnd(i+5)*.1),0,7);g.fill();}}}
- g.restore();
- /* inset plate seam: eroded silhouette -> dark seam line + slightly lit inner plate (layered look) */{const ero=(src,r)=>{const q=document.createElement('canvas');q.width=q.height=n;const qg=q.getContext('2d');qg.drawImage(src,0,0);qg.globalCompositeOperation='destination-in';for(let k=0;k<8;k++){const a=k*Math.PI/4;qg.drawImage(src,Math.cos(a)*r,Math.sin(a)*r);}return q;};
-  const ri=Math.max(2,u*.2),E1=ero(t,ri),E2=ero(E1,Math.max(1.2,dpr*1.1)),sm=document.createElement('canvas');sm.width=sm.height=n;const sg=sm.getContext('2d');sg.drawImage(E1,0,0);sg.globalCompositeOperation='destination-out';sg.drawImage(E2,0,0);sg.globalCompositeOperation='source-in';sg.fillStyle='rgba(10,10,14,.42)';sg.fillRect(0,0,n,n);
-  const pl=E2.getContext('2d');pl.globalCompositeOperation='source-in';pl.fillStyle='rgba(255,255,255,.07)';pl.fillRect(0,0,n,n);g.save();g.globalCompositeOperation='source-atop';g.drawImage(E2,0,0);g.drawImage(sm,0,0);g.restore();}
- /* rivets on the inner rim */const e=Math.max(2,u*.16),st=Math.max(3,u*.3)|0,cand=[];
- for(let y=st;y<n-st;y+=st)for(let x=st;x<n-st;x+=st){if(A(x,y)<220)continue;let ok=1,ed=0;for(let k=0;k<8;k++){const a=k*Math.PI/4,cx_=Math.cos(a),sy=Math.sin(a);if(A(x+cx_*e,y+sy*e)<200){ok=0;break;}if(A(x+cx_*e*2.4,y+sy*e*2.4)<60)ed=1;}if(ok&&ed)cand.push([x,y]);}
- const keep=[],cap=CAP[role]||6,ms=(u*.62)**2;for(let i=0;i<cand.length&&keep.length<cap;i++){const j=(i*7919)%cand.length,p=cand[j];if(keep.every(q=>(q[0]-p[0])**2+(q[1]-p[1])**2>ms))keep.push(p);}
- const rr=Math.max(1.1*dpr,u*.075);for(const[x,y]of keep){g.fillStyle=th.rd;g.beginPath();g.arc(x,y,rr*1.35,0,7);g.fill();g.fillStyle=th.rv;g.beginPath();g.arc(x,y,rr,0,7);g.fill();g.fillStyle='rgba(255,255,255,.75)';g.beginPath();g.arc(x-rr*.35,y-rr*.35,rr*.38,0,7);g.fill();}
- /* glowing eye/core: centroid of bright saturated pixels */{let sx=0,sy=0,m=0,cr=0,cg=0,cb=0;for(let y=0;y<n;y+=2)for(let x=0;x<n;x+=2){const o=(y*n+x)*4,r=id[o],gg=id[o+1],b=id[o+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b);if(id[o+3]>220&&mx>190&&mx-mn>80){sx+=x;sy+=y;m++;cr+=r;cg+=gg;cb+=b;}}
-  if(m>=3){const x=sx/m,y=sy/m,R=Math.max(3,u*.5);g.save();g.globalCompositeOperation='source-atop';const gr=g.createRadialGradient(x,y,0,x,y,R);gr.addColorStop(0,'rgba('+(cr/m|0)+','+(cg/m|0)+','+(cb/m|0)+',.55)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(x-R,y-R,R*2,R*2);g.fillStyle='rgba(255,255,255,.8)';g.beginPath();g.arc(x-u*.06,y-u*.06,Math.max(1,u*.05),0,7);g.fill();g.restore();}}
- if(tx==='circuit'||tx==='gild'||tx==='frost'){g.save();g.globalCompositeOperation='source-atop';g.lineWidth=Math.max(1,dpr*.9);
-   if(tx==='circuit'){g.strokeStyle='rgba(127,211,230,.35)';for(let i=0;i<4;i++){const y=n*(.3+i*.13);g.beginPath();g.moveTo(n*.3,y);g.lineTo(n*.45,y);g.lineTo(n*.5,y+u*.15);g.lineTo(n*.7,y+u*.15);g.stroke();}}
-   else if(tx==='gild'){g.strokeStyle='rgba(226,194,90,.4)';for(const[x,y]of keep){g.beginPath();g.arc(x,y,rr*2.2,0,7);g.stroke();}}
-   g.restore();}
- /* rotate into the real cache canvas */const h=c0.getContext('2d');h.save();h.translate(n/2,n/2);h.rotate(ang);h.drawImage(t,-n/2,-n/2);h.restore();
- /* world-fixed light + bevel */h.save();h.globalCompositeOperation='source-atop';const lg=h.createLinearGradient(n*.2,n*.2,n*.8,n*.8);lg.addColorStop(0,'rgba(255,255,255,.16)');lg.addColorStop(.5,'rgba(255,255,255,0)');lg.addColorStop(1,'rgba(0,0,0,.26)');h.fillStyle=lg;h.fillRect(0,0,n,n);
- if(tx==='frost'){const fg=h.createLinearGradient(0,n*.25,0,n*.5);fg.addColorStop(0,'rgba(240,250,255,.35)');fg.addColorStop(1,'rgba(240,250,255,0)');h.fillStyle=fg;h.fillRect(0,0,n,n);}
- h.restore();
- const o=Math.max(1.5,dpr*1.4),b=document.createElement('canvas');b.width=b.height=n;const bg=b.getContext('2d');
- for(const[dx,col]of[[o,'rgba(255,255,255,.32)'],[-o,'rgba(0,0,0,.3)']]){bg.globalCompositeOperation='source-over';bg.clearRect(0,0,n,n);bg.drawImage(c0,0,0);bg.globalCompositeOperation='destination-out';bg.drawImage(c0,dx,dx);bg.globalCompositeOperation='source-in';bg.fillStyle=col;bg.fillRect(0,0,n,n);h.save();h.globalCompositeOperation='source-atop';h.drawImage(b,0,0);h.restore();}
- return c0;};
+function K(){const o={};let g,u,dpr,lv,LW,N;const hx=c=>{c=c.replace('#','');return[0,2,4].map(i=>parseInt(c.slice(i,i+2),16));};
+ const mix=(c,t,k)=>'rgb('+hx(c).map(v=>Math.round(v+(t-v)*k)).join(',')+')';const X=v=>v*u,px=v=>v*dpr;
+ o.box=(x,y,w,h,r)=>(ox,oy)=>{g.beginPath();g.roundRect(X(x-w/2)+ox,X(y-h/2)+oy,X(w),X(h),X(Math.min(w,h)*(r??.18)));};
+ o.circ=(x,y,r)=>(ox,oy)=>{g.beginPath();g.arc(X(x)+ox,X(y)+oy,X(r),0,7);};
+ o.ell=(x,y,rx,ry)=>(ox,oy)=>{g.beginPath();g.ellipse(X(x)+ox,X(y)+oy,X(rx),X(ry),0,0,7);};
+ o.poly=pts=>(ox,oy)=>{g.beginPath();for(let i=0;i<pts.length;i+=2)g[i?'lineTo':'moveTo'](X(pts[i])+ox,X(pts[i+1])+oy);g.closePath();};
+ o.part=(P,c,inner,wear)=>{const h=Math.max(px(1),X(.05)),s=Math.max(px(1.5),X(.09)),B=4000;g.save();P(0,0);g.clip();g.fillStyle=mix(c,255,.22);g.fillRect(-B,-B,2*B,2*B);P(lv[0]*h,lv[1]*h);g.clip();g.fillStyle=mix(c,0,.2);g.fillRect(-B,-B,2*B,2*B);P(-lv[0]*s,-lv[1]*s);g.clip();g.fillStyle=c;g.fillRect(-B,-B,2*B,2*B);g.restore();
+  if(inner){g.save();P(0,0);g.clip();inner();g.restore();}
+  if(wear){g.save();P(0,0);g.clip();g.strokeStyle='rgba(255,255,255,.55)';g.lineWidth=Math.max(px(1),X(.035));g.lineCap='round';for(const w of wear){g.beginPath();g.moveTo(X(w[0]),X(w[1]));g.lineTo(X(w[2]),X(w[3]));g.stroke();}g.restore();}
+  P(0,0);g.lineWidth=LW;g.strokeStyle=N;g.lineJoin='round';g.stroke();};
+ o.bolt=(x,y,c)=>{g.fillStyle=c||'#DDE2E8';g.beginPath();g.arc(X(x),X(y),Math.max(px(1),X(.045)),0,7);g.fill();g.strokeStyle=N;g.lineWidth=Math.max(px(.8),LW*.45);g.stroke();};
+ o.seam=(x1,y1,x2,y2,a)=>{g.strokeStyle='rgba(20,18,22,'+(a||.5)+')';g.lineWidth=Math.max(px(1),LW*.55);g.lineCap='round';g.beginPath();g.moveTo(X(x1),X(y1));g.lineTo(X(x2),X(y2));g.stroke();};
+ o.lamp=(x,y,r,c)=>{g.fillStyle=c;g.beginPath();g.arc(X(x),X(y),Math.max(px(1.2),X(r)),0,7);g.fill();g.strokeStyle=N;g.lineWidth=Math.max(px(.8),LW*.5);g.stroke();g.fillStyle='rgba(255,255,255,.75)';g.beginPath();g.arc(X(x-r*.3),X(y-r*.3),Math.max(px(.6),X(r*.3)),0,7);g.fill();};
+ o.leg=(x1,y1,x2,y2,w,c)=>{g.lineCap='round';g.beginPath();g.moveTo(X(x1),X(y1));g.lineTo(X(x2),X(y2));g.strokeStyle=N;g.lineWidth=X(w)+LW*2;g.stroke();g.strokeStyle=c;g.lineWidth=X(w);g.stroke();g.strokeStyle='rgba(255,255,255,.3)';g.lineWidth=Math.max(px(1),X(w*.25));g.stroke();};
+ o.rot=(a,f)=>{g.save();g.rotate(a);f();g.restore();};
+ o.mix=mix;o.set=(ctx,U,d,a,n)=>{g=ctx;u=U;dpr=d||1;N=n;LW=Math.max(px(1.6),Math.min(px(3),u*.085));const c=Math.cos(-(a||0)),s=Math.sin(-(a||0)),v=Math.SQRT1_2;lv=[v*c-v*s,v*s+v*c];g.lineJoin='round';};return o;}
+window.V130K=K;
+/* ---------------- map 3 (잿빛 황야): cool steel/teal, ash-grey plates, cyan glass eyes ---------------- */
+if(MAP===3){const k=K(),{box,circ,poly,part,bolt,seam,lamp,leg,rot}=k;
+ const PALA={walk:['#B8DCE5','#39778B','#142735'],fast:['#65B8ED','#E5F3FA','#14283D'],tank:['#318C91','#D5EFEB','#102E35'],shoot:['#477DCA','#DAE9FA','#15243D'],heavy:['#D5DEE8','#47769D','#1C2938'],elite:['#789CE0','#E6ECF7','#202C48'],mid:['#ECF3F5','#248B9B','#142B38'],boss:['#253F64','#D3EAF2','#0C1728']};
+ const MET='#A9B8C6',DRK='#22303E',GL='#9FE6F2',EMB='#FF9A3C';let A,B;
+ const trk=(x,y,h)=>{part(box(x,y,.3,h,.2),DRK,()=>{for(let t=-h/2+.1;t<h/2;t+=.2)seam(x-.15,y+t,x+.15,y+t,.75);});part(box(x,y,.11,h*.85,.4),'#4A5A6A');};
+ const eye=(x,y,r,f)=>{part(circ(x,y,r*1.55),DRK);lamp(x,y,r,f?'#E8FBFF':GL);};
+ const DR={
+ walk(f){const s=f?-.15:0;trk(-.62,.2,1.2);trk(.62,.2,1.2);part(box(0,.5,.7,.45,.2),B,()=>{seam(-.35,.5,.35,.5,.4);});bolt(-.25,.6);bolt(.25,.6);
+  part(box(0,.05,1.1,.9,.16),A,()=>{seam(-.55,.25,.55,.25,.35);seam(0,.25,0,.5,.3);},[[-.42,-.33,.1,-.33]]);
+  part(poly([-.95,-.55+s,.95,-.55+s,.75,-.95+s*2,-.75,-.95+s*2]),f?B:MET,()=>{for(const x of[-.45,0,.45])seam(x,-.55+s,x*.8,-.95+s*2,.45);});eye(0,-.15,.12,f);},
+ fast(f){const n=f?-1.45:-1.25;trk(-.45,.35,.9);trk(.45,.35,.9);
+  part(poly([0,n,.55,.2,.4,.8,-.4,.8,-.55,.2]),A,()=>{seam(0,n+.3,0,.6,.35);seam(-.45,.35,.45,.35,.3);},[[-.06,n+.2,-.42,.15]]);
+  part(poly([0,n+.35,.25,.1,-.25,.1]),B);for(const sx of[-1,1]){part(box(sx*.25,.95,.18,.22,.3),DRK);lamp(sx*.25,1.0,.05,f?EMB:'#6A7A8A');}eye(0,-.25,.1,f);},
+ tank(f){const y=f?-.95:-.75;trk(-.78,.3,1.3);trk(.78,.3,1.3);
+  part(box(0,.35,1.25,1.05,.12),A,()=>{for(const yy of[.05,.6])seam(-.6,yy,.6,yy,.35);},[[-.5,-.1,0,-.1]]);for(const [x,yy] of[[-.48,.75],[.48,.75]])bolt(x,yy);
+  part(box(0,y,1.9,.38,.16),B,()=>{seam(-.9,y+.08,.9,y+.08,.3);});for(const x of[-.6,0,.6]){part(box(x,y,.16,.38,.1),MET);bolt(x,y);}eye(0,.3,.14,f);},
+ shoot(f){const r=f?.18:0;for(const [x,y] of[[-.8,.75],[.8,.75],[0,1.05]]){leg(0,.25,x,y,.14,DRK);part(circ(x,y,.09),MET);}
+  for(const a of[-.32,0,.32])rot(a,()=>{part(box(0,-.55+r,.2,.75,.25),MET,()=>{seam(-.1,-.75+r,.1,-.75+r,.5);});lamp(0,-.9+r,.045,f?EMB:DRK);});
+  part(circ(0,.2,.55),A,()=>{seam(-.55,.2,.55,.2,.3);},[[-.3,-.1,.05,-.25]]);part(circ(0,.2,.25),B);for(const a of[0,2.1,4.2])bolt(Math.cos(a)*.4,.2+Math.sin(a)*.4);eye(0,.2,.1,f);},
+ heavy(f){trk(-.78,.25,1.4);trk(.78,.25,1.4);part(box(0,.35,1.3,1.1,.12),A,()=>{seam(-.65,.6,.65,.6,.35);seam(0,.6,0,.9,.3);},[[-.5,-.12,.05,-.12]]);
+  const y=f?-.95:-.7,w=f?1.6:1.3;leg(-.4,0,-.4,y,.14,MET);leg(.4,0,.4,y,.14,MET);
+  part(box(0,y,w,.45,.14),B,()=>{for(const x of[-.3,0,.3])seam(x*w,y-.22,x*w,y+.22,.4);},[[-w*.4,y-.12,0,y-.12]]);for(const sx of[-1,1]){bolt(sx*w*.42,y);bolt(sx*.5,.85);}eye(0,.4,.14,f);},
+ elite(f){trk(-.85,.25,1.5);trk(.85,.25,1.5);part(box(0,.35,1.45,1.2,.12),A,null,[[-.55,-.15,.05,-.15]]);part(box(0,.35,.9,.6,.14),B,()=>{seam(-.45,.35,.45,.35,.35);});
+  for(const [x,y] of[[-.6,-.1],[.6,-.1],[-.6,.85],[.6,.85]])bolt(x,y,MET);const sp=f?.35:0,y=f?-1.0:-.75;leg(-.45,0,-.45-sp,y,.16,MET);leg(.45,0,.45+sp,y,.16,MET);
+  part(box(0,y,1.5+sp*2,.5,.14),B,()=>{seam(-.75-sp,y+.1,.75+sp,y+.1,.3);});part(box(0,y,.6,.5,.14),MET,()=>{seam(0,y-.25,0,y+.25,.4);});for(const sx of[-1,1])bolt(sx*(.6+sp),y);eye(0,.35,.15,f);},
+ mid(f){trk(-.7,.25,1.5);trk(.7,.25,1.5);part(box(0,.3,1.1,1.3,.12),A,()=>{for(const y of[.15,.55,.85])seam(-.55,y,.55,y,.3);},[[-.42,-.2,.1,-.2]]);
+  part(box(0,-.35,.95,.3,.2),B);const L=f?-1.6:-1.3;for(const x of[-.32,0,.32]){part(poly([x-.09,-.48,x+.09,-.48,x,L]),f?'#E8F6FA':MET,()=>{seam(x,-.5,x,L+.1,.35);});bolt(x,-.35);}
+  part(circ(0,.4,.3),DRK);eye(0,.4,.18,f);},
+ boss(f){const e=f?.18:0;for(const[x,y]of[[-1,-.7],[1,-.7],[-1,.7],[1,.7]]){leg(x*.6,y*.6,x*(1+e),y*(1+e),.14,MET);}
+  part(box(0,0,2.0,1.45,.08),A,()=>{seam(-1,-.4,1,-.4,.35);seam(-1,.4,1,.4,.35);seam(-.6,-.72,-.6,.72,.3);seam(.6,-.72,.6,.72,.3);},[[-.85,-.6,-.2,-.6]]);
+  for(const[x,y]of[[-1,-.7],[1,-.7],[-1,.7],[1,.7]]){const X0=x*(1+e),Y0=y*(1+e);part(box(X0,Y0,.5,.42,.16),B,()=>{seam(X0-.25,Y0,X0+.25,Y0,.35);});bolt(X0-.15*x,Y0-.1*y);bolt(X0+.12*x,Y0+.1*y);}
+  part(box(0,0,1.0,.72,.12),B,()=>{seam(-.5,0,-.3,0,.4);seam(.3,0,.5,0,.4);});part(box(0,0,.6,.42,.14),f?'#E8F6FA':MET);for(const [x,y] of[[-.4,-.28],[.4,-.28],[-.4,.28],[.4,.28]])bolt(x,y);eye(0,0,.16,f);}};
+ window.M3P={roles:Object.keys(DR),draw(ctx,role,U,d,a,f){const q=PALA[role]||PALA.walk;A=q[0];B=q[1];k.set(ctx,U,d,a,q[2]);(DR[role]||DR.walk)(f?1:0);}};}
+/* ---------------- map 4 (설원): snow steel, frost-white plates, warm amber eyes ---------------- */
+if(MAP===4){const k=K(),{box,circ,poly,part,bolt,seam,lamp,leg,rot}=k;
+ const C4={walk:'#2E5FD4',fast:'#0C8EA6',tank:'#3E8E2E',shoot:'#A87810',heavy:'#7A4A26',elite:'#6E6E6E',mid:'#2E5A47',boss:'#34495C'},ICE='#A9C3D6',SNOW='#EEF4F8',TRK='#2A2A30',MET='#B9C4CC',MED='#4E5A66',AMB='#FFB347',OUT='#14202C';let A;
+ const eye=(x,y,r,f)=>{part(circ(x,y,r*1.6),OUT);lamp(x,y,r,f?'#FFE9B8':AMB);};
+ const wh=(x,y)=>{part(box(x,y,.22,.34,.25),TRK,()=>{for(let t=-.12;t<=.12;t+=.08)seam(x-.11,y+t,x+.11,y+t,.7);});};
+ const WR=(x,y,w,h)=>part(box(x,y,w,h,.3),SNOW,()=>{seam(x-w*.42,y+h*.18,x+w*.42,y+h*.18,.18);});
+ const DR={
+ walk(f){wh(-.7,.35);wh(.7,.35);part(poly([0,-.95,.9,-.3,.6,.85,-.6,.85,-.9,-.3]),A,()=>{seam(0,-.6,0,.6,.3);seam(-.6,.2,.6,.2,.3);},[[-.1,-.8,-.6,-.32]]);
+  WR(0,-1.0,1.5,.25);for(let x=-.6;x<=.6;x+=.2)leg(x,-.9,x,-1.15,.04,'#8CA0B0');for(const [x,y] of[[-.4,.55],[.4,.55]])bolt(x,y);eye(0,-.2,.1,f);},
+ fast(f){for(const sx of[-1,1]){part(box(sx*.45,0,.18,2.1,.5),A,()=>{seam(sx*.45,-.8,sx*.45,.8,.35);},[[sx*.45-.04,-.9,sx*.45-.04,-.3]]);lamp(sx*.45,-.95,.045,f?AMB:ICE);}
+  part(box(0,.1,.6,1.0,.25),A,()=>{seam(-.3,.35,.3,.35,.3);});part(box(0,.55,.3,.18,.3),MED);eye(0,-.15,.1,f);},
+ tank(f){for(const sx of[-1,1])part(box(sx*.55,.4,.28,1.0,.3),A,()=>{for(let t=0;t<.9;t+=.18)seam(sx*.55-.14,t,sx*.55+.14,t,.5);});
+  part(box(0,.35,.9,1.0,.12),A,()=>{seam(-.45,.55,.45,.55,.3);},[[-.32,-.05,.05,-.05]]);bolt(-.3,.75);bolt(.3,.75);
+  WR(0,-.55,2.1,.35);for(const x of[-.8,.8])bolt(x,-.55,MET);part(box(0,-.25,.25,.35,.12),A);eye(0,.3,.11,f);},
+ shoot(f){part(circ(0,.2,.7),A,()=>{seam(-.7,.35,.7,.35,.3);},[[-.35,-.2,.1,-.35]]);leg(0,.2,0,-.2,.16,A);for(const x of[-.5,0,.5]){leg(0,-.2,x,x?-1.0:-1.1,.14,A);lamp(x,x?-1.0:-1.1,.05,f?AMB:ICE);}
+  part(circ(0,.2,.32),ICE);for(const a of[.5,2.6,4.7])bolt(Math.cos(a)*.52,.2+Math.sin(a)*.52);eye(0,.2,.12,f);},
+ heavy(f){for(const sx of[-1,1])part(box(sx*.6,0,.4,1.6,.12),A,()=>{for(const t of[-.5,0,.5])seam(sx*.6-.2,t,sx*.6+.2,t,.4);});
+  part(f?box(0,-1.2,2.2,.4,.5):box(0,-1.0,1.9,.45,.5),A,null,[[-.7,f?-1.3:-1.1,0,f?-1.3:-1.1]]);part(box(0,1.0,1.9,.45,.5),A,()=>{seam(-.8,1.0,.8,1.0,.3);});
+  part(box(0,0,1.2,.45,.12),ICE,()=>{seam(0,-.22,0,.22,.4);});for(const sx of[-1,1]){bolt(sx*.6,-.55);bolt(sx*.6,.55);bolt(sx*.75,f?-1.2:-1.0,MET);}eye(-.3,0,.08,f);eye(.3,0,.08,f);},
+ elite(f){for(const sx of[-1,1])part(box(sx*.6,0,.45,1.6,.12),A,()=>{for(const t of[-.5,0,.5])seam(sx*.6-.22,t,sx*.6+.22,t,.45);});
+  part(f?box(0,-1.25,1.8,.36,.5):box(0,-1.0,2.0,.48,.5),A,null,[[-.7,f?-1.35:-1.12,0,f?-1.35:-1.12]]);part(box(0,1.0,2.0,.48,.5),A,()=>{seam(-.85,1.0,.85,1.0,.3);});
+  part(box(0,0,1.2,.5,.12),MED,()=>{seam(-.6,0,.6,0,.3);});for(const [x,y] of[[-.6,-.4],[.6,.4],[-.6,.4],[.6,-.4]])bolt(x,y,ICE);eye(0,0,.12,f);},
+ mid(f){const q=f?.75:.35;for(const sx of[-1,1])rot(sx*q,()=>{part(box(sx*.55,0,.2,2.4,.5),MET,()=>{seam(sx*.55,-1.0,sx*.55,1.0,.3);},[[sx*.55-.05,-1.1,sx*.55-.05,-.4]]);bolt(sx*.55,0);});
+  part(box(0,.15,1.0,1.2,.2),A,()=>{seam(-.5,.5,.5,.5,.3);seam(0,.5,0,.75,.3);},[[-.38,-.3,.05,-.3]]);for(const [x,y] of[[-.32,.6],[.32,.6]])bolt(x,y);part(circ(0,.1,.32),OUT);lamp(0,.1,.2,f?'#FFE9B8':AMB);},
+ boss(f){const y=f?-.35:0;for(const sx of[-1,1])part(poly([sx*1.3,-.3+y,sx*.6,-.6+y,sx*.6,.3+y,sx*1.3,.6+y]),SNOW,()=>{seam(sx*1.25,-.1+y,sx*.65,-.35+y,.2);seam(sx*1.25,.3+y,sx*.65,.05+y,.2);});
+  part(poly([0,-1,.87,-.5,.87,.5,0,1,-.87,.5,-.87,-.5]),A,()=>{seam(0,-1,0,-.55,.4);seam(-.87,.5,-.48,.28,.4);seam(.87,.5,.48,.28,.4);},[[-.06,-.9,-.75,-.48]]);
+  part(poly([0,-.55,.48,-.28,.48,.28,0,.55,-.48,.28,-.48,-.28]),ICE,()=>{seam(-.48,0,.48,0,.25);});for(const [x,yy] of[[-.62,-.3],[.62,-.3],[-.62,.3],[.62,.3],[0,-.75],[0,.75]])bolt(x,yy);
+  part(circ(0,0,.26),OUT);lamp(0,0,.17,f?'#FFE9B8':AMB);}};
+ window.M4P={roles:Object.keys(DR),draw(ctx,role,U,d,a,f){A=C4[role]||C4.walk;k.set(ctx,U,d,a,role==='elite'?'#25323F':OUT);(DR[role]||DR.walk)(f||0);}};}
 })();
 </script>
 <script>/* v105: every dashing/charging enemy faces its travel direction while it moves (draw-only: the sprite aims are taken from P, so P is pointed along the travel line for that one draw call) */
