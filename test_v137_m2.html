@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v118';
+const BUILD='v119';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4751,7 +4751,7 @@ window.WV7=(function(){const OR='#FF9A2E',DK='rgba(20,10,5,.85)',FL='rgba(255,15
 .v15b.g{background:#3A4658;box-shadow:0 4px 0 #222A36;color:#C8D2E0}
 .v15b:disabled{background:#3A4658;box-shadow:0 4px 0 #222A36;color:#FF8080}
 .v15b:active:not(:disabled){transform:translateY(2px);box-shadow:0 2px 0 #A86400}
-.v15bb{flex:0 0 auto;display:flex;gap:12px;margin-top:12px}
+.v15bb{flex:0 0 auto;display:flex;gap:12px;margin-top:12px}.v15bb .v15b{height:64px;min-height:64px;box-sizing:border-box;padding:0 6px;border-width:3px;border-radius:14px}.v15b.gr{background:linear-gradient(#4CC985,#3BB273);box-shadow:0 4px 0 #23784A;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.25)}.v15b.gr:active{box-shadow:0 2px 0 #23784A}
 .v15pk{flex:0 0 auto;display:flex;gap:10px;justify-content:center;margin:12px 0 10px}
 .v15p{width:62px;height:62px;border-radius:14px;border:2px solid #343F4E;background:#232B38;padding:4px;position:relative}
 .v15p.on{border:3px solid #FFC93C}.v15p canvas{width:100%;height:100%;display:block}.v15p.lk canvas{opacity:.4}
@@ -4795,7 +4795,7 @@ function garage(){if(!GSEL||!CARS.find(c=>c[0]===GSEL))GSEL=myCar();const id=GSE
  else if(mx)bt='<button class="v15b g" disabled style="color:#C8D2E0">최대 레벨</button>';
  else bt='<button class="v15b" data-lg'+(SAVE.gold<LGC(L)?' disabled':'')+'><small>강화 Lv'+(L+1)+'</small>💰 '+fmt(LGC(L))+'</button><button class="v15b c" data-ld'+(SAVE.dia<LDC(L)?' disabled':'')+'><small>강화 Lv'+(L+1)+'</small>💎 '+fmt(LDC(L))+'</button>';
  const m=frame('<div class="v15st"><div class="v15car'+(own?'':' v15lk')+'" data-c="'+id+'"><div class="v15sh"></div></div><div class="v15nm">'+cname(c)+'</div><div class="v15sub">'+sub+'</div></div>'
- +'<div class="v15pk">'+CARS.map(x=>'<button class="v15p'+(x[0]===id?' on':'')+(SAVE.cars[x[0]]?'':' lk')+'" data-c="'+x[0]+'" data-pk="'+x[0]+'">'+(SAVE.cars[x[0]]?'<span class="u">'+(myCar()===x[0]?'✔':'')+'</span>':'<span class="k">🔒</span>')+'</button>').join('')+'</div>'+'<div class="v15bb">'+bt+'</div>'+(own?'<div class="v15bb"><button class="v15b'+(use?' g':'')+'" id="v15use"'+(use?' disabled style="color:#FFC93C;opacity:1;border:2px solid #C9A24A"':' style="color:#141A24"')+'>'+(use?'✔ 사용 중':'이 차량 사용')+'</button></div>':''));
+ +'<div class="v15pk">'+CARS.map(x=>'<button class="v15p'+(x[0]===id?' on':'')+(SAVE.cars[x[0]]?'':' lk')+'" data-c="'+x[0]+'" data-pk="'+x[0]+'">'+(SAVE.cars[x[0]]?'<span class="u">'+(myCar()===x[0]?'✔':'')+'</span>':'<span class="k">🔒</span>')+'</button>').join('')+'</div>'+'<div class="v15bb">'+bt+'</div>'+(own?'<div class="v15bb"><button class="v15b'+(use?' g':' gr')+'" id="v15use"'+(use?' disabled style="color:#FFC93C;opacity:1;border-color:#C9A24A"':'')+'>'+(use?'✔ 사용 중':'이 차량 사용')+'</button></div>':''));
  m.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{GSEL=b.dataset.pk;garage();});
  const u=$('v15use');if(u)u.onclick=()=>{SAVE.car=id;saveS();garage();};
  const ok=()=>{saveS();beep(880,.1,'triangle',.12);garage();};
