@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v125';
+const BUILD='v126';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4184,7 +4184,7 @@ function fork(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x);for(const d of[-
 function cross(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x),ux=Math.cos(an),uy=Math.sin(an),px=-uy,py=ux;
  for(const [k,dist,dl] of[[0,120,0],[1,230,.6]]){const cx0=e.x+ux*dist,cy0=e.y+uy*dist;hz({sh:'band',x:cx0-px*190,y:cy0-py*190,an:Math.atan2(py,px),L:380,w:40,wn:1.2,dl,dmg:.12,nm:'cross',st:k,g:c.g,src:e,c});}M6S.cross++;}
 function derail(b){const c=cast(b),an=Math.atan2(P.y-b.y,P.x-b.x),L=645,ux=Math.cos(an),uy=Math.sin(an);band(b,c,an,L,96,1.6,.20,'derail',{dash:1,dT:.375,ex:b.x+ux*(L-b.r),ey:b.y+uy*(L-b.r)});M6S.derail++;}
-function cars(b){const c=cast(b);for(let i=0;i<5;i++){/* v111: 3 -> 5 drops */const a=Math.random()*TAU,r=i?55+Math.random()*60:0,x=P.x+Math.cos(a)*r,y=P.y+Math.sin(a)*r,an=Math.random()*Math.PI,L=130;
+function cars(b){const c=cast(b);for(let i=0;i<5;i++){/* v111: 3 -> 5 drops *//* v126: drops follow the car - on it (i=0) then ahead along its current velocity, lead grows with each drop's delay */const vx=P.vx||0,vy=P.vy||0,sp=Math.hypot(vx,vy),kk=sp>400?400/sp:1,ld=i*.35+1.05,a=Math.random()*TAU,r=i?Math.random()*45:0,x=P.x+vx*kk*ld+Math.cos(a)*r,y=P.y+vy*kk*ld+Math.sin(a)*r,an=Math.random()*Math.PI,L=130;
   hz({sh:'band',x:x-Math.cos(an)*L/2,y:y-Math.sin(an)*L/2,an,L,w:62,wn:1.3,dl:i*.35,dmg:.15,nm:'cars',g:c.g,src:b,c});}M6S.cars++;}
 function steam(b){const c=cast(b);hz({sh:'ann',x:b.x,y:b.y,r0:b.r+75,r1:b.r+215,wn:1.5,dmg:.17,nm:'steam',g:c.g,src:b,c});M6S.steam++;}
 /* ---------- update ---------- */
