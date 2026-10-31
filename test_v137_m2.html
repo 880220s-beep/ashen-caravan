@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v121';
+const BUILD='v122';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -3957,7 +3957,7 @@ const Z=[];window.M5Z=Z;let GID=0;
 function hitP(f,src){G._src=src;hurt(MHP(f));G._src=0;M5S.hits++;M5S['h_'+src]=(M5S['h_'+src]||0)+1;}
 const groups=()=>{const s=new Set();for(const z of Z)if(z.t<z.wn)s.add(z.g);return s.size;};
 const CAP=()=>(G.boss||EN.some(e=>e.mb&&!e.dead))?2:3;
-const busy=e=>Z.some(z=>z.src===e&&z.t<z.wn);
+const busy=e=>Z.some(z=>z.src===e&&z.t<z.wn);window.V122WB=busy;/* v122: heading hold while own warning is up */
 function cast(e){return{g:++GID,hit:{},src:e};}
 function hz(o){o.t=-(o.dl||0);o.done=0;Z.push(o);return o;}
 const PR=()=>P.r*.5;
@@ -4157,7 +4157,7 @@ const Z=[];window.M6Z=Z;let GID=0;
 function hitP(f,src){G._src=src;hurt(MHP(f));G._src=0;M6S.hits++;M6S['h_'+src]=(M6S['h_'+src]||0)+1;}
 const groups=()=>{const s=new Set();for(const z of Z)if(z.t<z.wn)s.add(z.g);return s.size;};
 const CAP=()=>(G.boss||EN.some(e=>e.mb&&!e.dead))?2:3;
-const busy=e=>Z.some(z=>z.src===e&&z.t<z.wn);
+const busy=e=>Z.some(z=>z.src===e&&z.t<z.wn);window.V122WB=busy;/* v122: heading hold while own warning is up */
 function cast(e){return{g:++GID,hit:{},src:e};}
 function hz(o){o.t=-(o.dl||0);o.done=0;Z.push(o);return o;}
 const PR=()=>P.r*.5;
@@ -4322,7 +4322,7 @@ const Z=[];window.M7Z=Z;let GID=0;
 function hitP(f,src){G._src=src;hurt(MHP(f));G._src=0;M7S.hits++;M7S['h_'+src]=(M7S['h_'+src]||0)+1;}
 const groups=()=>{const s=new Set();for(const z of Z)if(z.t<z.wn)s.add(z.g);return s.size;};
 const CAP=()=>(G.boss||EN.some(e=>e.mb&&!e.dead))?2:3;
-const busy=e=>Z.some(z=>z.src===e&&z.t<z.wn);
+const busy=e=>Z.some(z=>z.src===e&&z.t<z.wn);window.V122WB=busy;/* v122: heading hold while own warning is up */
 function cast(e){return{g:++GID,hit:{},src:e};}
 function hz(o){o.t=-(o.dl||0);o.done=0;Z.push(o);return o;}
 const PR=()=>P.r*.5;
@@ -4478,7 +4478,7 @@ const Z=[];window.M8Z=Z;let GID=0;
 function hitP(f,src){G._src=src;hurt(MHP(f));G._src=0;M8S.hits++;M8S['h_'+src]=(M8S['h_'+src]||0)+1;}
 const groups=()=>{const s=new Set();for(const z of Z)if(z.t<z.wn)s.add(z.g);return s.size;};
 const CAP=()=>(G.boss||EN.some(e=>e.mb&&!e.dead))?2:3;
-const busy=e=>Z.some(z=>z.src===e&&z.t<z.wn);
+const busy=e=>Z.some(z=>z.src===e&&z.t<z.wn);window.V122WB=busy;/* v122: heading hold while own warning is up */
 function cast(e){return{g:++GID,hit:{},src:e};}
 function hz(o){o.t=-(o.dl||0);o.done=0;Z.push(o);return o;}
 const PR=()=>P.r*.5;
@@ -4705,7 +4705,7 @@ window.WV7=(function(){const OR='#FF9A2E',DK='rgba(20,10,5,.85)',FL='rgba(255,15
 (function(){const _u=update;update=function(dt){_u(dt);for(const e of EN){if(e._hp110||e.dead)continue;e._hp110=1;if(e===G.boss||e.boss)continue;const k=e.mb?.6:(e.elite||e.v==='big')?1:1.2;if(k!==1){e.hp*=k;if(e.max)e.max*=k;}}};})();
 </script>
 <script>/* v111: map-6 boss always faces its travel direction while it moves (never the player); holds the last travel facing while standing still */
-(function(){if(MAP!==6)return;const _d=drawBoss;drawBoss=function(b){if(!b)return _d.apply(this,arguments);
+(function(){if(MAP!==6)return;const _d=drawBoss;drawBoss=function(b){if(!b||window.V112HEAD)return _d.apply(this,arguments);/* v122: v112 owns facing (no second, unsmoothed heading fighting it) */
  if(b._vx6!=null){const dx=b.x-b._vx6,dy=b.y-b._vy6;if(dx*dx+dy*dy>.04)b._tv6=Math.atan2(dy,dx);}b._vx6=b.x;b._vy6=b.y;
  const a=(b._tfaT>G.t&&b._tfa!=null)?b._tfa:b._tv6;if(a==null)return _d.apply(this,arguments);const px=P.x,py=P.y;P.x=b.x+Math.cos(a)*1e4;P.y=b.y+Math.sin(a)*1e4;try{return _d.apply(this,arguments);}finally{P.x=px;P.y=py;}};})();
 </script>
@@ -4715,8 +4715,11 @@ window.WV7=(function(){const OR='#FF9A2E',DK='rgba(20,10,5,.85)',FL='rgba(255,15
   const dx=e.x-e._hx12,dy=e.y-e._hy12;e._hx12=e.x;e._hy12=e.y;const d2=dx*dx+dy*dy;
   if(d2>900){e._vx12=0;e._vy12=0;return e._hd12;}/* teleport/respawn: ignore */
   e._vx12=e._vx12*.7+dx*.3;e._vy12=e._vy12*.7+dy*.3;const v2=e._vx12*e._vx12+e._vy12*e._vy12;
+  /* v122: mid-boss/boss hold heading while their own warning is shown/charging (any map) or while only nudged (knockback/separation < ~.35px/frame) */
+  const big=e.mb||e===G.boss;if(big){let wb=window.V122WB&&V122WB(e);if(!wb&&e.m2&&e.m2!=='walk'&&e.m2!=='back'&&!(e.m2==='dash'||e.m2==='push'||e.m2==='mdash'))wb=1;if(!wb&&e===G.boss&&(e.st==='warn'||e.st==='aim'||e.st==='tele'))wb=1;
+   if(wb){e._vx12=0;e._vy12=0;return e._hd12;}if(v2<.12)return e._hd12;}
   if(v2>.0025)e._hd12=Math.atan2(e._vy12,e._vx12);return e._hd12;}
- const W=f=>function(e){if(!e||typeof e.x!=='number'||e.ally)return f.apply(this,arguments);const tfa=window.V105TFA?V105TFA(e):null,h=head(e),a=tfa!=null?tfa:h;if(a==null)return f.apply(this,arguments);
+ const W=f=>function(e){if(!e||typeof e.x!=='number'||e.ally)return f.apply(this,arguments);const tfa=window.V105TFA?V105TFA(e):null,h=head(e);if(tfa!=null){e._hd12=tfa;e._vx12=0;e._vy12=0;}/* v122: after a dash keep its heading */const a=tfa!=null?tfa:h;if(a==null)return f.apply(this,arguments);
   ST.n++;const px=P.x,py=P.y,ea=e.ang,ec=e.ca,hc='ca' in e;P.x=e.x+Math.cos(a)*1e4;P.y=e.y+Math.sin(a)*1e4;e.ang=a;if(hc&&!(e.m2&&e.m2!=='walk'))e.ca=a;try{return f.apply(this,arguments);}finally{P.x=px;P.y=py;e.ang=ea;if(hc)e.ca=ec;}};
  goblin=W(goblin);drawBoss=W(drawBoss);window.V112HEAD=head;})();
 </script>
