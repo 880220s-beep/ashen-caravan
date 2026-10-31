@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v123';
+const BUILD='v124';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4671,6 +4671,11 @@ const _pp=window.POSTPOOL;window.POSTPOOL=function(){if(_pp)_pp();for(const f of
   if(f.fl&&f.fl.length){const S=fsp(),T=G.t,gr=Math.min(1,f.t/.25);for(const q of f.fl){const sw=Math.sin(T*q.w+q.ph),st=Math.sin(T*q.w*1.6+q.ph*2),sc=q.s*gr;cx.save();cx.translate(q.x,q.y);cx.transform(1,0,-sw*.32,1,0,0);cx.scale(sc*(1-st*.1),sc*(1+st*.22));cx.globalAlpha=.85*k;cx.drawImage(S,-12,-40,24,40);cx.restore();}
    cx.save();cx.fillStyle='rgb(255,165,60)';for(const m of f.em){const u=(f.t*.6+m.ph)%1;cx.globalAlpha=(1-u)*.8*k;cx.beginPath();cx.arc(m.x+Math.sin(u*6+m.ph*9)*6,m.y-12-u*46,1.8,0,TAU);cx.fill();}cx.restore();}}};
 })();</script>
+<script>/* v124: map 7 - 첨탑 과부하 lingering fire was too faint on a phone (26 small flames spread over r235, mostly under the boss sprite, 22% floor tint). Visual only: denser, bigger flame patches + warmer floor; same 2s, same damage. */
+(function(){if(MAP!==7||!window.FIRE96)return;const _f=FIRE96,F=window.FIREL;window.FIRE96=function(z){const r=_f.apply(this,arguments);const o=F[F.length-1];if(o&&(z.nm==='over'||(o.a||o.r||0)>150)){const R=o.a||o.r||200;o.fl=[];const N=70;for(let k=0;k<N*6&&o.fl.length<N;k++){const a=Math.random()*TAU,d=Math.sqrt(Math.random())*(R-10),x=o.x+Math.cos(a)*d,y=o.y+Math.sin(a)*d;o.fl.push({x,y,s:1.1+Math.random()*.8,ph:Math.random()*TAU,w:3+Math.random()*2.4});}o.fl.sort((p,q)=>p.y-q.y);o.em=o.fl.slice(0,14).map((f,i)=>({x:f.x,y:f.y,ph:i/14}));o._v124=1;}return r;};
+ for(const k in _f)window.FIRE96[k]=_f[k];
+ const _pp=window.POSTPOOL;window.POSTPOOL=function(){for(const f of F){if(!f._v124||f.t>=1.7)continue;const k=f.t<1.5?1:Math.max(0,(1.7-f.t)/.2);cx.save();cx.globalAlpha=k;cx.beginPath();cx.ellipse(f.x,f.y,f.a,f.b,f.ro||0,0,TAU);cx.fillStyle='rgba(235,110,35,.2)';cx.fill();cx.restore();}if(_pp)_pp();};})();
+</script>
 <script>/* v105: every dashing/charging enemy faces its travel direction while it moves (draw-only: the sprite aims are taken from P, so P is pointed along the travel line for that one draw call) */
 (function(){const TFA=e=>{if(!e)return null;if(e._tfaT>G.t&&e._tfa!=null)return e._tfa;if(e.v==='chg'&&e.dash>0&&e.da!=null)return e.da;if((e.m2==='dash'||e.m2==='push'||e.m2==='mdash')&&e.ca!=null)return e.ca;if(e.bs==='dash'&&e.ca!=null)return e.ca;if(e.mb&&e.ab&&e.ab.st==='dash'&&e.ab.da!=null)return e.ab.da;
  if(e===G.boss){if(e.st==='charge'&&e.tx!=null)return e.tx;if(e.st==='roll'&&e.ra!=null)return e.ra;if(e.st==='m2ch'&&e.ca!=null)return e.ca;}return null;};
