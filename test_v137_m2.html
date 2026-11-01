@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v145';
+const BUILD='v146';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -3768,7 +3768,7 @@ function post(dt){if(DIFF===1&&!T15)for(const e of EN){if(e.dead||e._h2||e.mb||e
   else if(e.m2t<=0){e.m2='walk';e.m2t=2.2+Math.random()*1.2;e.ang=a;}}
  else if(R==='fast'){/* 협곡 정찰차: flank to the side, short band, straight dash */
   if(S==='walk'){if(dd<300&&!frz){hold(e);const sd=(e.ph>Math.PI?1:-1),fa=a+sd*1.15;e.x+=Math.cos(fa)*e.spd*dt;e.y+=Math.sin(fa)*e.spd*dt;}
-   if(e.m2t<=0&&dd<260){e.m2='warn';e.m2t=WN;e.wk='band';e.wL=230;e.wW=e.r*2;e.ca=a;}}
+   /* v146: regular 협곡 정찰차 no longer dashes (영태: 일반 적 돌진 빼) */}
   else if(S==='warn'){if(e.m2t<=0){e.m2='dash';e.m2t=.32;M2S.dash++;e.hitd=0;}}
   else if(S==='dash'){if(!frz){const v=230/.32*dt;e.x+=Math.cos(e.ca)*v;e.y+=Math.sin(e.ca)*v;}if(Math.random()<.4)dust(e.x,e.y,e.r*.6);if(e.m2t<=0){e.m2='rest';e.m2t=.55;}}
   else if(S==='rest'&&e.m2t<=0){e.m2='walk';e.m2t=3.2;}}
