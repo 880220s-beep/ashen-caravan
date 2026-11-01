@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v163';
+const BUILD='v164';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -1267,7 +1267,7 @@ function skBtn(){return skSlots()[0];}
 function beep(f,d,ty,v,f2){const a=ac();if(!a)return;const t=a.currentTime,o=a.createOscillator(),g=a.createGain();o.type=ty||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v||.15,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02);}
 let _sh=0,_sk=0,_vh=0;function sndHit(){const n=performance.now();if(n-_sh<70)return;_sh=n;beep(320,.05,'square',.04,180);}function sndKill(){const n=performance.now();if(n-_sk<90)return;_sk=n;beep(500,.07,'triangle',.06,900);}function sndLv(){beep(660,.09,'triangle',.15);setTimeout(()=>beep(990,.14,'triangle',.15),80);}let _mg=0;function sndMG(){const n=performance.now();if(n-_mg<110)return;_mg=n;beep(140,.09,'sawtooth',.07,60);beep(70,.12,'square',.05,40);}function sndBoss(){beep(90,.6,'sawtooth',.2,60);}
 let TAPPED=0;/* v139b: any first touch counts (pointer/touch/mouse, window+document, capture, passive) */{const _t=()=>{TAPPED=1;};for(const ev of['pointerdown','pointerup','touchstart','touchend','mousedown','click'])for(const tg of[window,document])tg.addEventListener(ev,_t,{capture:true,passive:true});}
-function vib(ms,th){try{if(!navigator.vibrate||!TAPPED)return;/* v139b: one shared 150ms throttle for every haptic (was: hurt 30ms+300ms gate, then HP hook 35ms 1ms later cancelling it) */const n=performance.now();if(n-(window.__hvT||0)<150)return;window.__hvT=n;navigator.vibrate(ms);}catch(e){}}
+function vib(ms,th){try{if(!navigator.vibrate)return;/* v164: gate on the browser's own sticky activation (Samsung Internet/Chrome), not our touchstart flag; 70ms min so it is felt */const ua=navigator.userActivation;if(ua?!ua.hasBeenActive:!TAPPED)return;ms=Math.max(70,ms);/* v139b: one shared 150ms throttle for every haptic (was: hurt 30ms+300ms gate, then HP hook 35ms 1ms later cancelling it) */const n=performance.now();if(n-(window.__hvT||0)<150)return;if(navigator.vibrate(ms)!==false)window.__hvT=n;}catch(e){}}
 function sfxHit(){const a=ac();if(!a)return;const t=a.currentTime,o=a.createOscillator(),g=a.createGain();o.type='square';o.frequency.setValueAtTime(220,t);o.frequency.exponentialRampToValueAtTime(55,t+.12);g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.16);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+.18);}
 const TESTNOCD=false;/* v77 test build: no cooldown for active skill + Lv20 button */
 function useSkill(){if(BC.on)return;return useSkill0.apply(this,arguments);}
