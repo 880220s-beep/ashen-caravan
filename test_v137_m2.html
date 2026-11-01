@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v150';
+const BUILD='v151';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -481,8 +481,8 @@ const ET={
 function scale(){const m=G.t/60;return{hp:1+m*.28+(STAGE-1)*.6,def:Math.floor(m*.9)+(STAGE-1)*3};}
 const ESPD=+(Q.get('espd')||1),ECN=+(Q.get('ecn')||70),ECH=+(Q.get('ech')||80);function HORDE(){return G.swarmLeft>0||(G.swQ&&G.swQ.length>0)||(G.mQ&&G.mQ.length>0);}/* v70 late-game tuning (index 0/1/2 = from 3:00/4:00/5:00) */const LATE={nc:[90,110,125],hc:[95,110,120],nh:[1.15,1.30,1.45],hh:[1.18,1.33,1.48],/* v70 iter2 */na:[.04,.07,.10],ha:[.04,.06,.08],ne:[1,2,3],he:[2,3,4]};
 function LT(a){return G.t<180?0:a[G.t<240?0:G.t<300?1:2];}
-function M1E149(){return MAP===1&&DIFF===0&&G.t>=120;}/* v149: map 1 쉬움 from 2:00 - spawn rate x0.7, alive cap 75 */function M2E150(){return MAP===2&&DIFF===0&&G.t>=120;}/* v150: map 2 쉬움 from 2:00 - spawn rate x0.8, alive cap 90 (swarm cap 90) */
-function ECAP(sw){return Math.min(M1E149()?75:M2E150()?90:160,(sw||HORDE())?(DIFF?160:145):(G.t<180?(DIFF?ECH:ECN):LT(DIFF?LATE.hc:LATE.nc))/* v70 late cap */);}
+function M1E149(){return MAP===1&&DIFF===0&&G.t>=120;}/* v149: map 1 쉬움 from 2:00 - spawn rate x0.7, alive cap 75 */function E151(){return DIFF===0&&MAP>=3&&G.t>=120?[0,0,0,[.85,100],[.88,105],[.91,110],[.94,115],[.97,120],[1,125]][MAP]:null;}/* v151: maps 3-8 쉬움 from 2:00 - spawn x / alive cap (swarm cap same) */function M2E150(){return MAP===2&&DIFF===0&&G.t>=120;}/* v150: map 2 쉬움 from 2:00 - spawn rate x0.8, alive cap 90 (swarm cap 90) */
+function ECAP(sw){return Math.min(M1E149()?75:M2E150()?90:E151()?E151()[1]:160,(sw||HORDE())?(DIFF?160:145):(G.t<180?(DIFF?ECH:ECN):LT(DIFF?LATE.hc:LATE.nc))/* v70 late cap */);}
 function spawnE(type,x,y){if(BC.on)return null;/*v79c: no spawns during bull*/let chg=0;if(type==='charger'){type='runner';chg=MAP===4?0:1;/* v139: map 4 spawns the normal 활주기 */if(G.t<135)return null;}if(!DPSM&&EN.length>=Math.min(175,type==='swarm'?ECAP(1):ECAP()))return null;const b=ET[type],s=scale();const e={type,x,y,vx:0,vy:0,hp:(type==='grunt'&&G.t<90?25:b.hp)*(type==='swarm'?1+G.t/400:s.hp)*(STAGE===1?.85:.7),def:type==='swarm'?0:b.def+s.def*(type==='shield'||type==='brute'?1.6:.5),
  spd:b.spd*ESPD*(1+Math.min(.35,G.t/1500)),r:b.r,xp:b.xp,dmg:b.dmg*(1+G.t/600),col:b.col,kbm:b.kb,flash:0,hitcd:{},sc:0,ph:Math.random()*TAU};
  if(G.t>90&&!G.boss){if(type==='shield'&&Math.random()<.15&&EN.filter(x=>x.v==='big').length<2){e.v='big';e.hp*=1.5;e.r*=1.2;e.spd*=.85;e.col='#2f5fb0';e.xp=6;}
@@ -499,7 +499,7 @@ function pickBase(){const t=G.t;let m=MIX[0][1];if(t>=MIX[MIX.length-1][0])m=MIX
 function target(){if(G.boss)return 22;const t=G.t;return Math.round(t<60?12+t*.067:t<120?18+(t-60)*.1:t<210?24+(t-120)*.53:clamp(72+(t-210)*.01,72,75));}
 let spawnAcc=0;
 function director(dt){if(G.t>=(DIFF?195:210)&&!G.bossSpawned&&!G.boss&&G.t>=(G.elT||0)){G.elT=G.t+18;const cap=LT(DIFF?LATE.he:LATE.ne);if(EN.filter(e=>e.elite&&!e.dead).length<cap){const p=edgePos(),e=spawnE(Math.random()<.5?'brute':'shield',p.x,p.y);if(e){e.elite=1;e.hp*=(DIFF&&!T15)?1.25:1.2;e.max=e.hp;e.def+=DIFF?3:2;}}}/* v70 armoured elites */let nonSwarm=0;for(const e of EN)if(e.type!=='swarm')nonSwarm++;spawnAcc+=dt;
- if(spawnAcc>(T15?.25/T15K('S'):.225)/(HELL?HELLK.spawn:1)/(M1E149()?.7:M2E150()?.8:1)/(EN.length<.65*ECAP()?(DIFF?1.2:1.15):1)/* v70 refill */){spawnAcc=0;let vis=0;const vh=viewHalf();for(const e of EN)if(Math.abs(e.x-P.x)<vh.w&&Math.abs(e.y-P.y)<vh.h)vis++;let n=Math.round(target()*(G.boss?1:STAGE===1?1.8:2.2))-nonSwarm;if(vis>=ECAP())n=0;n=Math.min(n,9);for(let i=0;i<n;i++){const p=edgePos();spawnE(pickType(),p.x,p.y);}}
+ if(spawnAcc>(T15?.25/T15K('S'):.225)/(HELL?HELLK.spawn:1)/(M1E149()?.7:M2E150()?.8:E151()?E151()[0]:1)/(EN.length<.65*ECAP()?(DIFF?1.2:1.15):1)/* v70 refill */){spawnAcc=0;let vis=0;const vh=viewHalf();for(const e of EN)if(Math.abs(e.x-P.x)<vh.w&&Math.abs(e.y-P.y)<vh.h)vis++;let n=Math.round(target()*(G.boss?1:STAGE===1?1.8:2.2))-nonSwarm;if(vis>=ECAP())n=0;n=Math.min(n,9);for(let i=0;i<n;i++){const p=edgePos();spawnE(pickType(),p.x,p.y);}}
  for(const st of[120,240]){if(G.t>=st-3&&G.t<st&&G.warnS!==st){G.warnS=st;banner('철갑 군단 접근!');}if(G.t>=st&&!G.swarmsDone.includes(st)){G.swarmsDone.push(st);if(G.t-st<5)swarm();}}
  for(const st of[60,165,300]){if(G.t>=st&&!G.mini.includes(st)){G.mini.push(st);if(G.t-st<5)miniSwarm();}}
  if(G.mQ&&G.mQ.length){G.mAcc=(G.mAcc||0)+dt;while(G.mAcc>=.08&&G.mQ.length){G.mAcc-=.08;const q=G.mQ.shift();const e=spawnE('swarm',q.x,q.y);if(e){e.hp=e.max=3+G.t/150;e.msw=1;}}}
