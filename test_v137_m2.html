@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v139';
+const BUILD='v140';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -3645,8 +3645,10 @@ const _gob=goblin;goblin=function(e){if(!e.m1)return _gob(e);setSC();const t=G.t
  const rr={rat:13,dog:15,boar:26,king:52}[e.m1];if(e.m1!=='king'&&(!e.bs||e.bs==='walk'))spr(e.m1,x,y,ang,rr,t);else ent(e.m1,x,y,ang,rr,e.bs==='stuck'||e.bs==='warn'?t*.2:t);
  if(e.bs==='stuck'){cx.save();cx.translate(e.x,e.y-rr*.9);cx.rotate(G.t*2);cx.fillStyle='#FFD34A';cx.strokeStyle=O;cx.lineWidth=px(2);for(let i=0;i<3;i++){const q=i*TAU/3;cx.beginPath();cx.arc(Math.cos(q)*rr*.45,Math.sin(q)*rr*.2,Math.max(px(3),rr*.07),0,TAU);cx.fill();cx.stroke();}cx.restore();}
  if(e.hp<e.max){const r=e.r;cx.fillStyle='rgba(0,0,0,.4)';cx.fillRect(e.x-r,e.y-rr-12,r*2,4);cx.fillStyle='#ff5a4a';cx.fillRect(e.x-r,e.y-rr-12,r*2*e.hp/e.max,4);}};
+/* v140: map-1 boss star warning fully static: outline, position, size and rotation fixed; only the fill rises (bottom to top) inside the fixed star. Before, the fill was a scaled copy of the star grown about its bounding-box centre (16px off the star centre), so it drifted and swelled = wobble. */
+function SW140(z,k,o){k=Math.max(0,Math.min(1,k));const P=()=>PG137.path(z,1);cx.save();P();cx.fillStyle=WV7.FLOOR;cx.fill('evenodd');if(k>0){const R=180,y1=z.y+R,yk=y1-2*R*k;cx.save();P();cx.clip('evenodd');cx.fillStyle='rgba(255,154,46,.4)';cx.fillRect(z.x-R,yk,2*R,y1-yk);cx.beginPath();cx.moveTo(z.x-R,yk);cx.lineTo(z.x+R,yk);cx.strokeStyle='#FFD08A';cx.lineWidth=px(2);cx.stroke();cx.restore();}P();WV7.rim(px);cx.restore();if(o)WV7.live(o,'roll','warn',[m=>PG137.path(z,1),px]);}
 const _db=drawBoss;drawBoss=function(b){if(!b||b.name!=='굴렁왕')return _db(b);setSC();const R=b.r*1.4;
- if(b.st==='crouch'||b.st==='rwarn'){const k=b.st==='crouch'?0:1-b.tm/ROLL.warn;if(b._sz)PG137.warn(b._sz,k,px,b,'roll');}
+ if(b.st==='crouch'||b.st==='rwarn'){const k=b.st==='crouch'?0:1-b.tm/ROLL.warn;if(b._sz)SW140(b._sz,k,b);}
  if(b.st==='roll'){ent('roll',b.x,b.y,b.ra,b.r*1.25,G.t,{dist:b.rd+1});}
  else{ent('bug',b.x,b.y,b.st==='crouch'||b.st==='rwarn'?b.ra:b.st==='daze'?b.ra:b.ang||0,R,b.st==='daze'?G.t*.2:G.t,{shake:b.st==='crouch'});}
  if(b.st==='daze'){cx.save();cx.translate(b.x,b.y-R*.6);cx.rotate(G.t*2);cx.fillStyle='#FFD34A';cx.strokeStyle=O;cx.lineWidth=px(2);for(let i=0;i<4;i++){const q=i*TAU/4;cx.beginPath();cx.arc(Math.cos(q)*R*.4,Math.sin(q)*R*.18,Math.max(px(4),R*.06),0,TAU);cx.fill();cx.stroke();}cx.restore();}};
@@ -3667,7 +3669,7 @@ const _db=drawBoss;drawBoss=function(b){if(!b||b.name!=='굴렁왕')return _db(b
   if(e.burn>0||e.fsl>0||e.l2s>0){cx.save();cx.globalAlpha=.28;cx.fillStyle='#ff7a2a';cx.beginPath();cx.arc(e.x,e.y,rr*.9,0,TAU);cx.fill();cx.restore();}
   if(e.hp<e.max){const r=e.r;cx.fillStyle='rgba(0,0,0,.4)';cx.fillRect(e.x-r,e.y-rr-12,r*2,4);cx.fillStyle='#ff5a4a';cx.fillRect(e.x-r,e.y-rr-12,r*2*e.hp/e.max,4);}};
  const _dbx=drawBoss;drawBoss=function(b){if(!b||!b.m1b)return _dbx(b);setSC();const Uw=104*TUNE.boss.size/rbLW()/2*.72;
-  if(b.st==='crouch'||b.st==='rwarn'){const k=b.st==='crouch'?0:1-b.tm/ROLL.warn;if(b._sz)PG137.warn(b._sz,k,px,b,'roll');}
+  if(b.st==='crouch'||b.st==='rwarn'){const k=b.st==='crouch'?0:1-b.tm/ROLL.warn;if(b._sz)SW140(b._sz,k,b);}
   const ang=(b.st==='crouch'||b.st==='rwarn'||b.st==='daze'||b.st==='roll')?b.ra:(b.ang||0);const fzb=window.AWKON&&AWKON();if(b._tx!=null&&!fzb)b._td=(b._td||0)+Math.hypot(b.x-b._tx,b.y-b._ty);b._tx=b.x;b._ty=b.y;{const T=cx.getTransform(),sc=Math.hypot(T.a,T.b)/(window.DPR||1);BL('boss',b.x,b.y,ang,Uw,.35,Math.floor((b._td||0)*sc/6)%4);}
   if(b.st==='daze'){cx.save();cx.translate(b.x,b.y-Uw*.6);cx.rotate(G.t*2);cx.fillStyle='#FFD34A';cx.strokeStyle=O;cx.lineWidth=px(2);for(let i=0;i<4;i++){const q=i*TAU/4;cx.beginPath();cx.arc(Math.cos(q)*Uw*.4,Math.sin(q)*Uw*.18,Math.max(px(4),Uw*.06),0,TAU);cx.fill();cx.stroke();}cx.restore();}};}
 })();
