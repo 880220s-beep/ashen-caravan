@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v137';
+const BUILD='v138';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -4602,8 +4602,8 @@ function inZ(z){const pr=PR(),dx=P.x-z.x,dy=P.y-z.y,d=Math.hypot(dx,dy);if(z.sh=
 /* ---------- skills ---------- */
 const circ8=(x,y,r,o)=>hz(Object.assign({sh:'ell',x,y,a:r,b:r,ro:0},o));
 function slam(e){const el=!!e.elite,c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x);hz({sh:'band',x:e.x,y:e.y,an,L:el?230:200,w:el?130:110,wn:1.2,dmg:el?.14:.12,nm:'slam',g:c.g,src:e,c});M8S.slam++;}
-function door(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x)+Math.PI/2,L=360;hz({sh:'poly',loc:PG137.SH.gothic(),x:P.x,y:P.y,an,L,w:60,/* v137s: gothic door (GPT) */wn:1.25,dmg:.14,nm:'door',g:c.g,src:e,c});M8S.door++;}
-function chime(e){const c=cast(e);hz({sh:'ann',x:e.x,y:e.y,r0:40,r1:140,wn:1.2,dmg:.12,nm:'chime',st:0,g:c.g,src:e,c});hz({sh:'ann',x:e.x,y:e.y,r0:140,r1:260,wn:1.2,dl:.6,dmg:.12,nm:'chime',st:1,g:c.g,src:e,c});M8S.chime++;}
+function door(e){const c=cast(e),an=Math.atan2(P.y-e.y,P.x-e.x)+Math.PI/2,L=440,K=440/360;hz({sh:'poly',loc:PG137.SH.gothic().map(p=>p.map(q=>[q[0]*K,q[1]*K])),x:P.x,y:P.y,an,L,w:80,/* v138: gothic door scaled to 440 wide (x1.22, ~293 tall) */wn:1.0,dmg:.15,nm:'door',g:c.g,src:e,c});M8S.door++;}
+function chime(e){const c=cast(e);hz({sh:'ann',x:e.x,y:e.y,r0:40,r1:180,wn:1.1,dmg:.13,nm:'chime',st:0,g:c.g,src:e,c});hz({sh:'ann',x:e.x,y:e.y,r0:180,r1:350,wn:1.1,dl:.5,dmg:.13,nm:'chime',st:1,g:c.g,src:e,c});M8S.chime++;}
 function bell(b){const c=cast(b);[[60,170],[170,280],[280,390]].forEach(([r0,r1],i)=>hz({sh:'ann',x:b.x,y:b.y,r0,r1,wn:1.2,dl:i*.45,dmg:.16,nm:'bell',g:c.g,src:b,c}));M8S.bell++;}
 function glass(b){const c=cast(b),o=(Math.random()-.5)*60;for(const k of[-1,0,1]){const x=P.x+o+k*230;/* v134: gap 70->140; v137s: tapered shards 90->25 x500, ~140 gap (Grok) */hz({sh:'poly',loc:PG137.SH.shard(),an:0,x,y:P.y,wn:1.4,dmg:.18,nm:'glass',g:c.g,src:b,c});}M8S.glass++;}
 function fall(b){const c=cast(b),a0=Math.random()*TAU,pads=[0,1,2].map(i=>[b.x+Math.cos(a0+i*TAU/3)*150,b.y+Math.sin(a0+i*TAU/3)*150,45]);hz({sh:'lotus',x:b.x,y:b.y,R:260,pads,wn:2.0,dmg:.22,nm:'fall',g:c.g,src:b,c});M8S.fall++;}
@@ -4620,8 +4620,8 @@ function skills(dt){for(const e of EN){if(e.dead||e.mb||e===G.boss)continue;if(!
 /* big enemies stand still while their warning is up */
 function hold(){for(const e of EN){if(e.dead||e.mb||e===G.boss)continue;if(busy(e)){if(e._hx5==null){e._hx5=e.x;e._hy5=e.y;}e.x=e._hx5;e.y=e._hy5;}else e._hx5=null;}}
 
-miniAI=function(e,dt){if(AW())return 0;e._dc8=(e._dc8??2.5)-dt;e._xc8=(e._xc8??5)-dt;if(busy(e))return 0;const dd=Math.hypot(P.x-e.x,P.y-e.y);if(dd>=300||groups()>=CAP())return 1;
- if(e._dc8<=0){door(e);e._dc8=6;}else if(e._xc8<=0&&dd<240){chime(e);e._xc8=7.5;}return busy(e)?0:1;};
+miniAI=function(e,dt){if(AW())return 0;e._dc8=(e._dc8??2.5)-dt;e._xc8=(e._xc8??5)-dt;if(busy(e))return 0;const dd=Math.hypot(P.x-e.x,P.y-e.y);if(dd>=350||groups()>=CAP())return 1;/* v138: 350 */
+ if(e._dc8<=0){door(e);e._dc8=5.5;}else if(e._xc8<=0&&dd<300){chime(e);e._xc8=6;}return busy(e)?0:1;};
 boss2Pick=function(b){};
 boss2Upd=function(b,dt){b._sc8=(b._sc8??3)-dt;b._xc8=(b._xc8??5.5)-dt;b._oc8=(b._oc8??8)-dt;b._busy=busy(b);
  if(!b._busy&&!AW()&&groups()<CAP()){const dd=Math.hypot(P.x-b.x,P.y-b.y);
