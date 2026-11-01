@@ -635,7 +635,7 @@ function hit(e,d,kb,ang,col){if(bcSafe()||(bcNoDie()&&bcStrong(e)))return;hitFx(
  if(e.hp<=0&&!e.dead){e.dead=1;if(isB)return bossDie();kill(e);}}
 function CHIPS(){let n=0;for(const f of FX)if(f.k==='chip')n++;return n;}
 // swarm XP burst when a swarm is wiped: 150s +80, 300s +120, 420s +160
-function swarmCheck(){if(G.swBurst&&G.swarmLeft<=0&&!(G.swQ&&G.swQ.length)){G.swBurst=0;const i=G.swarmsDone.length-1,v=[80,120,160][Math.min(2,i)]*XPK.burst;ring(P.x,P.y,300,'#7af0c0',.5);v*=XPM();BAN={s:'떼거지 섬멸! +'+Math.round(v)+' XP',life:.7,kill:1};gainXp(v);}}
+function swarmCheck(){if(G.swBurst&&G.swarmLeft<=0&&!(G.swQ&&G.swQ.length)){G.swBurst=0;const i=G.swarmsDone.length-1,v=[80,120,160][Math.min(2,i)]*XPK.burst*XPM();ring(P.x,P.y,300,'#7af0c0',.5);BAN={s:'떼거지 섬멸! +'+Math.round(v)+' XP',life:.7,kill:1};gainXp(v);}}
 function dropPot(x,y,k){if(ITEM.some(i=>i.k===k))return;const it={x:x+rnd(-14,14),y:y+rnd(-14,14),k,t:0};ITEM.push(it);ring(it.x,it.y,40,k==='hp'?'#56D364':'#FFD86B',.35);}
 function potPick(it){beep(700,.08,'triangle',.12,1400);if(it.k==='hp'){G.hp=Math.min(G.maxhp,G.hp+G.maxhp*(HELL?.20:.25));/* v117 hell heal 20% */POPS.push({s:'체력 회복!',c:'#7dff8f',life:1.2});ring(P.x,P.y,P.r*2.5,'#56D364',.35);}else{for(const g of GEM)g.pull=1;POPS.push({s:'자석! 전부 흡수!',c:'#FFD86B',life:1.2});ring(P.x,P.y,P.r*3,'#9B5CFF',.4);}}
 window.__pot=(k,dx)=>dropPot(P.x+(dx||60),P.y,k);window.__items=()=>ITEM.map(i=>i.k);
