@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v144';
+const BUILD='v145';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -1278,7 +1278,7 @@ function update(dt){if(G.over||G.paused||G.upause)return;if(G.roul){roulTick(dt)
  vehTick();skillTick(dt);
  if(!DPSM){director(dt);bossUpd(dt);}else dpsPin(dt);buildGrid();{const _pc={};for(const k in WP)_pc[k]=WP[k].cd;wUpd(dt);for(const k in WP){const w=WP[k];if(w.cd>(_pc[k]??0)+.01)w.lf=G.t;if(k==='ram'&&w.blk!==w._b){w._b=w.blk;w.lf=G.t;}}}wDone();
  for(const e of EN){if(e.dead)continue;const a=Math.atan2(P.y-e.y,P.x-e.x),dd=Math.hypot(P.x-e.x,P.y-e.y);let mv=(RBCAR&&(BC.on||(typeof RBSS!=='undefined'&&RBSS&&RBSS.car==='raven')))?0:e.rbSl>G.t?1-(e.rbSk||0):1;if(e.pa){e.pa.t+=dt;const k=Math.min(1,e.pa.t/.15),q=1-(1-k)*(1-k);e.x=e.pa.x0+(e.pa.x1-e.pa.x0)*q;e.y=e.pa.y0+(e.pa.y1-e.pa.y0)*q;e.vx=e.vy=0;if(k>=1)e.pa=null;continue;}if(e.kbsT>0){e.kbsT-=dt;if(e.kbsT<=0)e.kbs=0;}if(e.fsl>0){e.fsl-=dt;mv=FSL;}if(e.l2s>0){e.l2s-=dt;mv*=e.l2m||1;}if(e.stag>0){e.stag-=dt;mv=0;}
-  else if(e.v==='chg'){e.dcd-=dt;if(e.tel>0){e.tel-=dt;mv=0;if(e.tel<=0){e.dash=.55;e.da=a;}}else if(e.dash>0){e.dash-=dt;mv=0;e.x+=Math.cos(e.da)*e.spd*2.1*dt;e.y+=Math.sin(e.da)*e.spd*2.1*dt;}else if(e.dcd<=0&&dd<300){e.tel=.5;e.dcd=4.5;}}
+  else if(e.v==='chg'){e.dcd-=dt;if(e.tel>0){e.tel-=dt;mv=0;if(e.tel<=0){e.dash=.55;e.da=a;}}else if(e.dash>0){e.dash-=dt;mv=0;e.x+=Math.cos(e.da)*e.spd*2.1*dt;e.y+=Math.sin(e.da)*e.spd*2.1*dt;}/* v145: regular charger no longer dashes */}
   if(e.mb&&!(e.stag>0))mv*=miniAI(e,dt,a,dd);
   if(ET[e.type].ranged){e.sc-=dt;e.tg=dd<250&&e.sc<=.5&&e.sc>0;if(dd<250){mv=dd<190?-.6:0;if(e.sc<=0){e.sc=(2.25-.05*MAP)*(e.mb||e.elite?1:1.75);/* c18: regular shooter fire interval x1.75 (map 4 2.05s->3.59s) */e.tg=0;let aa=a;const bs=DIFF?150:135;if(DIFF){const tt=dd/bs;aa=Math.atan2(P.y+P.vy*tt*.7-e.y,P.x+P.vx*tt*.7-e.x);}for(const o of [-.25,0,.25])EB.push({x:e.x,y:e.y,vx:Math.cos(aa+o)*bs,vy:Math.sin(aa+o)*bs,life:2.5,r:5,sh:1,dmg:e.dmg*.8*.6,bt:(e.mb||e.elite)?1:0,sourceTier:e.mb?2:e.elite?1:0,c:e.type==='shaman'?'#F5D6FF':0});}}}
   let ma=a;if(STAGE===2&&MAP!==4){if(e.type==='runner')ma=a+Math.sin(G.t*5+e.ph*3)*.9;else if(e.type==='grunt'&&dd>160)ma=a+(e.ph>Math.PI?.55:-.55);}
@@ -3623,7 +3623,7 @@ function band(e){return e.m1==='king'?{L:300,dur:.55,warn:1.1}:e.type==='brute'?
 function KZ137(x,y,a,Lp){return{sh:'poly',x,y,an:a,loc:PG137.SH.chev3(Lp,110)};}
 function preAI(dt){for(const e of EN){if(e.dead||!(e.m1==='boar'||e.m1==='king'))continue;e._px=e.x;e._py=e.y;}}
 function postAI(dt){if(lockd())return;for(const e of EN){if(e.dead&&e.m1&&e.bs){e.bs='walk';e.nc=0;}/* v139b: dead charger owns no warning */if(e.dead||!e.m1)continue;
- if(e.m1==='boar'||e.m1==='king'){const B=band(e),dd=Math.hypot(P.x-e.x,P.y-e.y),a=Math.atan2(P.y-e.y,P.x-e.x),frz=e.stag>0||e.pa;e.bt-=dt;
+ if((e.m1==='boar'&&(e.type!=='shield'||e.elite))||e.m1==='king'){/* v145: regular shield (멧돼지) no longer charges */const B=band(e),dd=Math.hypot(P.x-e.x,P.y-e.y),a=Math.atan2(P.y-e.y,P.x-e.x),frz=e.stag>0||e.pa;e.bt-=dt;
   if(e.bs!=='walk'&&e._px!=null&&!frz){e.x=e._px;e.y=e._py;}
   if(e.bs==='walk'){if(e.bt<=0&&dd<(e.m1==='king'?620:320)){e.bs='warn';e.bt=B.warn;e.ca=a;e._wx=e.x;e._wy=e.y;if(e.m1==='king'&&!e.nc){e.nc=3;M1S.dogCalls++;const p=edgePos();for(let i=0;i<3;i++)spawnE('swarm',p.x+(Math.random()-.5)*60,p.y+(Math.random()-.5)*60);}}}
   else if(e.bs==='warn'){if(e.bt<=0){e.bs='dash';e.bt=B.dur;e._dsx=e.x;e._dsy=e.y;e._kh137=0;M1S.charges++;if(e.m1==='king')M1S.miniCharges++;}}
