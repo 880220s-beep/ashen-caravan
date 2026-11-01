@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v160';
+const BUILD='v161';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -256,7 +256,7 @@ function rbFire(w,L0,E,dt){const T=rbT(),R=TRNG,s=rbS(),D=rbD()*RBK[CAR][s],L=rb
  if(CAR==='croc'){/* v158: bite removed -> thrown croc tooth: every 1.2s @1000px/s, first target <=600, jumps <=220 to nearest unhit, 2*Lv-1 targets (39 at Lv20), first hit = old bite DPS x1.2 (per 1.2s), -5% per jump, max 3 in flight */if(w.cd>0)return;if(CTP.filter(q=>q.fd==null).length>=3)return;const RG=1+.2*CK('c_big');/* v159: 이빨 사거리 */const t=ctNext(P.x,P.y,600*RG,new Set());if(!t)return;const CS=s>=4?1.55:1;if(P._cd0==null)P._cd0=P.cdMul||1;
   const oc=(.95-.01*(Math.min(G.lv||1,20)-1))*(E?.85:1)*((P.cdMul||1)/P._cd0)*CS,cm=1/* v159: c_rate/c_more no longer add damage */,
    per=s>=4?D*CS*2*cm+D*2*CS:D*(1+(s>=3?1:0))*cm+(s>=2?D*2.5/3:0)/* old bite damage per cycle on the first target */,dm=per/oc*1.2*1.2;
-  w.cd=1.2*Math.max(.1,1-.1*CK('c_rate'));/* v159: 빠른 투척 -10%/stack */w.rbN=(w.rbN||0)+1;const a=Math.atan2(t.y-P.y,t.x-P.x);CTP.push({x:P.x+Math.cos(a)*P.r*.6,y:P.y+Math.sin(a)*P.r*.6,a,tg:t,hits:new Set(),left:Math.min(5,1+Math.floor((G.lv||1)/5))+Math.min(1,CK('c_more')),jr:220*RG,/* v160: targets 1+floor(lv/5) cap 5, 튕김 추가 +1 */d:dm*[1,1.2,1.4,1.6,1.8][Math.min(4,Math.floor((G.lv||1)/5))]/* v160: first-hit mult */,n:0,t:0,fl:0,fd:null});
+  w.cd=1.2*Math.max(.1,1-.1*CK('c_rate'));/* v159: 빠른 투척 -10%/stack */w.rbN=(w.rbN||0)+1;const a=Math.atan2(t.y-P.y,t.x-P.x);CTP.push({x:P.x+Math.cos(a)*P.r*.6,y:P.y+Math.sin(a)*P.r*.6,a,tg:t,hits:new Set(),left:Math.min(6,2+Math.floor((G.lv||1)/5))+Math.min(1,CK('c_more')),jr:220*RG,/* v161: targets 2+floor(lv/5) cap 6, 튕김 추가 +1 */d:dm*[1,1.2,1.4,1.6,1.8][Math.min(4,Math.floor((G.lv||1)/5))]/* v160: first-hit mult */,n:0,t:0,fl:0,fd:null});
   w.aim=a;beep(240,.07,'sawtooth',.05,90);}}
 const CTP=[];window.CTP=CTP;/* v158: croc tooth */
 function ctOk(e){return !!e&&!e.dead&&!((e===G.boss||e.mb)&&visK(e)<.5);}
