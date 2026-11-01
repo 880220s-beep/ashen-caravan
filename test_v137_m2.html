@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v134';
+const BUILD='v135';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -2268,13 +2268,14 @@ function draw(){const z=zoom(),v=viewHalf();VV=v;if(!CV.on){CV.x=P.x;CV.y=P.y;}c
  drawBG(v);drawTall(v);/* v82: decorations strictly under everything */const HD=HIDEB();
 /* v138f: player flame drawn right after floor, under everything else */
  if(CAR==='flame'&&G.flm&&G.flm.al>0&&!G.tf&&!G.robo&&!BC.on)for(const tp of (G.awk?[{o:-1},{o:1}]:fTips())){const f0=G.flm,off=tp.o||0,_t=off?armTip(off):null,f={...f0,x:off?_t.x:tp.x,y:off?_t.y:tp.y,a:off?f0.a:tp.a,R:f0.R*(off||tp.n>1?.95:1),al:f0.al*(tp.n>1?.8:1)};const R=f.R,a=f.a,hw=R*Math.sin(f.arc)*.42,tt=G.t*30+f.x;cx.save();cx.globalAlpha=f.al;cx.translate(f.x,f.y);cx.rotate(a);
-   if(f.e&&!G.awk&&!window.__NOLAVA){/* v133: evolved flame = one continuous lava stream: dark-red edge, red-orange body, bright orange core, cached flowing crust pattern (scroll only, no flicker) */
-    if(!window.LAVA133){const c=document.createElement('canvas');c.width=128;c.height=64;const g=c.getContext('2d');let sd=7;const r=()=>(sd=(sd*16807)%2147483647)/2147483647;
-     for(let i=0;i<46;i++){const x=r()*128,y=r()*64,w=8+r()*22,h=2+r()*4;for(const dx of[-128,0,128]){g.fillStyle='rgba(70,8,4,'+(.18+r()*.2)+')';g.beginPath();g.ellipse(x+dx,y,w,h,0,0,7);g.fill();}}
-     for(let i=0;i<30;i++){const x=r()*128,y=r()*64,w=5+r()*14,h=1+r()*2;for(const dx of[-128,0,128]){g.fillStyle='rgba(255,226,140,'+(.18+r()*.22)+')';g.beginPath();g.ellipse(x+dx,y,w,h,0,0,7);g.fill();}}window.LAVA133=cx.createPattern(c,'repeat');}
+   if(f.e&&!G.awk&&!window.__NOLAVA){/* v135: evolved flame = 4-layer heat (red outer, orange, yellow, white-hot core), feathered sides/tip, outward-flowing waves, muzzle glow. Same fan shape/range/hitbox. */
+    if(!window.LAVA135){const c=document.createElement('canvas');c.width=96;c.height=64;const g=c.getContext('2d');for(let i=0;i<3;i++){const x0=i*32,gr=g.createLinearGradient(x0,0,x0+32,0);gr.addColorStop(0,'rgba(255,240,190,0)');gr.addColorStop(.5,'rgba(255,240,190,.28)');gr.addColorStop(1,'rgba(255,240,190,0)');g.fillStyle=gr;g.fillRect(x0,0,32,64);}window.LAVA135=cx.createPattern(c,'repeat');}
     const len=R,N=16,sh=(wr,sc)=>{cx.beginPath();cx.moveTo(0,-3*wr);for(let i=1;i<=N;i++){const q=i/N;cx.lineTo(len*q*sc,-(3+hw*wr*Math.pow(q,.85)));}cx.quadraticCurveTo(len*sc+hw*wr*.55,0,len*sc,(3+hw*wr));for(let i=N-1;i>=1;i--){const q=i/N;cx.lineTo(len*q*sc,3+hw*wr*Math.pow(q,.85));}cx.lineTo(0,3*wr);cx.closePath();};
-    sh(1,1);cx.fillStyle='#5E0F07';cx.fill();sh(.86,.985);cx.fillStyle='#B3260F';cx.fill();sh(.6,.96);cx.fillStyle='#E8541A';cx.fill();sh(.32,.93);cx.fillStyle='#FF9A2E';cx.fill();sh(.13,.9);cx.fillStyle='#FFC768';cx.fill();
-    sh(.86,.985);cx.save();cx.clip();const m=new DOMMatrix();m.translateSelf((G.t*90)%128,-32);LAVA133.setTransform&&LAVA133.setTransform(m);cx.fillStyle=LAVA133;cx.fillRect(0,-hw-6,len+hw,2*hw+12);cx.restore();
+    const lg=(c,a,e)=>{const g=cx.createLinearGradient(0,0,len*e,0);g.addColorStop(0,'rgba('+c+','+a+')');g.addColorStop(.7,'rgba('+c+','+a*.85+')');g.addColorStop(1,'rgba('+c+',0)');return g;};
+    for(const[wr,sc,c,a]of[[1.12,1.04,'200,30,12',.16],[1.04,1.0,'215,40,14',.22],[.96,.97,'225,48,16',.3],[.86,.95,'232,60,18',.38]]){sh(wr,sc);cx.fillStyle=lg(c,a,sc);cx.fill();}
+    for(const[wr,sc,c,a]of[[.7,.92,'255,128,30',.45],[.6,.9,'255,140,36',.5],[.42,.85,'255,205,70',.5],[.34,.82,'255,215,90',.55],[.2,.74,'255,248,215',.55],[.12,.68,'255,255,245',.7]]){sh(wr,sc);cx.fillStyle=lg(c,a,sc);cx.fill();}
+    sh(.6,.9);cx.save();cx.clip();const m=new DOMMatrix();m.translateSelf((G.t*120)%96,-32);LAVA135.setTransform&&LAVA135.setTransform(m);cx.fillStyle=LAVA135;cx.globalAlpha=f.al*.8;cx.fillRect(0,-hw-6,len+hw,2*hw+12);cx.restore();
+    const mg=cx.createRadialGradient(4,0,0,4,0,Math.max(14,hw*.45));mg.addColorStop(0,'rgba(255,255,240,.9)');mg.addColorStop(.35,'rgba(255,220,120,.55)');mg.addColorStop(1,'rgba(255,120,30,0)');cx.fillStyle=mg;cx.beginPath();cx.arc(4,0,Math.max(14,hw*.45),0,TAU);cx.fill();
     cx.globalAlpha=1;cx.restore();continue;}
    const L=G.awk?[[1,1,'230,75,36',.55],[.94,.68,'255,152,45',.55],[.8,.32,'255,214,120',.45]]:[[1,1,'198,90,32',.5],[.94,.68,'255,146,43',.5],[.8,.32,'255,210,74',.45]];
    for(const[lr,wr,c,al]of L){const len=R*lr,N=14;cx.beginPath();cx.moveTo(0,-3*wr);for(let i=1;i<=N;i++){const q=i/N,w=(3+hw*wr*Math.pow(q,.85))*(1+.12*Math.sin(tt+q*9));cx.lineTo(len*q,-w);}
