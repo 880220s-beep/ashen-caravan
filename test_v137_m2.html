@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v173';
+const BUILD='v174';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -1160,7 +1160,7 @@ function drillTip_v74(){const L=P.r,a=ramAng();return{x:P.x+Math.cos(a)*L*3,y:P.
 function laserTick(w){const z=Math.max(.3,zoom()),tp=drillTip(),ca=Math.cos(tp.a),sa=Math.sin(tp.a),len=Math.hypot(W,H)/z-tp.d,hw=TUNE.laser.wPx/z,per=bskBasic()*9/15*TUNE.laser.dpsMul*10/TUNE.laser.tickHz*2/* c17: drill laser damage x2 (boss/mid-boss caps unchanged) */;let nsp=0;HITSRC=null;
  const pool=EN.slice();if(G.boss&&!G.boss.dead&&!pool.includes(G.boss))pool.push(G.boss);
  for(const e of pool){if(e.dead)continue;const dx=e.x-tp.x,dy=e.y-tp.y,al=dx*ca+dy*sa;if(al<-e.r||al>len)continue;if(Math.abs(-dx*sa+dy*ca)>hw+e.r)continue;
-  let d=per;if(e===G.boss||e.mb){const cap=(e.max||e.hp)*(e===G.boss?TUNE.laser.capBoss:TUNE.laser.capMini)/Math.max(1,P.dmgMul),u=w.lzU.get(e)||0,pt=cap/(TUNE.laser.dur*TUNE.laser.tickHz);d=Math.max(0,Math.min(d,pt,cap-u));w.lzU.set(e,u+d);}if(d>0){hit(e,d,0,tp.a,'#FF353B');if(nsp<3&&Math.random()<.5){nsp++;if(DSP.length>=TUNE.laser.sparkMax)DSP.shift();const aa=tp.a+Math.PI+rnd(-1,1);DSP.push({x:e.x,y:e.y,vx:Math.cos(aa)*140,vy:Math.sin(aa)*140,t:0,c:Math.random()<.5?'#FF353B':'#FFF5E8'});}}}}
+  let d=per;if(e===G.boss||e.mb){const cap=(e.max||e.hp)*(e===G.boss?TUNE.laser.capBoss:TUNE.laser.capMini)/Math.max(1,P.dmgMul),u=w.lzU.get(e)||0,pt=cap/(TUNE.laser.dur*TUNE.laser.tickHz);d=Math.max(0,Math.min(d,pt,cap-u));w.lzU.set(e,u+d);}if(d>0){hit(e,d,0,tp.a,'#FF353B');if(e!==G.boss&&!e.mb&&!e.boss&&!e.dead){const pr=-dx*sa+dy*ca,sg=pr<0?-1:1;e.x+=-sa*sg*4;e.y+=ca*sg*4;}/* v174: small side push away from the laser (regular/big only) */if(nsp<3&&Math.random()<.5){nsp++;if(DSP.length>=TUNE.laser.sparkMax)DSP.shift();const aa=tp.a+Math.PI+rnd(-1,1);DSP.push({x:e.x,y:e.y,vx:Math.cos(aa)*140,vy:Math.sin(aa)*140,t:0,c:Math.random()<.5?'#FF353B':'#FFF5E8'});}}}}
 function clank(){const a=ac();if(!a)return;beep(1500,.035,'square',.035,700);beep(260,.06,'triangle',.04,140);}
 function riseTone(){beep(300,.28,'sawtooth',.05,1400);}
 let _dsl=0;
