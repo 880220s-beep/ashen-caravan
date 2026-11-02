@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v175';
+const BUILD='v176';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -710,9 +710,11 @@ const ROUL={0:[['무기 +1',85,1],['장비 +1',15,'pas']],1:[['무기 +1',75,1],
 function openChest(boss){const it=ROUL[boss];let r=Math.random()*100,i=0;for(;i<it.length-1;i++){r-=it[i][1];if(r<0)break;}let v=it[i][2];
  const own=Object.keys(WP),lv5=own.filter(k=>WP[k].lv>=5&&!WP[k].evo),low=own.filter(k=>WP[k].lv<5);let k,kind;
  if(boss&&lv5.length){k=lv5[Math.random()*lv5.length|0];kind='evo';}
- else if(v==='pas'){kind='pas';k=own[Math.random()*own.length|0];}
+ else{/* v176: chest only +1s what the player owns (no new weapon/passive) */const pw=Object.keys(PD).filter(x=>PV[x]>=1&&PV[x]<5);if(v==='pas'&&!pw.length&&low.length)v=1;else if(v!=='pas'&&!low.length&&pw.length)v='pas';
+ if(v==='pas'){kind='pas';k=own[Math.random()*own.length|0];}
  else{kind='lv';k=low.length?low[Math.random()*low.length|0]:own[Math.random()*own.length|0];}
- G.roul={boss,own:own.slice(),k,kind,v,pk:Object.keys(PD)[Math.random()*Object.keys(PD).length|0],t:0,spin:.85,hold:.95};G.chestsOpened++;G.chestLog.push(kind==='evo'?'evo':'+'+v);}
+ var pk176=pw.length?pw[Math.random()*pw.length|0]:null;if(kind==='pas'&&!pk176){kind='lv';v=1;}}
+ G.roul={boss,own:own.slice(),k,kind,v,pk:typeof pk176!=='undefined'&&pk176?pk176:Object.keys(PD)[0],t:0,spin:.85,hold:.95};G.chestsOpened++;G.chestLog.push(kind==='evo'?'evo':'+'+v);}
 function roulTick(dt){const R0=G.roul;R0.t+=dt;if((R0.t>=R0.spin||R0.skip)&&!R0.applied){R0.applied=1;chestApply(R0);}
  if(R0.t>=R0.spin+R0.hold||R0.skip){G.roul=null;if(G.endAfter){setTimeout(()=>G.over=true,1500/SPEED);}const q=R0.pend||0;if(q)gainXpRaw(q);}}
 function lvlUp(k,n){let g=0;for(let i=0;i<n&&WP[k]&&WP[k].lv<5;i++){addW(k);g++;}return g;}
