@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v172';
+const BUILD='v173';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -260,7 +260,7 @@ function rbFire(w,L0,E,dt){const T=rbT(),R=TRNG,s=rbS(),D=rbD()*RBK[CAR][s],L=rb
   /* v162: total hits 2+2*floor(L/5) (+1 card); evolved = 2 teeth splitting it, shared hit list; first-hit mult keeps 90% of v161 total (evo +18% already via oc) */
   const bd=Math.min(4,Math.floor((G.lv||1)/5)),TT=2+2*bd+Math.min(1,CK('c_more')),d0=dm*[1,1.2,1.4,1.6,1.8][bd],HS=new Set([t]),EV=!!(w&&w.evo);HS.hc=new Map();/* v165: per-throw hit history shared by both teeth */
   const mk=(g,n,m)=>{const a=Math.atan2(g.y-P.y,g.x-P.x);CTP.push({x:P.x+Math.cos(a)*P.r*.6,y:P.y+Math.sin(a)*P.r*.6,a,tg:g,hits:HS,left:n,jr:220,d:d0*m,n:0,t:0,fl:0,fd:null,ev:EV});return a;};
-  let a;if(EV){const t2=ctNext(P.x,P.y,600,HS),nA=Math.ceil(TT/2),SS=n=>(1-Math.pow(.95,n))/.05,em=[.9,.692,.630,.605,.594][bd]*SS(TT)/(SS(nA)+SS(TT-nA));if(t2){HS.add(t2);a=mk(t,nA,em);mk(t2,TT-nA,em);}else a=mk(t,TT,[.9,.692,.630,.605,.594][bd]);}
+  let a;if(EV){const t2=ctNext(P.x,P.y,600,HS),nA=Math.ceil(TT/2),SS=n=>(1-Math.pow(.95,n))/.05,em=[.9,.692,.630,.605,.594][bd]*SS(TT)/(SS(nA)+SS(TT-nA));if(t2){HS.add(t2);a=mk(t,nA+1,em);mk(t2,TT-nA+1,em);/* v173: +1 bounce per awakened tooth */}else a=mk(t,TT,[.9,.692,.630,.605,.594][bd]);}
   else a=mk(t,TT,[.9,.692,.630,.605,.594][bd]);
   w.aim=a;beep(240,.07,'sawtooth',.05,90);}}
 const CTP=[];window.CTP=CTP;/* v158: croc tooth */
@@ -510,7 +510,7 @@ const ET={
  brute:{hp:260,def:10,spd:44,r:28,xp:10,dmg:20,col:'#d9603b',kb:.2},
  swarm:{hp:6,def:0,spd:85,r:9,xp:.5,dmg:3,col:'#e8794a',kb:1.6}};
 function scale(){const m=G.t/60;return{hp:1+m*.28+(STAGE-1)*.6,def:Math.floor(m*.9)+(STAGE-1)*3};}
-const ESPD=+(Q.get('espd')||1),ECN=+(Q.get('ecn')||70),ECH=+(Q.get('ech')||80);function HORDE(){return G.swarmLeft>0||(G.swQ&&G.swQ.length>0)||(G.mQ&&G.mQ.length>0);}/* v70 late-game tuning (index 0/1/2 = from 3:00/4:00/5:00) */const LATE={nc:[90,110,125],hc:[95,110,120],nh:[1.15,1.30,1.45],hh:[1.18,1.33,1.48],/* v70 iter2 */na:[.04,.07,.10],ha:[.04,.06,.08],ne:[1,2,3],he:[2,3,4]};
+const ESPD=+(Q.get('espd')||1),ECN=+(Q.get('ecn')||70),ECH=+(Q.get('ech')||80);function HORDE(){return G.swarmLeft>0||(G.swQ&&G.swQ.length>0)||(G.mQ&&G.mQ.length>0);}/* v70 late-game tuning (index 0/1/2 = from 3:00/4:00/5:00) */const LATE={nc:[90,110,125],hc:[95,110,120],nh:[1.10,1.20,1.30],hh:[1.10,1.20,1.30],/* v173: late regular HP ramp reduced (was 1.15/1.30/1.45, hard/hell 1.18/1.33/1.48) *//* v70 iter2 */na:[.04,.07,.10],ha:[.04,.06,.08],ne:[1,2,3],he:[2,3,4]};
 function LT(a){return G.t<180?0:a[G.t<240?0:G.t<300?1:2];}
 function M1E149(){return MAP===1&&DIFF===0&&G.t>=120;}/* v149: map 1 쉬움 from 2:00 - spawn rate x0.7, alive cap 75 */function E151(){return DIFF===0&&MAP>=3&&G.t>=120?[0,0,0,[.85,100],[.88,105],[.91,110],[.94,115],[.97,120],[1,125]][MAP]:null;}/* v151: maps 3-8 쉬움 from 2:00 - spawn x / alive cap (swarm cap same) */function C153(){return DIFF&&G.t>=120?Math.round((DIFF===1?81:87)+((DIFF===1?135:145)-(DIFF===1?81:87))*(MAP-1)/7):0;}/* v153: 어려움/지옥 from 2:00 alive cap map1 81/87 -> map8 135/145 linear, swarm cap same */function SPI153(){return .25/T15T.S[T15M][0]/(G.t>=120?[1,.7,.8,.85,.88,.91,.94,.97,1][MAP]:1)/[1,1.1,1.2][DIFF];}/* v153: 어려움/지옥 spawn interval = 쉬움 / 1.1 / 1.2 */function M2E150(){return MAP===2&&DIFF===0&&G.t>=120;}/* v150: map 2 쉬움 from 2:00 - spawn rate x0.8, alive cap 90 (swarm cap 90) */
 function ECAP(sw){return Math.min(M1E149()?75:M2E150()?90:E151()?E151()[1]:C153()?C153():160,(sw||HORDE())?(DIFF?160:145):(G.t<180?(DIFF?ECH:ECN):LT(DIFF?LATE.hc:LATE.nc))/* v70 late cap */);}
