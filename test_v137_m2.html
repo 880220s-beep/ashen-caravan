@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v178';
+const BUILD='v179';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -2232,7 +2232,7 @@ function drawAsm(){if(T45ok()){drawAwk45();return;}if(T42ok()){drawAwk42();retur
 function vehicle(){v75Frame();dashDrawUnder();drawLzBeam();const sq=dashSquash(),bq2=bcRear();sq[0]*=bq2[0];sq[1]*=bq2[1];cx.save();if(sq[0]!==1){cx.translate(P.x,P.y);cx.rotate(P.ang);cx.scale(sq[0],sq[1]);cx.rotate(-P.ang);cx.translate(-P.x,-P.y);}if(G.robo){drawAsm();}else if(G.awk){drawRobotW(1);}else vehicleCar();cx.restore();dashDrawOver();}
 /* v131 bumper charge dots: one function for every car/robot, drawn last on the canvas in screen space (8 CSS px, 4px gap, not zoomed); charged magenta, spent gray */
 function drawPipRow(){const w=WP.ram;if(!w||w.evo||HIDEB()||G.over)return;const mx=w.mx||[2,2,3,3,4][Math.min(5,w.lv)-1],ch=w.ch==null?mx:Math.min(w.ch,mx);const z=zoom(),sx=W/2+(P.x-CV.x)*z,sy=H/2+(P.y-CV.y)*z+P.r*z*1.35+10,D=8,GP=4,x0=sx-(mx*D+(mx-1)*GP)/2+D/2;cx.save();cx.setTransform(DPR,0,0,DPR,0,0);cx.globalAlpha=1;cx.filter='none';cx.lineWidth=1.5;cx.strokeStyle='#14141a';for(let i=0;i<mx;i++){cx.fillStyle=i<ch?'#FF2BD6':'#8C9096';cx.beginPath();cx.arc(x0+i*(D+GP),sy,D/2-.75,0,TAU);cx.fill();cx.stroke();}cx.restore();}
-function drawPips(L){if(WP.ram&&!HIDEB()){const w=WP.ram;cx.fillStyle='rgba(180,200,220,.25)';const a2=(G.awk?160:w.evo?140:100+5*(w.lv-1))*Math.PI/360;cx.strokeStyle='rgba(200,220,240,.45)';cx.lineWidth=3;cx.beginPath();cx.arc(0,0,L*1.6+10,-a2,a2);cx.stroke();/* v178: arc dots removed (count shown by drawPipRow) */}}
+function drawPips(L){if(WP.ram&&!HIDEB()){const w=WP.ram;cx.fillStyle='rgba(180,200,220,.25)';const a2=(G.awk?160:w.evo?140:100+5*(w.lv-1))*Math.PI/360;cx.strokeStyle='rgba(200,220,240,.45)';cx.lineWidth=3;cx.beginPath();cx.arc(0,0,L*1.6+10,-a2,a2);cx.stroke();if(!w.evo)for(let i=0;i<(w.mx||2);i++){const a=-a2+(i+.5)/(w.mx||2)*a2*2;cx.fillStyle=i<(w.ch||0)?'#8fe3ff':'rgba(60,70,80,.7)';cx.beginPath();cx.arc(Math.cos(a)*(L*1.6+10),Math.sin(a)*(L*1.6+10),4,0,TAU);cx.fill();}}}
 function drawRobot(ext,gl){const R=P.r,fl=CAR==='flame';cx.save();cx.translate(P.x,P.y);const lift=1+.12*(1-ext)+.06;cx.fillStyle='rgba(0,0,0,.28)';cx.beginPath();cx.ellipse(6,R*.5,R*1.2,R*.7,0,0,TAU);cx.fill();cx.rotate(P.ang);cx.scale(lift,lift);
  const mv=Math.hypot(P.vx,P.vy)>30,st=mv?Math.sin(G.t*12):0;const tor=.55+.45*ext;
  // legs/feet
@@ -5249,5 +5249,4 @@ const _u=update;update=function(dt){scan();for(const e of EN){if(!e.mb||e.dead||
   cx.save();cx.translate(W/2+ca*t,H/2+sa*t);cx.rotate(a);cx.beginPath();cx.moveTo(12,0);cx.lineTo(-8,-9);cx.lineTo(-4,0);cx.lineTo(-8,9);cx.closePath();cx.fillStyle=c;cx.fill();cx.lineWidth=2.5;cx.strokeStyle='#1A1410';cx.stroke();cx.restore();}
  cx.restore();}catch(_){}return r;};}
 })();</script>
-<script>/* v178: bumper block-count dot row under the car, drawn last every frame */(function(){const _d=draw;draw=function(){const r=_d.apply(this,arguments);try{drawPipRow();}catch(_){}return r;};})();</script>
 </body></html>
