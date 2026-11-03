@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v182';
+const BUILD='v183';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -790,7 +790,7 @@ function zoom(){return zoom0()/(G.bzk||1);}/* v51: v37 camera *//* v50: Lv1 car 
 function zoom0(){const vt=520/[1,.92,.82,.74][G.veh];if(G.zv===undefined)G.zv=vt;const pin=G.tf?camZ(G.tf.t/G.tf.D*3):1;return W/G.zv*pin*(1+G.zoomPunch*.18)*(1-.08*(G.zoomOut||0))*(G.robo?asmZ(G.robo.t):1);}
 // ---------- level up
 let choices=null;
-const XPK={a:22,b:1,c:1.8,s2:1.60,d:3.2,k:28,e1:.52,e:.29,e2:.64,late:1.50,burst:1,chest:.25};if(Q.get('xpe'))XPK.e=+Q.get('xpe');if(Q.get('xpm')){const q=Q.get('xpm').split(',').map(Number);XPK.e1=q[0];XPK.e=q[1];if(q[2])XPK.e2=q[2];}if(Q.get('cxp'))XPK.chest=+Q.get('cxp');if(Q.get('xpk'))XPK.k=+Q.get('xpk');if(Q.get('late'))XPK.late=+Q.get('late');if(Q.get('burst'))XPK.burst=+Q.get('burst');if(Q.get('xp')){const q=Q.get('xp').split(',').map(Number);XPK.a=q[0];XPK.b=q[1];XPK.c=q[2];XPK.s2=q[3];XPK.d=q[4]??XPK.d;}function NEED0(l){return Math.round(XPK.a+l*XPK.b+l*l*XPK.c+XPK.d*Math.min(6,Math.max(0,l-5))**3);}
+const XPK={a:22,b:1,c:1.8,s2:1.60,d:3.2,k:28,e1:.57,e:.32,e2:.64,late:1.50,burst:1,chest:.25};if(Q.get('xpe'))XPK.e=+Q.get('xpe');if(Q.get('xpm')){const q=Q.get('xpm').split(',').map(Number);XPK.e1=q[0];XPK.e=q[1];if(q[2])XPK.e2=q[2];}if(Q.get('cxp'))XPK.chest=+Q.get('cxp');if(Q.get('xpk'))XPK.k=+Q.get('xpk');if(Q.get('late'))XPK.late=+Q.get('late');if(Q.get('burst'))XPK.burst=+Q.get('burst');if(Q.get('xp')){const q=Q.get('xp').split(',').map(Number);XPK.a=q[0];XPK.b=q[1];XPK.c=q[2];XPK.s2=q[3];XPK.d=q[4]??XPK.d;}function NEED0(l){return Math.round(XPK.a+l*XPK.b+l*l*XPK.c+XPK.d*Math.min(6,Math.max(0,l-5))**3);}
 // early levels cheap (first card ~10s, then ~every 20s), Lv6-11 steeper so transforms stay ~1:45 / ~4:10, then linear
 const NT=[8,28,48,72,100,140,190,250,320,400,490,580];
 function NEED(l){if(l>=15&&l<=19)return [380,440,500,560,620][l-15];/* v155 (Grok): Lv15->20 */return l<12?Math.round(NT[l]*(l<=5?XPK.e1:XPK.e)):Math.round((380+120*(l-12))*XPK.e2)/* v95: cheaper Lv12-15, steeper late */;}// post-Lv12 linear
