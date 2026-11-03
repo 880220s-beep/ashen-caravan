@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v185';
+const BUILD='v186';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -958,7 +958,7 @@ function drawDrill(Lr){const w=WP.ram||{},key=drStage(),S0=DRS[key],nom=[22,29.7
  const bitDetail=(b,base)=>{if(base){if(b.cH){rr2(-b.w*.62,-b.cH*.4,b.w*1.24,b.cH,b.cH*.45);ctx.fillStyle=C.collar;ctx.fill();}bitPath(b.w,b.l);ctx.fillStyle=C.steelShade;ctx.fill();ctx.save();bitPath(b.w,b.l);ctx.clip();ctx.fillStyle=C.steelLit;ctx.fillRect(-b.w/2-2,-b.l-4,b.w*.46+2,b.l+8);ctx.restore();}
   ctx.save();bitPath(b.w,b.l);ctx.clip();const slant=(b.w/2+2)*Math.tan(28*Math.PI/180),band=Math.max(lwO*.9,b.l*.075),ph=rev-Math.floor(rev);ctx.fillStyle=C.groove;for(let k=-1;k<=b.g;k++){const u=(k+ph)/b.g,y=-u*b.l*.9;ctx.beginPath();ctx.moveTo(-b.w/2-2,y+slant);ctx.lineTo(b.w/2+2,y-slant);ctx.lineTo(b.w/2+2,y-slant-band);ctx.lineTo(-b.w/2-2,y+slant-band);ctx.closePath();ctx.fill();}ctx.restore();
   if(b.cH){rr2(-b.w*.62,-b.cH*.4,b.w*1.24,b.cH,b.cH*.45);ctx.lineWidth=lw*.8;ctx.strokeStyle=C.outline;ctx.stroke();}bitPath(b.w,b.l);ctx.lineWidth=lw;ctx.strokeStyle=C.outline;ctx.stroke();
-  const tr=Math.max(1.6,b.w*.12),r=Math.max(1.2,b.w*.09);ctx.beginPath();ctx.arc(0,-b.l+r*1.1,tr,0,TAU);ctx.fillStyle=(w.lw>0&&b===main&&GL184(w)>.35)?'#FFF5E8':C.tip;ctx.fill();if(!base&&chA){ctx.fillStyle='rgba(255,53,59,'+chA.toFixed(3)+')';ctx.fill();}ctx.lineWidth=Math.max(1,lw*.6);ctx.stroke();ctx.beginPath();ctx.arc(-tr*.3,-b.l+r*1.1-tr*.3,tr*.4,0,TAU);ctx.fillStyle=C.tipHi;ctx.fill();};
+  const tr=Math.max(1.6,b.w*.12),r=Math.max(1.2,b.w*.09);ctx.beginPath();ctx.arc(0,-b.l+r*1.1,tr,0,TAU);ctx.fillStyle=(w.lw>0&&b===main&&GL184(w)>.8)?'#FFF5E8':C.tip;ctx.fill();if(!base&&chA){ctx.fillStyle='rgba(255,53,59,'+chA.toFixed(3)+')';ctx.fill();}ctx.lineWidth=Math.max(1,lw*.6);ctx.stroke();ctx.beginPath();ctx.arc(-tr*.3,-b.l+r*1.1-tr*.3,tr*.4,0,TAU);ctx.fillStyle=C.tipHi;ctx.fill();};
  ctx.lineJoin='round';let chA=0;
  if(full&&!dBk){ctx.save();ctx.strokeStyle='rgba(255,53,59,.15)';ctx.lineWidth=lwO*2+8;sil(()=>ctx.stroke());ctx.restore();}ctx.save();ctx.strokeStyle=C.outline;ctx.lineWidth=lwO*2;sil(()=>ctx.stroke());ctx.restore();
  const pass=(base)=>{for(const p of parts){if(p.kind==='plate'){if(base){p.path();ctx.fillStyle=C.plate;ctx.fill();rr2(-pW/2+lw,pY+lw*.7,pW-lw*2,Math.max(1.5,pD*.22),1.5);ctx.fillStyle=C.plateHi;ctx.fill();const n=s.rivets||0,rv=Math.max(1.3,.028*W),span=pW/2-cW/2;for(let i=0;i<n;i++){const sg=i%2?1:-1,k=n===2?.5:n===6?[.2,.2,.5,.5,.8,.8][i]:(i<2?.3:.74),x=sg*(cW/2+span*k);ctx.beginPath();ctx.arc(x,pY+pD*.58,rv,0,TAU);ctx.fillStyle=C.rivet;ctx.fill();ctx.lineWidth=1;ctx.strokeStyle=C.outline;ctx.stroke();}if(s.trim){rr2(-pW/2+lw*2,pY+pD*.74,pW-lw*4,Math.max(1.2,pD*.16),1);ctx.fillStyle='#B8501A';ctx.fill();}}p.path();ctx.lineWidth=lw;ctx.strokeStyle=C.outline;ctx.stroke();}
@@ -970,6 +970,7 @@ function drawDrill(Lr){const w=WP.ram||{},key=drStage(),S0=DRS[key],nom=[22,29.7
  pass(true);
  if(lc>0&&!dBk){const a=full?.66:.50+.16*(lc/10);/* v104: deeper red, exact 1/10 per block, steady (no pulse) */ctx.save();{const yb=full?pY+pD+1:cY+1,yt=main.y-main.l-2,yc=yb+(yt-yb)*Math.min(1,lc/10);/* v104: heat rises along the bit from its base (plate excluded until full) */ctx.beginPath();ctx.rect(-W,yc,W*2,yb-yc+2);ctx.clip();}chA=a;ctx.fillStyle='rgba(196,12,22,'+a.toFixed(3)+')';sil(()=>ctx.fill());ctx.restore();pass(false);}
  {const n=10,sw=(pW-lw*6)/n,ty=pY+pD*.3,th=Math.max(1.2,pD*.3);for(let i=0;i<n;i++){const x=-pW/2+lw*3+i*sw;ctx.fillStyle=i<lc&&!dBk?'#D0101C':'rgba(15,35,55,.45)';ctx.fillRect(x+sw*.14,ty,sw*.72,th);}}/* v104: no white blink before the laser; drill stays fully red-hot */
+ if(GL184(w)>.8){/* v186: whole drill blinks bright white 3x during the .7s pre-beam charge (drawn last, on top) */ctx.save();ctx.globalAlpha=.9;ctx.fillStyle='#FFFFFF';sil(()=>ctx.fill());ctx.globalAlpha=1;ctx.strokeStyle='#FFE9A0';ctx.lineWidth=lwO*1.4;sil(()=>ctx.stroke());ctx.restore();}
  ctx.restore();const tipD=-(main.y-main.l);w._tipD=tipD;return tipD;}
 function GL184(w){if(!(w&&w.lw>0))return 0;const u=Math.min(.999,Math.max(0,(.7-w.lw)/.7))*3,f=u%1;return Math.sin(f*Math.PI);}/* v184: 3 smooth glints over the .7s charge */
 function drillTip(){const a=ramAng(),w=WP.ram||{},d=w._tipD||P.r*1.4;return{x:P.x+Math.cos(a)*d,y:P.y+Math.sin(a)*d,a,d};}
@@ -1179,7 +1180,7 @@ function drawDrillFX(){const n=performance.now(),dt=_dsl?Math.min(.05,(n-_dsl)/1
  for(const p of DSP){p.t+=dt;p.x+=p.vx*dt/z;p.y+=p.vy*dt/z;cx.globalAlpha=Math.max(0,1-p.t/.15);cx.fillStyle=p.c;cx.fillRect(p.x-2/z,p.y-2/z,4/z,4/z);}cx.globalAlpha=1;for(let i=DSP.length-1;i>=0;i--)if(DSP[i].t>=.15)DSP.splice(i,1);
  const br=P.r*2.2+40;for(const d of DARC){d.t+=dt;cx.globalAlpha=Math.max(0,1-d.t/.12);cx.strokeStyle='#51E4E8';cx.lineWidth=4/z;const rd=Math.hypot(d.x-P.x,d.y-P.y);cx.beginPath();cx.arc(P.x,P.y,rd,d.a-.12,d.a+.12);cx.stroke();}cx.globalAlpha=1;for(let i=DARC.length-1;i>=0;i--)if(DARC[i].t>=.12)DARC.splice(i,1);
  /* v76b beam drawn under car (drawLzBeam) */
- {const w=WP.ram,g=GL184(w);if(g>0&&!G.tf){/* v185: 3 big glints on the drill tip only, drawn on top of the car (v184 glint was tiny and under the car) */const tp=drillTip(),R=40/z*g;cx.save();cx.translate(tp.x,tp.y);cx.rotate(tp.a+Math.PI/4*g);cx.globalAlpha=.55*g;cx.fillStyle='#FFFFFF';cx.beginPath();cx.arc(0,0,R*.42,0,TAU);cx.fill();cx.globalAlpha=Math.min(1,g*1.2);cx.fillStyle='#FFF8E0';cx.shadowColor='#FFE07A';cx.shadowBlur=12;cx.beginPath();for(let i=0;i<4;i++){const a=i*Math.PI/2;cx.lineTo(Math.cos(a)*R,Math.sin(a)*R);cx.lineTo(Math.cos(a+Math.PI/4)*R*.18,Math.sin(a+Math.PI/4)*R*.18);}cx.closePath();cx.fill();cx.restore();}}
+ /* v186: v185 tip star glint removed */
  cx.restore();}
 /* draw the evolved drill in vehicle-local coords (x = drive direction) */
 function drawDrill_v74(L){const w=WP.ram||{},lc=w.lc||0,z=1;w._dr=(w._dr||0)+((w.burst>0)?1200:900)*(1/60);const fr=Math.floor(G.t*20)%8,ph=(Math.floor(((w._dr||0)/45))%8)/8;
@@ -1200,8 +1201,8 @@ function drawDrill_v74(L){const w=WP.ram||{},lc=w.lc||0,z=1;w._dr=(w._dr||0)+((w
  for(let i=-2;i<8;i++){const gx=x0+(i+ph)*pitch;cx.beginPath();cx.moveTo(gx,-hw);cx.quadraticCurveTo(gx+pitch*.35,0,gx+pitch*.15,hw);cx.stroke();}
  cx.strokeStyle='rgba(232,238,242,.75)';cx.lineWidth=1.6;for(let i=-2;i<8;i++){const gx=x0+(i+ph)*pitch+pitch*.25;cx.beginPath();cx.moveTo(gx,-hw*.85);cx.quadraticCurveTo(gx+pitch*.3,-hw*.3,gx+pitch*.28,-hw*.05);cx.stroke();}cx.restore();
  cone();cx.strokeStyle='#132638';cx.lineWidth=4;cx.lineJoin='round';cx.stroke();
- cx.fillStyle=lw?'#FFF5E8':'#E8EEF2';cx.beginPath();cx.moveTo(x0+len*.86,-hw*.12);cx.lineTo(x0+len+2,0);cx.lineTo(x0+len*.86,hw*.12);cx.closePath();cx.fill();
- if(lw){/* v184: 3 glints on the drill only (was fast flicker) */const g=GL184(w);if(g>0){cx.globalAlpha=g;cx.fillStyle='#FFF5E8';cx.beginPath();cx.arc(x0+len,0,L*.28*(.6+.4*g),0,TAU);cx.fill();const r=L*.75*g;cx.beginPath();cx.moveTo(x0+len-r,0);cx.lineTo(x0+len,-r*.16);cx.lineTo(x0+len+r,0);cx.lineTo(x0+len,r*.16);cx.closePath();cx.moveTo(x0+len,-r);cx.lineTo(x0+len+r*.16,0);cx.lineTo(x0+len,r);cx.lineTo(x0+len-r*.16,0);cx.closePath();cx.fill();cx.globalAlpha=1;}}}
+ cx.fillStyle=lw&&GL184(w)>.8?'#FFF5E8':'#E8EEF2';cx.beginPath();cx.moveTo(x0+len*.86,-hw*.12);cx.lineTo(x0+len+2,0);cx.lineTo(x0+len*.86,hw*.12);cx.closePath();cx.fill();
+ if(lw&&GL184(w)>.8){/* v186: whole drill cone blinks bright white 3x during the .7s charge */cx.save();cone();cx.globalAlpha=.92;cx.fillStyle='#FFFFFF';cx.fill();cx.globalAlpha=1;cx.lineWidth=2.5;cx.strokeStyle='#FFF2B0';cx.stroke();cx.restore();}}
 /* --- flame awakening v74: 6s channel --- */
 /* v74 bullSkill replaced in v76 */
 function bullTick(i,vol){const w=WP.mg;const L=w?w.lv:1,E=w?w.evo:0,z=Math.max(.3,zoom()),R=(i>=12?255:240)/z,arc=50*Math.PI/180;
