@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v186';
+const BUILD='v187';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -279,7 +279,7 @@ function ctTick(dt){for(let i=CTS.length-1;i>=0;i--){CTS[i].t+=dt;if(CTS[i].t>=.
    continue;}}
  if(!p.tg||p.tg.dead){p.tg=ctNext(p.x,p.y,p.jr||220,p.hits);if(!p.tg){p.fd=0;continue;}p.hits.add(p.tg);}
  const g=p.tg,dx=g.x-p.x,dy=g.y-p.y,d=Math.hypot(dx,dy),st=1000*dt;p.a=Math.atan2(dy,dx);
- if(d<=st+(g.r||0)*.5){p.x=g.x;p.y=g.y;p.hits.add(g);if(ctOk(g)){rbHit(g,p.d*Math.pow(.95,p.n)*ctRe(p,g));p.n++;if(p.ev)CTS.push({x:g.x,y:g.y,a:p.a,t:0});}p.left--;p.tg=p.left>0?ctNext(p.x,p.y,p.jr||220,p.hits):null;if(p.tg)p.hits.add(p.tg);else if(p.left>0&&ctOk(g)){p.lp=g;p.lt=0;p.la=p.a+Math.PI;}else p.fd=0;}
+ if(d<=st+(g.r||0)*.5){p.x=g.x;p.y=g.y;p.hits.add(g);if(ctOk(g)){rbHit(g,p.d*Math.pow(.95,p.n)*ctRe(p,g));p.n++;if(p.ev)CTS.push({x:g.x,y:g.y,a:p.a,t:0});}p.left--;p.tg=p.left>0?ctNext(p.x,p.y,p.jr||220,p.hits):null;if(!p.tg&&p.left>0&&(g===G.boss||g.mb))p.tg=ctNext(p.x,p.y,600,p.hits);/* v187: no loop on boss/mid-boss - jump <=600 or vanish */if(p.tg)p.hits.add(p.tg);else if(p.left>0&&ctOk(g)&&!(g===G.boss||g.mb)){p.lp=g;p.lt=0;p.la=p.a+Math.PI;}else p.fd=0;}
  else{p.x+=dx/d*st;p.y+=dy/d*st;p.fl+=st;if(p.fl>4000)p.fd=0;}}}
 function ctDraw(){if(!CTP.length&&!CTS.length)return;const T=cx.getTransform(),sc=Math.max(.05,Math.hypot(T.a,T.b)/(window.DPR||1)),k=2.2*(innerWidth/1080)/sc/* v167: croc teeth x2.2 visual size */,Lh=18*k,Hh=9*k;
  for(const m of CTS){const al=1-m.t/.15;cx.save();cx.globalAlpha=Math.max(0,al);cx.translate(m.x,m.y-6*k);cx.rotate(m.a+.6);cx.strokeStyle='#2B2A2C';cx.lineWidth=Math.max(1/sc,2.2*k);cx.lineCap='round';for(const o of[-3.5,3.5]){cx.beginPath();cx.moveTo(-7*k,o*k);cx.lineTo(7*k,o*k);cx.stroke();}cx.restore();}
