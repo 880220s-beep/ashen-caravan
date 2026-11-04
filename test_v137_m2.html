@@ -2360,10 +2360,7 @@ function tkLion(w,aimL){const g=k=>w[k]??1,N=TK.N,N2=TK.N2,O=TK.O,G1='#FFC45C';c
   if(eS>0){cx.globalAlpha*=eS;cx.fillStyle=O;rr(-4,-4.5,8,9,3.5);cx.fill();tkO(0,1.6);cx.fillStyle=N;cx.beginPath();cx.arc(0,0,2,0,TAU);cx.fill();}cx.restore();}
  /* eye sockets grow under the gun roots */const so=g('sock');
  if(so>0)for(const s of[-1,1]){cx.fillStyle=N;cx.beginPath();cx.arc(10,s*12,6.5*so,0,TAU);cx.fill();cx.strokeStyle=N2;cx.lineWidth=1.4;cx.stroke();}
- /* guns <- Lv15 big-turret twin barrels: roots slide from the turret (4±5) to the sockets (10,±12) */const tS=g('tS'),rec=-(w.rec||0)*3;
- for(const s of[-1,1]){const rx=tkL(4,10,tS),ry=s*tkL(5,12,tS),len=tkL(18+11,20,tS),bw=tkL(4.5,5.6,tS);cx.save();cx.translate(rx,ry);cx.rotate(aimL);
-  cx.fillStyle=N;rr(rec+tkL(8,0,tS),-bw/2,len-tkL(8,0,tS),bw,bw/2);cx.fill();cx.strokeStyle=N2;cx.lineWidth=1.2;cx.stroke();cx.fillStyle=w.muz>0?G1:N2;rr(rec+len-3.5,-bw/2,3.5,bw,1.2);cx.fill();
-  if(w.flash>0){cx.fillStyle='rgba(255,226,140,'+w.flash+')';cx.beginPath();cx.arc(len+1,0,4.5*w.flash+1,0,TAU);cx.fill();}cx.restore();}
+ /* v199: 눈 총구(조준 따라 도는 포신·총구 불빛) 그림 제거 — 어지러움. 탄 발사 위치·피해·속도 그대로 */
  /* pupils (face) */const fa=g('face'),e=g('eye');if(fa>0)for(const s of[-1,1]){cx.save();cx.globalAlpha*=fa;cx.fillStyle=e>0?G1:'#5a6a7c';cx.globalAlpha*=.45+.55*e;cx.beginPath();cx.ellipse(8.6,s*11.2,2.8,4.4,0,0,TAU);cx.fill();cx.restore();
   if(e>0&&w.chg>0){cx.fillStyle='rgba(255,213,106,'+(.4*w.chg)+')';cx.beginPath();cx.arc(10,s*12,8,0,TAU);cx.fill();}}
  /* brows <- Lv15 front shield, split into two halves that slide back and tilt */const sb=g('shB'),sb2=g('shB2'),bc=g('brow');
