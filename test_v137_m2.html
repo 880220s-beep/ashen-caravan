@@ -1868,7 +1868,7 @@ function fBull(o,C){const g=k=>o[k]??1,I='#292D33',BR='#8E2C1F',M=fNozMounts(o);
  if(bx>0){const d=-3*g('brDrop');cx.save();cx.globalAlpha*=bx;cx.translate(d,0);cx.beginPath();cx.moveTo(27,-16);cx.lineTo(20.5,0);cx.lineTo(27,16);cx.lineTo(20,17);cx.lineTo(14,2.5);cx.lineTo(14,-2.5);cx.lineTo(20,-17);cx.closePath();
   cx.fillStyle=BR;cx.fill();fOl(1.8);cx.strokeStyle=fSh(BR,1.5);cx.lineWidth=1;cx.beginPath();cx.moveTo(25.5,-14);cx.lineTo(20,-1.5);cx.moveTo(25.5,14);cx.lineTo(20,1.5);cx.stroke();fBolt(19,-11,.8);fBolt(19,11,.8);cx.restore();}
  /* eyes: the twin nozzles slide into the exhaust ports; ports grow around them */
- fPt(o,'nozL',()=>fNoz(-1,o,...M[0]));fPt(o,'nozR',()=>fNoz(1,o,...M[1]));
+ /* v199: 황소 눈 노즐(조준 따라 도는 총구) 그림 제거 — 어지러움. 불길·피해 그대로 */
  const ey=g('eye'),eq=o.nzOut||0;if(eq>0)for(const s of[-1,1]){cx.save();cx.translate(9,s*12);cx.scale(eq,eq);cx.translate(-9,-s*12);cx.fillStyle=I;cx.beginPath();cx.moveTo(4.5,s*7);cx.lineTo(10,s*7);cx.lineTo(13.5,s*17);cx.lineTo(4.5,s*17);cx.closePath();cx.fill();fOl(1.2);
   cx.fillStyle='rgba(255,152,45,'+(.35+.65*ey)+')';cx.beginPath();cx.moveTo(6,s*8.8);cx.lineTo(9.4,s*8.8);cx.lineTo(11.6,s*15.3);cx.lineTo(6,s*15.3);cx.closePath();cx.fill();
   if(ey>0){cx.fillStyle='rgba(255,220,140,'+(.8*ey)+')';rr(7,s*12-1.2,3,2.4,1);cx.fill();}cx.restore();}
