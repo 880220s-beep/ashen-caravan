@@ -456,7 +456,7 @@ function rbBumper(){if(!WP.ram||HIDEB()||G.tf)return rbMolo();const L=P.r;cx.sav
  else{cx.fillStyle='#8a6a3a';rr(L*.85,-L*.45,L*.25,L*.9,4);cx.fill();cx.strokeStyle='#2a2018';cx.lineWidth=2;cx.stroke();cx.fillStyle='#c0c6cf';for(const y of[-.3,0,.3]){cx.beginPath();cx.moveTo(L*1.1,y*L-5);cx.lineTo(L*1.35,y*L);cx.lineTo(L*1.1,y*L+5);cx.fill();}}
  cx.restore();cx.restore();rbMolo();}
 /* v103: molotov side canisters (tank/flame show them on the rear) also on robots */
-function rbMolo(){if(!WP.molo||HIDEB()||G.tf)return;const L=P.r,E=WP.molo.evo;cx.save();cx.translate(P.x,P.y);cx.rotate(UP20()&&WP.mg&&WP.mg.aim!=null?WP.mg.aim:P.ang);cx.translate(-L*(RBBF[CAR]||0)*.6,0);
+function rbMolo(){/* v189: 로봇 차 몸체의 화염병 통(녹색 끝) 그림 제거 - 조준 따라 돌아서 어지러움. 화염병 공격은 그대로 */return;if(!WP.molo||HIDEB()||G.tf)return;const L=P.r,E=WP.molo.evo;cx.save();cx.translate(P.x,P.y);cx.rotate(UP20()&&WP.mg&&WP.mg.aim!=null?WP.mg.aim:P.ang);cx.translate(-L*(RBBF[CAR]||0)*.6,0);
  for(const y of[-.45,.45]){cx.fillStyle='#555';cx.strokeStyle='#222';cx.lineWidth=1.5;rr(-L*1.1,y*L-4,L*.35,8,3);cx.fill();cx.stroke();if(!E){cx.fillStyle='#7ad06a';cx.fillRect(-L*.8,y*L-3,6,6);}}cx.restore();}
 {const _rv=rbVeh;rbVeh=function(fl){const r=_rv(fl);if(!fl){try{rbBumper();}catch(e){}}return r;};}
 
@@ -1727,7 +1727,7 @@ function tankDraw(o,blink,aimL){const op=o.open||0;
  if(o.off.twin){cx.save();const q=o.off.twin;cx.translate(q.x,q.y);cx.rotate(q.r||0);cx.fillStyle=TK.N;for(const s of[-3.5,3.5]){rr(8,s-1.8,15,3.6,1.8);cx.fill();cx.strokeStyle=TK.N2;cx.lineWidth=1.2;cx.stroke();}cx.restore();}
  if(o.off.bigT){cx.save();const q=o.off.bigT;cx.translate(4+q.x,q.y);cx.rotate(q.r||0);cx.fillStyle=TK.O;cx.beginPath();cx.arc(0,0,11,0,TAU);cx.fill();tkO(0,1.8);cx.fillStyle=TK.N;cx.beginPath();cx.arc(0,0,6,0,TAU);cx.fill();cx.restore();}}
 function tkAimL(){const A=vAng(),a=WP.mg&&WP.mg.aim!=null?WP.mg.aim:A;return a-A;}
-function tkTip(i){if(G.l20&&CAR!=='flame'){const a=WP.mg&&WP.mg.aim!=null?WP.mg.aim:vAng(),S=TKS[3],sp=(i%2?6.5:-6.5)*S,ca=Math.cos(vAng()),sa=Math.sin(vAng()),hd=vAng()+hdA(a-vAng()),sp2=(i%2?12:-12);const sx=P.x+(Math.cos(hd)*10-Math.sin(hd)*sp2)*S,sy=P.y+(Math.sin(hd)*10+Math.cos(hd)*sp2)*S;return{x:sx+Math.cos(a)*21*S,y:sy+Math.sin(a)*21*S};}const Q=tkTip0(i),S=TKS[G.veh];return{x:P.x+(Q.x-P.x)*S,y:P.y+(Q.y-P.y)*S};}
+function tkTip(i){if(G.l20&&CAR!=='flame'){const a=WP.mg&&WP.mg.aim!=null?WP.mg.aim:vAng(),S=TKS[3]*TK20,sp=(i%2?6.5:-6.5)*S,ca=Math.cos(vAng()),sa=Math.sin(vAng()),hd=vAng()+hdA(a-vAng()),sp2=(i%2?12:-12);const sx=P.x+(Math.cos(hd)*10-Math.sin(hd)*sp2)*S,sy=P.y+(Math.sin(hd)*10+Math.cos(hd)*sp2)*S;return{x:sx+Math.cos(a)*21*S,y:sy+Math.sin(a)*21*S};}const Q=tkTip0(i),S=TKS[G.veh];return{x:P.x+(Q.x-P.x)*S,y:P.y+(Q.y-P.y)*S};}
 function tkTip0(i){const v=G.veh,r=TK.TR[v],tw=v>=1,big=v>=3,bl=big?18:tw?15:12,sp=big?5:3.5,a=WP.mg&&WP.mg.aim!=null?WP.mg.aim:P.ang;
  let lx,ly;const nb=tw?2:1;const k=i%(big?4:nb);
  if(big&&k>=2){const s=k===2?-1:1;const bx=2,by=30*s,ca=Math.cos(P.ang),sa=Math.sin(P.ang);const wx=P.x+bx*ca-by*sa,wy=P.y+bx*sa+by*ca;return{x:wx+Math.cos(a)*10,y:wy+Math.sin(a)*10};}
@@ -2294,7 +2294,7 @@ function crocNew(st,tt){NOL='#142016';const C0='#3F5E34',CD='#2A4024',CL='#57773
  cx.restore();}
 
 /* 단계별 크기: 성전차 외곽(그림자 제외)에 맞춘 배율 (시안에서 잰 값, Lv20은 채워진 면적 기준) */
-const NK={"flame": [0.94667, 0.80519, 0.98701, 1.2, 1.26468], "raven": [0.85514, 0.7678, 0.75743, 0.73624, 0.88249], "mammoth": [0.93846, 1.14815, 0.92121, 0.73418, 0.9], "croc": [0.80617, 1.26531, 1.09286, 0.9497, 0.98396]},L20Y={mammoth:[1,1.19]},cl=x=>Math.max(0,Math.min(1,x));
+const NK={"flame": [0.94667, 0.80519, 0.98701, 1.2, 1.16297], "raven": [0.85514, 0.7678, 0.75743, 0.73624, 0.79856], "mammoth": [0.93846, 1.14815, 0.92121, 0.73418, 0.9], "croc": [0.80617, 1.26531, 1.09286, 0.9497, 0.8928]},L20Y={mammoth:[1,1.08]},cl=x=>Math.max(0,Math.min(1,x));
 function kAt(car,st,tt){const K=NK[car];let k=K[st];if(tt!=null&&st<4)k=k+(K[st+1]-k)*SS(cl((tt-.3)/2.3));return k;}
 function yAt(car,st,tt){const S=L20Y[car];if(!S)return null;let u=st===4?1:0;if(tt!=null&&st===3)u=SS(cl((tt-.3)/2.3));return u>0?[1+(S[0]-1)*u,1+(S[1]-1)*u]:null;}
 /* 로봇 차: 월드 좌표 P에서 진행 방향 P.ang. fix=4 이면 Lv20 크기 고정(각성 연출용, 기존 로봇 그림) */
@@ -2413,7 +2413,7 @@ function drawTF20(f){const u=f.t,cl=(a,b)=>Math.max(0,Math.min(1,(u-a)/(b-a))),o
   fr:0,pod:1,tri:1,trS:0,lock:1,chg:u<2.55?0:u<2.85?cl(2.55,2.85):0,muz:u<2.55?0:cl(2.55,2.7),aim:0,
   rec:u>=2.85?1-cl(2.85,3):0,podRec:u>=2.85?1-cl(2.85,3):0,flash:u>=2.85&&u<2.97?1-cl(2.85,2.97):0,mn:SS(cl(2.4,2.55)),eye:SS(cl(2.55,2.7)),brow:SS(cl(2.55,2.7)),nose:SS(cl(2.7,2.85)),slot:SS(cl(2.7,2.85))};
  w.ov=0;
- const W=(lx,ly)=>{const c=Math.cos(P.ang),s=Math.sin(P.ang),S=TKS[3];return{x:P.x+(lx*c-ly*s)*S,y:P.y+(lx*s+ly*c)*S};};
+ const W=(lx,ly)=>{const c=Math.cos(P.ang),s=Math.sin(P.ang),S=TKS[3]*(1+(TK20-1)*SS(cl(.3,2.6)));return{x:P.x+(lx*c-ly*s)*S,y:P.y+(lx*s+ly*c)*S};};
  f.ev5=f.ev5||{};const go=(n,t,fn)=>{if(u>=t&&!f.ev5[n]){f.ev5[n]=1;fn();}};const spk=(x,y,n,c)=>{for(let i=0;i<n&&(f.np||0)<12;i++){f.np=(f.np||0)+1;const a=rnd(0,TAU),vv=rnd(60,120);RFX.push({k:'sp',x,y,vx:Math.cos(a)*vv,vy:Math.sin(a)*vv,life:.22,max:.22,s:rnd(1.4,2.2),c});}};
  const lockFx=(n,lx,ly,hs)=>{beep(700+n*90,.05,'square',.08,450);G.shake=Math.max(G.shake,1.5);if(hs){G.stop=.04;f.t+=.04;}const p=W(lx,ly);spk(p.x,p.y,2,'#FF982D');LFL(p.x,p.y);};
  go('a',.1,()=>beep(320,.25,'sawtooth',.06,90));go('c',.2,()=>beep(500,.12,'sine',.05,900));
@@ -2423,11 +2423,11 @@ function drawTF20(f){const u=f.t,cl=(a,b)=>Math.max(0,Math.min(1,(u-a)/(b-a))),o
  o.open=u<.3?0:u<.4?.9*SS(cl(.3,.4)):u<2.8?.9:.9*(1-SS(cl(2.8,2.9)));o.seam=TK.O2;
  const shk=u<.3&&u>.1?Math.sin(u*90)*1.2:0,lift=u<.4?3*SS(cl(.3,.4)):u<2.85?3:3*(1-SS(cl(2.85,3))),aimL=tkAimL();
  cx.save();cx.translate(P.x,P.y);{const rr0=P.r*1.2,g=cx.createRadialGradient(0,2,rr0*.2,0,2,rr0*.85);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.beginPath();cx.ellipse(0,2,rr0*.85,rr0*.7,0,0,TAU);cx.fill();}
- cx.translate(shk,-lift);cx.rotate(P.ang);cx.scale(TKS[3],TKS[3]);tankDraw(o,false,aimL);cx.restore();}
+ cx.translate(shk,-lift);cx.rotate(P.ang);{const z=TKS[3]*(1+(TK20-1)*SS(cl(.3,2.6)));cx.scale(z,z);}tankDraw(o,false,aimL);cx.restore();}
 // ===== v42 round chibi 성전차 (upright 3/4 sprites, part-based transforms) =====
 const T42={"st": [[233, 278, 116.0, 264], [243, 278, 121.0, 264], [240, 278, 119.5, 266], [261, 278, 130.0, 273], [271, 278, 135.0, 264]], "tr": [{"rest": [-117, -176, 235, 177], "parts": [[-84, -201, 165, 93], [65, -152, 45, 40], [24, -59, 40, 60], [63, -115, 47, 48]], "core": [4.8, -178.4]}, {"rest": [-116, -202, 232, 203], "parts": [[-76, -218, 120, 111], [30, -212, 82, 78], [-69, -105, 50, 77], [34, -59, 60, 59]], "core": [98.6, -147.2]}, {"rest": [-112, -213, 234, 214], "parts": [[-126, -260, 215, 240], [31, -209, 96, 140], [-75, -166, 109, 80], [-86, -97, 71, 58]], "core": [-4.5, -197.7]}], "awk": {"r": {"head": [-67.0, -260, 100, 88], "footL": [-115.0, -92, 85, 81], "footR": [-10.0, -86, 75, 87], "armL": [-131.0, -228, 58, 154], "armR": [50.0, -236, 82, 189], "torso": [-73.0, -229, 123, 157]}, "c": {"head": [-55.0, -260, 97, 79], "footL": [-126.0, -98, 121, 85], "footR": [-5.0, -88, 127, 89], "armL": [-126.0, -178, 58, 80], "armR": [55.0, -239, 72, 151], "torso": [-99.0, -237, 154, 149]}}, "mz": [131.0, -79], "ab": [[268, 261, 134.0, 260], [250, 261, 125.0, 260]]};T42.I={};T42.n=0;
 ["s0", "s1", "s2", "s3", "s4", "t0r", "t1r", "t2r", "t0p0", "t0p1", "t0p2", "t0p3", "t1p0", "t1p1", "t1p2", "t1p3", "t2p0", "t2p1", "t2p2", "t2p3", "r_head", "r_footL", "r_footR", "r_armL", "r_armR", "r_torso", "c_head", "c_footL", "c_footR", "c_armL", "c_armR", "c_torso","a","b"].forEach(n=>{const im=new Image();im.onload=()=>{T42.n++;};/* v48: AI art removed */T42.I[n]=im;});
-const T42N=34;function T42ok(){return CAR!=='flame'&&T42.n>=T42N;}
+const TK20=0.90489;/* v189: Lv20 성전차 크기 (줄인 매머드 Lv20 기준) */const T42N=34;function T42ok(){return CAR!=='flame'&&T42.n>=T42N;}
 const T42F=[-1,-1,-1,-1,-1];/* v44: all 5 stage arts face LEFT (3/4 front-left); mirror when moving right */
 const T42TIP=[[-74,-136],[-76,-134],[-80,-96],[-120,-110]];/* cannon tip px rel. anchor (art facing left) */
 function t42Tip(){const v=G.veh,k=t42K(P.r),q=T42TIP[v],sx=t42Dir(v);return{x:P.x+q[0]*k*sx,y:P.y+P.r*FE+q[1]*k};}
@@ -2653,7 +2653,7 @@ function vehicleCar(){const _pa=P.ang;G._hdg=_pa;G._drw=1;if(UP20())P.ang=-Math.
 function vehicleCar0(){const s=P.r/22;cx.save();cx.translate(P.x,P.y);if(G.spike>0){const k=Math.min(1,G.spike/.5);const gr=cx.createRadialGradient(0,0,P.r*.6,0,0,P.r*2.1);gr.addColorStop(0,'rgba(255,214,90,0)');gr.addColorStop(.6,'rgba(255,200,70,'+(.35*k)+')');gr.addColorStop(1,'rgba(255,170,40,0)');cx.fillStyle=gr;cx.beginPath();cx.arc(0,0,P.r*2.1,0,TAU);cx.fill();cx.strokeStyle='rgba(255,226,122,'+(.7*k)+')';cx.lineWidth=3;cx.beginPath();cx.arc(0,0,P.r*1.6+Math.sin(G.t*14)*4,0,TAU);cx.stroke();}{/* v47: tight soft contact shadow directly under the code-drawn car (grounded, no offset) */const sh=G.veh>=2?1.25:1.1,rr0=P.r*sh,g=cx.createRadialGradient(0,2,rr0*.2,0,2,rr0*.85);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.beginPath();cx.ellipse(0,2,rr0*.85,rr0*.7,0,0,TAU);cx.fill();}cx.rotate(P.ang);cx.globalAlpha*=PBA();cx.filter=PBF();
  const _cs=CSPR();if(_cs){if(false){cx.rotate(-P.ang);t42Car(P.inv>0&&!(G.t<(G.noFl||0))&&!G.robo&&false/*v91 no blink*/);}else carSpr(_cs,P.r,G.veh,P.inv>0&&!(G.t<(G.noFl||0))&&!G.robo&&false/*v91 no blink*/);}else{
  const fl=P.inv>0&&!(G.t<(G.noFl||0))&&!G.robo&&false/*v91 no blink*/;const gold=fl?'#fff':CAR==='flame'?'#ff8a3a':'#F58032',gold2=CAR==='flame'?'#b8401a':'#a84e14',blue=CAR==='flame'?'#8a2a14':'#4fc3ff',blue2=CAR==='flame'?'#5a160a':'#30465C';
- if(RBCAR){cx.rotate(-P.ang);cx.translate(-P.x,-P.y);rbVeh(fl);}else if(CAR==='flame'){fCar(fl);}else if(CAR!=='flame'){cx.scale(TKS[G.veh],TKS[G.veh]);tankDraw(tkSt(G.veh),fl,tkAimL());}else if(G.veh<2){const L=G.veh?40:28,Wd=G.veh?26:18,wn=G.veh?3:2;cx.fillStyle='#333';for(let i=0;i<wn;i++){const x=-L*.6+i*(L*1.2/(wn-1));for(const y of[-Wd*.9,Wd*.9]){rr(x-6,y-4,12,8,3);cx.fill();}}
+ if(RBCAR){cx.rotate(-P.ang);cx.translate(-P.x,-P.y);rbVeh(fl);}else if(CAR==='flame'){fCar(fl);}else if(CAR!=='flame'){const z=TKS[G.veh]*(G.l20?TK20:1);cx.scale(z,z);tankDraw(tkSt(G.veh),fl,tkAimL());}else if(G.veh<2){const L=G.veh?40:28,Wd=G.veh?26:18,wn=G.veh?3:2;cx.fillStyle='#333';for(let i=0;i<wn;i++){const x=-L*.6+i*(L*1.2/(wn-1));for(const y of[-Wd*.9,Wd*.9]){rr(x-6,y-4,12,8,3);cx.fill();}}
   cx.fillStyle=gold2;rr(-L*.75,-Wd*.85,L*1.5,Wd*1.7,10);cx.fill();cx.fillStyle=gold;rr(-L*.7,-Wd*.75,L*1.4,Wd*1.5,9);cx.fill();
   cx.fillStyle=blue;rr(-L*.25,-Wd*.5,L*.6,Wd,7);cx.fill();cx.fillStyle='rgba(255,255,255,.4)';rr(-L*.2,-Wd*.45,L*.25,Wd*.35,4);cx.fill();
   if(G.veh===1){cx.fillStyle=blue2;for(const y of[-1,1]){rr(-L*.6,y*Wd*.62-3,L*1.1,6,3);cx.fill();}cx.fillStyle=gold2;for(let i=0;i<4;i++){cx.beginPath();cx.arc(-L*.5+i*L*.33,-Wd*.78,3,0,TAU);cx.arc(-L*.5+i*L*.33,Wd*.78,3,0,TAU);cx.fill();}}}
