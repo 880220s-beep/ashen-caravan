@@ -508,13 +508,13 @@ const ET={
  shaman:{hp:40,def:2,spd:55,r:15,xp:3,dmg:8,col:'#9b6bd6',kb:.8,ranged:1},
  brute:{hp:260,def:10,spd:44,r:28,xp:10,dmg:20,col:'#d9603b',kb:.2},
  swarm:{hp:6,def:0,spd:85,r:9,xp:.5,dmg:3,col:'#e8794a',kb:1.6}};
-function scale(){const m=G.t/60;return{hp:1+(STAGE-1)*.6/* v177: no per-minute HP (was +m*.28) */,def:Math.floor(m*.9)+(STAGE-1)*3};}
+function scale(){const m=G.t/60;return{hp:1+(STAGE-1)*.6/* v177: no per-minute HP (was +m*.28) */,def:(STAGE-1)*3/* v198: 시간에 따른 방어력 증가 제거 (was +floor(분*0.9)) */};}
 const ESPD=+(Q.get('espd')||1),ECN=+(Q.get('ecn')||70),ECH=+(Q.get('ech')||80);function HORDE(){return G.swarmLeft>0||(G.swQ&&G.swQ.length>0)||(G.mQ&&G.mQ.length>0);}/* v70 late-game tuning (index 0/1/2 = from 3:00/4:00/5:00) */const LATE={nc:[90,110,125],hc:[95,110,120],nh:[1.10,1.20,1.30],hh:[1.10,1.20,1.30],/* v173: late regular HP ramp reduced (was 1.15/1.30/1.45, hard/hell 1.18/1.33/1.48) *//* v70 iter2 */na:[.04,.07,.10],ha:[.04,.06,.08],ne:[1,2,3],he:[2,3,4]};
 function LT(a){return G.t<180?0:a[G.t<240?0:G.t<300?1:2];}
 function M1E149(){return MAP===1&&DIFF===0&&G.t>=120;}/* v149: map 1 쉬움 from 2:00 - spawn rate x0.7, alive cap 75 */function E151(){return DIFF===0&&MAP>=3&&G.t>=120?[0,0,0,[.85,100],[.88,105],[.91,110],[.94,115],[.97,120],[1,125]][MAP]:null;}/* v151: maps 3-8 쉬움 from 2:00 - spawn x / alive cap (swarm cap same) */function C153(){return DIFF&&G.t>=120?Math.round((DIFF===1?81:87)+((DIFF===1?135:145)-(DIFF===1?81:87))*(MAP-1)/7):0;}/* v153: 어려움/지옥 from 2:00 alive cap map1 81/87 -> map8 135/145 linear, swarm cap same */function SPI153(){return .25/T15T.S[T15M][0]/(G.t>=120?[1,.7,.8,.85,.88,.91,.94,.97,1][MAP]:1)/[1,1.1,1.2][DIFF];}/* v153: 어려움/지옥 spawn interval = 쉬움 / 1.1 / 1.2 */function M2E150(){return MAP===2&&DIFF===0&&G.t>=120;}/* v150: map 2 쉬움 from 2:00 - spawn rate x0.8, alive cap 90 (swarm cap 90) */
 function ECAP(sw){return Math.min(M1E149()?75:M2E150()?90:E151()?E151()[1]:C153()?C153():160,(sw||HORDE())?(DIFF?160:145):(G.t<180?(DIFF?ECH:ECN):LT(DIFF?LATE.hc:LATE.nc))/* v70 late cap */);}
 function spawnE(type,x,y){if(BC.on)return null;/*v79c: no spawns during bull*/let chg=0;if(type==='charger'){type='runner';chg=MAP===4?0:1;/* v139: map 4 spawns the normal 활주기 */if(G.t<135)return null;}if(!DPSM&&EN.length>=Math.min(175,type==='swarm'?ECAP(1):ECAP()))return null;const b=ET[type],s=scale();const e={type,x,y,vx:0,vy:0,hp:b.hp/* v181: fixed HP (was 25 before 1:30) */*(type==='swarm'?1/* v177: was 1+G.t/400 */:s.hp)*(STAGE===1?.85:.7),def:type==='swarm'?0:b.def+s.def*(type==='shield'||type==='brute'?1.6:.5),
- spd:b.spd*ESPD*(1+Math.min(.35,G.t/1500)),r:b.r,xp:b.xp,dmg:b.dmg*(1+G.t/600),col:b.col,kbm:b.kb,flash:0,hitcd:{},sc:0,ph:Math.random()*TAU};
+ spd:b.spd*ESPD*(1+Math.min(.35,G.t/1500)),r:b.r,xp:b.xp,dmg:b.dmg/* v198: 시간에 따른 공격력 증가 제거 (was ×(1+t/600)) */,col:b.col,kbm:b.kb,flash:0,hitcd:{},sc:0,ph:Math.random()*TAU};
  if(G.t>90&&!G.boss){if(type==='shield'&&Math.random()<.15&&EN.filter(x=>x.v==='big').length<2){e.v='big';e.hp*=1.5;e.r*=1.2;e.spd*=.85;e.col='#2f5fb0';e.xp=6;}
 }
  if(chg){e.v='chg';e.hp*=1.3;e.col='#ff9a2a';e.dcd=2;e.xp=3;e.kbm=.2;}
@@ -1937,7 +1937,7 @@ function nRaven(A,layer,un){NOL='#06070A';const K='#16171D',B='#2A2F3E',H='#5660
   /* Lv10 뒷날개: 몸 밑에서 레일로 늘어나며 옆뒤로 펴짐 */
   if(a2.sl>0)both(()=>{at(wingAt(),()=>{cx.scale(wLen()/16,1);
     nP([0,-5.5,12,-4.6,16,-1.5,15,4,0,6],'#3B4560',1.8);for(let i=0;i<3;i++)nP([3+i*4,4.4,7+i*4,4.2,6+i*4,8],i%2?F1:F2,1.1);line(2,-1,13,-1,H,1);nB(3,0,1);
-    if(a3.sl>0){cx.save();cx.globalAlpha*=a3.lk;nR(12,-3,6,6,2.5,B,1.2);cx.restore();}nLamp(9,-.5,a2.on,'#FFD25A');});});
+    if(a3.sl>0){cx.save();cx.globalAlpha*=a3.lk;nR(12,-3,6,6,2.5,B,1.2);cx.restore();}/* v198: 까마귀 날개 옆 노란 점 제거 (Lv20 전 얼굴 금지) */});});
   /* Lv5 깃 4개: 가운데(몸 밑)에서 돌아 나와 십자/별 모양 */
   if(a1.sl>0)both(()=>{const fr=pose(a1,[5,8,PI],[5,11+o1,2.45],[5,11+o1,1.15],[5,11.5,1.15]);
     let rr=pose(a1,[-8,8,PI],[-8,11+o1,2.45],[-8,11+o1,2.0],[-8,11.5,2.0]);
@@ -1950,7 +1950,7 @@ function nRaven(A,layer,un){NOL='#06070A';const K='#16171D',B='#2A2F3E',H='#5660
   /* Lv10 부리: 앞쪽 밑에서 미끄러져 나옴 / Lv15 위·아래 부리판이 갈고리로 맞물림 */
   if(a2.sl>0){const x=LL(2,17,a2.sl)+1.5*a2.lk;nJ(x,0,0,()=>{const hk=a3.sl;nP([0,-6.5,12+5*hk,-3.5,19+7*hk,0,12+5*hk,3.5,0,6.5],BK,1.6);line(2,0,16+6*hk,0,'#76768A',1.1);
     if(hk>0)both(()=>{nJ(0,6.5,-.5*(1-a3.hg),()=>{nP([0,0,13*hk,-1.5,(17+6)*hk,-3,(15)*hk,1.4,0,2],K,1.2);});});
-    nLamp(4,-3,a2.on,E);nLamp(4,3,a2.on,E);});}
+    /* v198: 부리 뿌리 두 점 제거 (눈처럼 보임) */});}
  } else {
   /* Lv15 등판 맞물림(위 레이어): 날개 뿌리를 잇는 갈매기형 판 */
   if(a3.sl>0){cx.save();const k=a3.sl;cx.translate(LL(-16,-6,k)+1.5*a3.lk,0);nP([-6,-12*k,4,-5*k,6,0,4,5*k,-6,12*k,-2,0],B,1.6);line(-4,-8*k,2,0,E,.9);line(2,0,-4,8*k,E,.9);nLamp(1,0,a3.on,E);cx.restore();}
@@ -2650,7 +2650,7 @@ function PBW(fn){const f=(typeof PBF==='function')?PBF():'none';if(f==='none')re
    if(k==='drone'){add(px,py,40*VIS('drone'));}
    else{const E=WP.saw.evo,TS0=TUNE.saw,S0=E?TS0.evo:TS0.basic,r=S0.px/2/TS0.zRef*GS('saw')*WSZ()*SZA()*VSC('saw'),pad=r*1.3+4;const R0=Math.hypot(px-P.x,py-P.y),a=Math.atan2(py-P.y,px-P.x),span=((S0.trailN||0)*(S0.trailDeg||0)+4+(S0.trailDeg||0)+6)*Math.PI/180;add(px,py,pad);for(let q=0;q<=24;q++){const aa=a-span*q/24;add(P.x+Math.cos(aa)*R0,P.y+Math.sin(aa)*R0,pad);}}}}
  nx();if(!RS.length)return;/* v120: one box spanning the orbiters is drawn once, but only the 64px tiles that touch an orbiter (or its trail) are filtered and pasted - each pixel filtered once, the empty ring middle is skipped */let X0=1e9,Y0=1e9,X1=-1e9,Y1=-1e9;for(const r of RS){X0=Math.min(X0,r[0]);Y0=Math.min(Y0,r[1]);X1=Math.max(X1,r[2]);Y1=Math.max(Y1,r[3]);}const Sw=X1-X0,Sh=Y1-Y0,TL=[],G6=64;for(let ty=Y0;ty<Y1;ty+=G6)for(let tx=X0;tx<X1;tx+=G6){const tw=Math.min(G6,X1-tx),th=Math.min(G6,Y1-ty);if(RS.some(r=>r[0]<tx+tw&&tx<r[2]&&r[1]<ty+th&&ty<r[3]))TL.push([tx,ty,tw,th]);}PBX(OB.fn,f,TO,X0+Sw/2,Y0+Sh/2,Sw,Sh,OB.al,TL);}
-function vehicleCar(){const _pa=P.ang;G._hdg=_pa;G._drw=1;if(UP20())P.ang=-Math.PI/2;try{PBW(vehicleCar0);}finally{P.ang=_pa;G._drw=0;}}
+function vehicleCar(){const _pa=P.ang;G._hdg=_pa;G._drw=1;if(UP20())P.ang=-Math.PI/2;const _fs=CAR==='flame'?((G.lv||1)>=20?1.027:[1.039,1.096,1.04,.971][Math.min(3,G.veh||0)]):1;/* v198: 화염차 몸체를 같은 레벨 다른 차 크기에 맞춤 (그림만, 판정 P.r 그대로) */if(_fs!==1){cx.save();cx.translate(P.x,P.y);cx.scale(_fs,_fs);cx.translate(-P.x,-P.y);}try{PBW(vehicleCar0);}finally{if(_fs!==1)cx.restore();P.ang=_pa;G._drw=0;}}
 function vehicleCar0(){const s=P.r/22;cx.save();cx.translate(P.x,P.y);if(G.spike>0){const k=Math.min(1,G.spike/.5);const gr=cx.createRadialGradient(0,0,P.r*.6,0,0,P.r*2.1);gr.addColorStop(0,'rgba(255,214,90,0)');gr.addColorStop(.6,'rgba(255,200,70,'+(.35*k)+')');gr.addColorStop(1,'rgba(255,170,40,0)');cx.fillStyle=gr;cx.beginPath();cx.arc(0,0,P.r*2.1,0,TAU);cx.fill();cx.strokeStyle='rgba(255,226,122,'+(.7*k)+')';cx.lineWidth=3;cx.beginPath();cx.arc(0,0,P.r*1.6+Math.sin(G.t*14)*4,0,TAU);cx.stroke();}{/* v47: tight soft contact shadow directly under the code-drawn car (grounded, no offset) */const sh=G.veh>=2?1.25:1.1,rr0=P.r*sh,g=cx.createRadialGradient(0,2,rr0*.2,0,2,rr0*.85);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.beginPath();cx.ellipse(0,2,rr0*.85,rr0*.7,0,0,TAU);cx.fill();}cx.rotate(P.ang);cx.globalAlpha*=PBA();cx.filter=PBF();
  const _cs=CSPR();if(_cs){if(false){cx.rotate(-P.ang);t42Car(P.inv>0&&!(G.t<(G.noFl||0))&&!G.robo&&false/*v91 no blink*/);}else carSpr(_cs,P.r,G.veh,P.inv>0&&!(G.t<(G.noFl||0))&&!G.robo&&false/*v91 no blink*/);}else{
  const fl=P.inv>0&&!(G.t<(G.noFl||0))&&!G.robo&&false/*v91 no blink*/;const gold=fl?'#fff':CAR==='flame'?'#ff8a3a':'#F58032',gold2=CAR==='flame'?'#b8401a':'#a84e14',blue=CAR==='flame'?'#8a2a14':'#4fc3ff',blue2=CAR==='flame'?'#5a160a':'#30465C';
@@ -5856,7 +5856,7 @@ window.GJAW=function(gap,af,vh){const z=zoom(),iz=1/z,Wp=vh.w*2*z,N=20,tw=(Wp+20
  for(const sd of[-1,1]){const gy=sd*(Math.max(0,gap)+14)*z,edge=sd*ext;/* gum line = original tooth base */
   cx.fillStyle=C.jade;cx.fillRect(-10,Math.min(gy,edge),Wp+20,Math.abs(edge-gy));
   cx.fillStyle=sd<0?C.jadeL:C.jadeD;cx.fillRect(-10,sd<0?gy-9:gy,Wp+20,9);cx.fillStyle=sd<0?C.jadeD:C.jadeL;cx.fillRect(-10,sd<0?gy-26:gy+20,Wp+20,4);
-  cx.fillStyle='rgba(40,83,72,.45)';for(let r=0;r<6;r++)for(let x=(r%2?-30:10);x<Wp+40;x+=80){const y=gy+sd*(46+r*44);cx.beginPath();cx.ellipse(x,y,30,13,0,0,TAU);cx.fill();}
+  /* v198: 턱판 동그란 비늘 무늬 제거 (매끈한 옥색 판) */
   cx.beginPath();cx.moveTo(-10,gy);cx.lineTo(Wp+10,gy);cx.strokeStyle=C.ol;cx.lineWidth=3;cx.stroke();
   for(let i=0;i<N;i++){const x=-10+tw*(i+.5)+(sd>0?tw/2:0);const wx=P.x-vh.w+x*iz;let L=th;if(G.boss&&!G.boss.dead&&Math.abs(wx-G.boss.x)<G.boss.r&&af>=0)L=th*20/33.6;/* teeth over the boss stay short after the bite (as before) */
    cx.save();cx.translate(x,gy);if(sd>0)cx.scale(1,-1);cx.drawImage(T,-T.width/2/D,-2/D,T.width/D,T.height/D*(L/th));cx.restore();}}
