@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
 const BUILD='v187';
@@ -896,7 +896,7 @@ function wUpd(dt){const cd=P.cdMul;if(BC.on&&TUNE.bull.stopWeapons)return;if(RBC
 const FTURN=+(Q.get('fturn')||4.7),FSL=+(Q.get('fsl')||.88),FLK=+(Q.get('flk')||1.15),FKB=+(Q.get('fkb')||1);
 /* v69 flame balance */const FUNEV=[[1,.35],[5,.80],[10,.95],[15,.95]],FFO=[.80,.55,.55,.32];/* v69 tuned: see report */
 function fLvI(T){const l=G.lv||1;if(l<=T[0][0])return T[0][1];for(let i=1;i<T.length;i++)if(l<=T[i][0]){const[a,A]=T[i-1],[b,B]=T[i];return A+(B-A)*(l-a)/(b-a);}return T[T.length-1][1];}
-function flameUpd(w,L,E,cd,dt){if(G.tf){w.fa=0;w.hold=0;G.flm=null;return;}const _fb=Math.min(4,Math.floor((G.lv||1)/5))/* v165 (GPT 1102e): cone by player level 150/55,175/55,200/60,225/60,250/60 */,R=(1+.15*CK('f_long'))*[150,175,200,225,250][_fb],arc=[55,55,60,60,60][_fb]*Math.PI/360+CK('f_wide')*5*Math.PI/180;/* v108 wide flame (+10deg full) */
+function flameUpd(w,L,E,cd,dt){if(G.tf){w.fa=0;w.hold=0;G.flm=null;return;}const _fb=Math.min(4,Math.floor((G.lv||1)/5))/* v165 (GPT 1102e): cone by player level 150/55,175/55,200/60,225/60,250/60 */,R=(1+.15*CK('f_long'))*[225,262.5,300,337.5,375][_fb]/* v199: 기본 불길 사거리 ×1.5 (was 150/175/200/225/250) */,arc=[55,55,60,60,60][_fb]*Math.PI/360+CK('f_wide')*5*Math.PI/180;/* v108 wide flame (+10deg full) */
  const B=G.boss;let t0=(B&&!B.dead&&!BV(B)&&Math.hypot(B.x-P.x,B.y-P.y)<R+B.r+20)?B:nearest(1,R+40)[0];
  const ta=t0?Math.atan2(t0.y-P.y,t0.x-P.x):(w.aim??P.ang);let a=w.aim??ta;let dA=Math.atan2(Math.sin(ta-a),Math.cos(ta-a));const mx=FTURN*dt;a+=Math.max(-mx,Math.min(mx,dA));w.aim=a;
  if(t0)w.hold=.35;else w.hold=Math.max(0,(w.hold||0)-dt);const on=w.hold>0;w.fa=Math.max(0,Math.min(1,(w.fa||0)+(on?dt:-dt)/.2));
@@ -2703,7 +2703,7 @@ function draw(){const z=zoom(),v=viewHalf();VV=v;if(!CV.on){CV.x=P.x;CV.y=P.y;}c
  drawBG(v);drawTall(v);/* v82: decorations strictly under everything */const HD=HIDEB();
 /* v138f: player flame drawn right after floor, under everything else */
  if(CAR==='flame'&&G.flm&&G.flm.al>0&&!G.tf&&!G.robo&&!BC.on)for(const tp of (G.awk?[{o:-1},{o:1}]:fTips())){const f0=G.flm,off=tp.o||0,_t=off?armTip(off):null,f={...f0,x:off?_t.x:tp.x,y:off?_t.y:tp.y,a:off?f0.a:tp.a,R:f0.R*(off||tp.n>1?.95:1),al:f0.al*(tp.n>1?.8:1)};const R=f.R,a=f.a,hw=R*Math.sin(f.arc)*.42,tt=G.t*30+f.x;cx.save();cx.globalAlpha=f.al;cx.translate(f.x,f.y);cx.rotate(a);
-   if(f.e&&!G.awk&&!window.__NOLAVA){/* v135: evolved flame = 4-layer heat (red outer, orange, yellow, white-hot core), feathered sides/tip, outward-flowing waves, muzzle glow. Same fan shape/range/hitbox. */
+   if(f.e&&!window.__NOLAVA){/* v199: 각성 중에도 평소(진화) 불길 색 그대로 *//* v135: evolved flame = 4-layer heat (red outer, orange, yellow, white-hot core), feathered sides/tip, outward-flowing waves, muzzle glow. Same fan shape/range/hitbox. */
     if(!window.LAVA135){const c=document.createElement('canvas');c.width=96;c.height=64;const g=c.getContext('2d');for(let i=0;i<3;i++){const x0=i*32,gr=g.createLinearGradient(x0,0,x0+32,0);gr.addColorStop(0,'rgba(255,240,190,0)');gr.addColorStop(.5,'rgba(255,240,190,.28)');gr.addColorStop(1,'rgba(255,240,190,0)');g.fillStyle=gr;g.fillRect(x0,0,32,64);}window.LAVA135=cx.createPattern(c,'repeat');}
     const len=R,N=16,sh=(wr,sc)=>{cx.beginPath();cx.moveTo(0,-3*wr);for(let i=1;i<=N;i++){const q=i/N;cx.lineTo(len*q*sc,-(3+hw*wr*Math.pow(q,.85)));}cx.quadraticCurveTo(len*sc+hw*wr*.55,0,len*sc,(3+hw*wr));for(let i=N-1;i>=1;i--){const q=i/N;cx.lineTo(len*q*sc,3+hw*wr*Math.pow(q,.85));}cx.lineTo(0,3*wr);cx.closePath();};
     const lg=(c,a,e)=>{const g=cx.createLinearGradient(0,0,len*e,0);g.addColorStop(0,'rgba('+c+','+a+')');g.addColorStop(.7,'rgba('+c+','+a*.85+')');g.addColorStop(1,'rgba('+c+',0)');return g;};
@@ -2793,7 +2793,7 @@ if(G.tb&&G.tb.life>0&&document.getElementById('res').style.display!=='flex'){con
  if(G.upause){cx.fillStyle='rgba(0,0,0,.5)';cx.fillRect(0,0,W,H);cx.fillStyle='#fff';cx.font='900 32px system-ui';cx.textAlign='center';cx.fillText('일시정지',W/2,H/2);cx.font='bold 16px system-ui';cx.fillText('화면을 누르면 계속',W/2,H/2+30);const hb=homeBtn();cx.fillStyle='#FFC83D';rr(hb.x-hb.w/2,hb.y-hb.h/2,hb.w,hb.h,14);cx.fill();cx.fillStyle='#2a1e05';cx.font='900 20px system-ui';cx.fillText('🏠 홈으로',hb.x,hb.y+7);}
  if(BAN&&BAN.life>0&&!G.roul&&document.getElementById('res').style.display!=='flex'){if(BAN.kill){cx.globalAlpha=Math.min(1,BAN.life*8);cx.font='900 15px system-ui';cx.textAlign='center';cx.lineWidth=4;cx.strokeStyle='#3b2a08';cx.fillStyle='#ffe27a';cx.strokeText(BAN.s,W/2,64,190);cx.fillText(BAN.s,W/2,64,190);cx.globalAlpha=1;}else{cx.globalAlpha=Math.min(1,BAN.life*2);cx.font=BAN.small?'900 22px system-ui':BAN.big?'900 '+Math.round(Math.min(46,W*.11)*(1+Math.max(0,BAN.life-1.6)*1.5))+'px system-ui':'bold 30px system-ui';cx.textAlign='center';cx.lineWidth=6;cx.strokeStyle='#3b2a08';cx.fillStyle='#ffe27a';{const by=BAN.small?140:H*.28;cx.strokeText(BAN.s,W/2,by);cx.fillText(BAN.s,W/2,by);}cx.globalAlpha=1;}}
  for(let i=0;i<POPS.length;i++){const p=POPS[i];cx.globalAlpha=Math.min(1,p.life*2);cx.font='900 24px system-ui';cx.textAlign='center';cx.lineWidth=5;cx.strokeStyle='#1a1030';cx.fillStyle=p.c;const yy=H*.42-(POPS.length-1-i)*30;cx.strokeText(p.s,W/2,yy);cx.fillText(p.s,W/2,yy);}cx.globalAlpha=1;
- if(G.ready&&!G.tf){/* v133: 변신 준비 완료, ~.18s 6px upward slide-in then hold (no pulse/blink) */const q=Math.min(1,(G.t-(G.ready.t0??G.t))/.18),e=1-(1-q)*(1-q),Y=H*.28+6*(1-e);cx.save();cx.globalAlpha=e;cx.textAlign='center';cx.font='900 30px system-ui';cx.lineWidth=7;cx.strokeStyle='#3a1a00';cx.fillStyle='#ffd25a';cx.strokeText('변신 준비 완료',W/2,Y);cx.fillText('변신 준비 완료',W/2,Y);cx.font='800 15px system-ui';cx.lineWidth=4;cx.strokeText('곧 변신해요!',W/2,Y+26);cx.fillStyle='#fff';cx.fillText('곧 변신해요!',W/2,Y+26);cx.restore();}
+ if(G.ready&&!G.tf){/* v133: 변신 준비 완료, ~.18s 6px upward slide-in then hold (no pulse/blink) */const q=Math.min(1,(G.t-(G.ready.t0??G.t))/.18),e=1-(1-q)*(1-q),Y=H*.28+6*(1-e);cx.save();cx.globalAlpha=e;cx.textAlign='center';cx.textBaseline='alphabetic';/* v199: 한 줄 + 무지개 1안 — 도현체, 진한 #26313D 테두리, 파스텔 무지개가 옆으로 흐름(2.8초 한 바퀴), 깜빡임·맥동·발광 없음 */cx.font='36px "Do Hyeon",system-ui,sans-serif';try{cx.letterSpacing='2px';}catch(_){}const T='변신 준비 완료',tw=cx.measureText(T).width;cx.lineJoin='round';cx.lineWidth=7;cx.strokeStyle='#26313D';cx.strokeText(T,W/2,Y);if(!window.__RBP||window.__RBP.w!==Math.round(tw)){const w=Math.max(1,Math.round(tw)),c=document.createElement('canvas');c.width=2*w;c.height=1;const g=c.getContext('2d'),gr=g.createLinearGradient(0,0,2*w,0),RC=['#E8A0A0','#EBC48F','#E6DE98','#A8D8A0','#94C8DC','#A9A6DE','#D4A2D6'];for(let k=0;k<=14;k++)gr.addColorStop(k/14,RC[k%7]);g.fillStyle=gr;g.fillRect(0,0,2*w,1);window.__RBP={w,p:cx.createPattern(c,'repeat')};}const RB=window.__RBP,ph=((G.t%2.8)/2.8)*2*RB.w;try{RB.p.setTransform(new DOMMatrix([1,0,0,1,W/2-tw/2-ph,0]));}catch(_){}cx.fillStyle=RB.p;cx.fillText(T,W/2,Y);try{cx.letterSpacing='0px';}catch(_){}/* 부제 '곧 변신해요!' 뺌 */cx.restore();}
  if(TUT&&PLAY0&&G.t<14&&!G.paused){const tx=G.t<5?'👆 화면을 끌어서 움직여요':G.t<10?'🔫 공격은 알아서 해요':'💎 보석을 먹으면 레벨업, 카드를 골라요';cx.save();cx.textAlign='center';cx.font='900 19px system-ui';cx.lineWidth=5;cx.strokeStyle='#000';cx.fillStyle='#fff';cx.strokeText(tx,W/2,H*.72);cx.fillText(tx,W/2,H*.72);cx.restore();}
  drawSkill();drawBsk();if(RBCAR)rbSkHud();
  if(G.roul)drawRoul();
@@ -5858,6 +5858,53 @@ window.GJAW=function(gap,af,vh){const z=zoom(),iz=1/z,Wp=vh.w*2*z,N=20,tw=(Wp+20
   for(let i=0;i<N;i++){const x=-10+tw*(i+.5)+(sd>0?tw/2:0);const wx=P.x-vh.w+x*iz;let L=th;if(G.boss&&!G.boss.dead&&Math.abs(wx-G.boss.x)<G.boss.r&&af>=0)L=th*20/33.6;/* teeth over the boss stay short after the bite (as before) */
    cx.save();cx.translate(x,gy);if(sd>0)cx.scale(1,-1);cx.drawImage(T,-T.width/2/D,-2/D,T.width/D,T.height/D*(L/th));cx.restore();}}
  cx.restore();};
+})();
+</script>
+<script>try{document.fonts&&document.fonts.load('36px "Do Hyeon"','변신 준비 완료');}catch(e){}</script>
+<script>/* v199: Lv5/10/15 변신을 성전차처럼 — 새 부품이 바깥에서 날아와 하나씩 척척 붙으면서 커짐 (몸이 서서히 커지지 않음, 성전차 타이밍/이징 그대로). 판정·능력치·Lv20 변신 그대로. 번쩍임·흔들림 없음. */
+(function(){
+const SSx=x=>x<=0?0:x>=1?1:x*x*x*(x*(6*x-15)+10),cl=(u,a,b)=>Math.max(0,Math.min(1,(u-a)/(b-a)));
+const EXT=150;/* world units covered by the cache */
+function render(s,D,flame){const n=Math.ceil(EXT*D),c=document.createElement('canvas');c.width=c.height=n;const g=c.getContext('2d');
+ const cx0=cx,px=P.x,py=P.y,pa=P.ang;cx=g;P.x=0;P.y=0;P.ang=0;
+ try{g.setTransform(D,0,0,D,n/2,n/2);if(flame)TFN.flame(s,null,0);else TFN.rob(CAR,s,null,0,1);}catch(e){}finally{cx=cx0;P.x=px;P.y=py;P.ang=pa;}return c;}
+function bbox(d,n){let x0=n,y0=n,x1=-1,y1=-1;for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(d[(y*n+x)*4+3]>40){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}return x1<0?null:[x0,y0,x1,y1];}
+function build(f,flame){const m=cx.getTransform(),D=Math.max(1,Math.min(4,Math.hypot(m.a,m.b)));const A=render(G.veh,D,flame),B=render(f.nv,D,flame),n=A.width;
+ const ga=A.getContext('2d'),gb=B.getContext('2d'),da=ga.getImageData(0,0,n,n).data,db=gb.getImageData(0,0,n,n).data;
+ const ba=bbox(da,n),bb=bbox(db,n);let r=1;if(ba&&bb)r=Math.sqrt(((ba[2]-ba[0]+1)*(ba[3]-ba[1]+1))/((bb[2]-bb[0]+1)*(bb[3]-bb[1]+1)));r=Math.max(.5,Math.min(1,r));
+ /* new parts = what the new stage has outside the old body (same world scale) — these fly in and make the car bigger */
+ const C=3,M=Math.ceil(n/C),cell=new Uint8Array(M*M);
+ for(let y=0;y<n;y++)for(let x=0;x<n;x++){const i=(y*n+x)*4;if(db[i+3]>60&&da[i+3]<=30)cell[((y/C)|0)*M+((x/C)|0)]++;}
+ for(let i=0;i<cell.length;i++)cell[i]=cell[i]>=3?1:0;
+ /* group cells (gap of 1 cell allowed) */
+ const lab=new Int32Array(M*M).fill(-1),comps=[];
+ for(let i=0;i<M*M;i++){if(!cell[i]||lab[i]>=0)continue;const st=[i],cs=[];lab[i]=comps.length;while(st.length){const k=st.pop();cs.push(k);const kx=k%M,ky=(k/M)|0;for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){const xx=kx+dx,yy=ky+dy;if(xx<0||yy<0||xx>=M||yy>=M)continue;const j=yy*M+xx;if(cell[j]&&lab[j]<0){lab[j]=comps.length;st.push(j);}}}comps.push(cs);}
+ const cen=cs=>{let sx=0,sy=0;for(const k of cs){sx+=k%M;sy+=(k/M)|0;}return{cs,x:sx/cs.length,y:sy/cs.length};};
+ const hm=M/2;let P2=[];const all=comps.reduce((a,c)=>a+c.length,0);
+ for(const cs of comps){if(cs.length>all*.3){const sec={};for(const k of cs){const a=Math.atan2(((k/M)|0)-hm,k%M-hm),si=((Math.round(a/(Math.PI/3))%6)+6)%6;(sec[si]=sec[si]||[]).push(k);}for(const v of Object.values(sec))P2.push(cen(v));}else P2.push(cen(cs));}
+ const tot=P2.reduce((a,p)=>a+p.cs.length,0);
+ const merge=()=>{P2.sort((a,b)=>a.cs.length-b.cs.length);const s=P2.shift();let bi=0,bd=1e9;P2.forEach((p,i)=>{const d=Math.hypot(p.x-s.x,p.y-s.y);if(d<bd){bd=d;bi=i;}});const t=P2[bi];const nn=t.cs.length+s.cs.length;t.x=(t.x*t.cs.length+s.x*s.cs.length)/nn;t.y=(t.y*t.cs.length+s.y*s.cs.length)/nn;t.cs=t.cs.concat(s.cs);};
+ while(P2.length>1&&(P2.length>8||P2.some(p=>p.cs.length<tot*.04)))merge();
+ /* cut each part out of the new-stage image (cells + 1-cell rim so outlines come along) */
+ const c0=M/2,parts=P2.map(p=>{const mk=new Uint8Array(M*M);for(const k of p.cs){const kx=k%M,ky=(k/M)|0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const xx=kx+dx,yy=ky+dy;if(xx>=0&&yy>=0&&xx<M&&yy<M)mk[yy*M+xx]=1;}}
+  const cv=document.createElement('canvas');cv.width=cv.height=n;const g=cv.getContext('2d');g.fillStyle='#000';for(let i=0;i<M*M;i++)if(mk[i])g.fillRect((i%M)*C,((i/M)|0)*C,C,C);g.globalCompositeOperation='source-in';g.drawImage(B,0,0);
+  let dx=p.x-c0,dy=p.y-c0;if(Math.abs(dy)<M*.04){dy=0;dx=dx>=0?1:-1;}const L=Math.hypot(dx,dy)||1;return{cv,dx:dx/L,dy:dy/L,d:Math.hypot(p.x-c0,p.y-c0)};});
+ parts.sort((a,b)=>b.d-a.d);
+ f.tfx={A,B,r,D,n,parts};}
+function draw(f,u,flame){if(!f.tfx)build(f,flame);const X=f.tfx,N=X.parts.length,stp=N>1?Math.min(.3,1.2/(N-1)):.3,w=X.n/X.D;
+ f.ev5=f.ev5||{};
+ /* body: old stage stays its own size; the new parts fly in around it, so the size grows part by part */
+ cx.save();cx.translate(P.x,P.y);cx.rotate(P.ang);
+ if(u<2.0){cx.drawImage(X.A,-w/2,-w/2,w,w);
+  X.parts.forEach((q,j)=>{const t0=.5+stp*j,p=cl(u,t0,t0+.3);if(p<=0)return;if(p>=1&&!f.ev5[j]){f.ev5[j]=1;try{beep(900+Math.min(6,j)*150,.05,'square',.08,600);}catch(e){}}
+   const d=p<.8?65*(1-SSx(p/.8))-3*SSx(p/.8):-3*(1-SSx((p-.8)/.2)),rot=j%3===2?(25*Math.PI/180)*(1-SSx(p)):0;
+   cx.save();cx.globalAlpha*=Math.min(1,p/.2);cx.translate(q.dx*d,q.dy*d);if(rot)cx.rotate(rot);cx.drawImage(q.cv,-w/2,-w/2,w,w);cx.restore();});}
+ else cx.drawImage(X.B,-w/2,-w/2,w,w);/* 2.0s: every part is on — switch to the finished new stage (same size) */
+ cx.restore();}
+const _rb=rbTF;rbTF=function(f){if(f.l20||window.__TFOLD)return _rb(f);const tt=Math.min(3,f.t/f.D*3);TFN.sfx(f,tt);draw(f,tt,0);};
+const _fl=drawFTF;drawFTF=function(f){if(f.l20||window.__TFOLD)return _fl(f);const u=Math.min(3,f.t/f.D*3);TFN.sfx(f,u);
+ cx.save();cx.translate(P.x,P.y);{const R=(f.r0+(f.r1-f.r0)*SSx(cl(u,2.0,2.2)))*1.15,g=cx.createRadialGradient(0,2,R*.2,0,2,R*.85);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.beginPath();cx.ellipse(0,2,R*.85,R*.7,0,0,TAU);cx.fill();}cx.restore();
+ draw(f,u,1);};
 })();
 </script>
 </body></html>
