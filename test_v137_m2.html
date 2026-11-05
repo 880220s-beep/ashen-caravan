@@ -2035,7 +2035,7 @@ function flameDraw(st,tt){const S=stageA(st,tt);
    o.nzOut=Q(1.5);o.mouthM=Q(1.8);o.nosM=Q(1.8);o.hornOut=SS(cl(2.4,2.55));o.eye=SS(cl(2.55,2.7));o.brDrop=o.eye;o.valve=SS(cl(2.7,2.85));o.jaw=o.valve;o.c=fMix(FBC[3],FBC[4],SS(cl(2.1,2.4)));
    /* 연결: 기존 Lv5~15 부품이 0.35~1.2초에 몸 밑에서 밀려 나옴 (새 부품은 같은 시간에 접혀 들어감) */
    const r=SM((u-.35)/.85);for(const n of['podL','podR','covL','covR','heatL','heatR','exh','rear','dist']){if(!o.has.has(n))continue;const D=FPD[n]||[0,0,0,0];o.has.delete(n);if(r>0)o.off[n]={x:-D[0]*14*(1-r),y:-D[1]*14*(1-r),a:Math.min(1,r*3),r:0,s:1};}
-   const BS=(BSZ[3]+(BSZ[4]-BSZ[3])*SS(cl(2.0,2.2)));cx.scale(BS,BS);
+   const BS=window.__L20B?(BSZ[0]+(BSZ[4]-BSZ[0])*SS(cl(.3,2.6))):(BSZ[3]+(BSZ[4]-BSZ[3])*SS(cl(2.0,2.2)));cx.scale(BS,BS);
    nFlame(S.A,0,0);fDraw(o,false);nFlame(S.A,1,0);return;}
   cx.scale(BSZ[4],BSZ[4]);fDraw(o,false);return;}
  const o=fState(0);o.aim=st===0&&tt==null?FAIM:0;let stw=1;if(st===0&&tt!=null)stw=SM(tt/.35);if(st===0&&tt==null)stw=0;o.stow=stw;
@@ -2300,13 +2300,13 @@ function kAt(car,st,tt){const K=NK[car];let k=K[st];if(tt!=null&&st<4)k=k+(K[st+
 function yAt(car,st,tt){const S=L20Y[car];if(!S)return null;let u=st===4?1:0;if(tt!=null&&st===3)u=SS(cl((tt-.3)/2.3));return u>0?[1+(S[0]-1)*u,1+(S[1]-1)*u]:null;}
 /* 로봇 차: 월드 좌표 P에서 진행 방향 P.ang. fix=4 이면 Lv20 크기 고정(각성 연출용, 기존 로봇 그림) */
 function rob(car,st,tt,aimL,isNew,fix){const px=P.x,py=P.y,pa=P.ang,nf=RBX.RB.nofx;cx.save();cx.translate(px,py);cx.rotate(pa+Math.PI/2);
- const ks=fix===4?4:st,k=kAt(car,ks,fix===4?null:tt),y=yAt(car,ks,fix===4?null:tt);cx.scale(k,k);if(y)cx.scale(y[0],y[1]);
+ const ks=fix===4?4:st,B5=window.__L20B&&st===3&&tt!=null&&fix!==4,k=B5?NK[car][0]+(NK[car][4]-NK[car][0])*SS(cl((tt-.3)/2.3)):kAt(car,ks,fix===4?null:tt),y=yAt(car,ks,fix===4?null:tt);cx.scale(k,k);if(y)cx.scale(y[0],y[1]);
  TFNON=isNew?1:0;P.x=0;P.y=0;P.ang=-Math.PI/2;
  try{if(isNew&&(car==='mammoth'||car==='croc')&&!(tt==null&&(st===0||st===4)))(car==='mammoth'?mamNew:crocNew)(st,tt);
-  else{const Z=RBSZ[car];let z=Z[fix===4?4:st];if(fix!==4&&tt!=null&&st<4)z=Z[st]+(Z[st+1]-Z[st])*SS(cl((tt-.3)/2.2));cx.scale(z,z);RBX.RB.nofx=1;RBX.draw(car,st,tt,aimL||0);}}
+  else{const Z=RBSZ[car];let z=Z[fix===4?4:st];if(fix!==4&&tt!=null&&st<4){const z0=B5?Z[0]:Z[st];z=z0+(Z[st+1]-z0)*SS(cl((tt-.3)/2.2));}cx.scale(z,z);RBX.RB.nofx=1;RBX.draw(car,st,tt,aimL||0);}}
  finally{RBX.RB.nofx=nf;P.x=px;P.y=py;P.ang=pa;TFNON=0;cx.restore();}}
 /* 화염방사차: 이미 P로 옮기고 진행 방향(+x)으로 돌린 상태에서 호출 */
-function flame(st,tt,aim){const k=kAt('flame',st,tt);cx.save();cx.scale(k,k);FAIM=aim||0;try{flameDraw(st,tt);}finally{FAIM=0;cx.restore();}}
+function flame(st,tt,aim){const K=NK.flame,k=window.__L20B&&st===3&&tt!=null?K[0]+(K[4]-K[0])*SS(cl((tt-.3)/2.3)):kAt('flame',st,tt);cx.save();cx.scale(k,k);FAIM=aim||0;try{flameDraw(st,tt);}finally{FAIM=0;cx.restore();}}
 /* 화염 노즐 끝 계산용 전체 배율 (완성형) */
 function fk(i){return NK.flame[i]*BSZ[i];}
 /* 변신 소리: 5박자에 맞춤 (화면 흔들림·번쩍임 없음) */
@@ -5886,29 +5886,38 @@ const SH={
  gat:(s,L)=>{RR(-L/2,-5,10,10,3,Q.m);for(const y of[-3,0,3])RR(-L/2+9,y-1.2,L-9,2.4,1,'#5d5650');CI(-L/2+5,0,2,Q.g);},
  jaw:(s,L,H)=>{PG([-L/2,0,L/2,0,L/2-4,H*.8*s*-1,-L/2,H*s*-1].map(v=>v),Q.b);cx.fillStyle=Q.iv;for(let x=-L/2+3;x<L/2-3;x+=4){cx.beginPath();cx.moveTo(x,0);cx.lineTo(x+2,-3*s*-1);cx.lineTo(x+4,0);cx.fill();}},
  spines:(s,L)=>{for(let i=0;i<4;i++){const x=-L/2+i*L/3.2;PG([x-3,3,x,-4,x+3,3],Q.l);}},
+ twin:()=>{/* v205: 화염 노즐 2개 — 기본 포탑 축(6,0)에서 조준 방향으로 돌고, 불은 이 끝에서 나옴 */const k=TFN.fk(0),r0=10*k,r1=20*k+5;cx.save();cx.translate(6*k,0);cx.rotate(FA5);for(const y of[-2.6,2.6]){RR(r0,y-2,r1-r0,4,1.5,Q.m);CI(r1,y,1.5,Q.g);}RR(r0-3,-5,5,10,2,Q.d);cx.restore();},
+ tusk2:(s,L)=>{for(const t of[-1,1]){cx.save();cx.translate(0,7*t);SH.tusk(t,L);cx.restore();}},
+ jaw2:(s,L,H)=>{for(const t of[-1,1]){cx.save();cx.translate(0,4*t);SH.jaw(t,L,H);cx.restore();}},
  crest:(s,L)=>{PG([-L/2,-4,L/2,0,-L/2,4,-L/2+3,0],Q.g);}
 };
 /* named parts per car / stage (x forward, y side) — same counts as the lion: 3 / 4 / 4 */
+/* v205: 부품을 몸에 딱 붙게(틈 없음) + 단계별 전체 크기 = 예전 단계 크기 */
 const NP={
- flame:{1:[['tankL','tank',-2,-22,24,9],['tankR','tank',-2,22,24,9],['nozzle','nozzle',24,0,12]],
-        2:[['trackL','tread',-6,-33,38,9],['trackR','tread',-6,33,38,9],['plateL','plate',8,-17,18,7],['plateR','plate',8,17,18,7]],
-        3:[['hornL','horn',22,-15,22],['hornR','horn',22,15,22],['armorL','plate',-20,-14,16,8],['armorR','plate',-20,14,16,8]]},
- raven:{1:[['wingL','wing',-6,-14,24,12],['wingR','wing',-6,14,24,12],['beak','crest',28,0,12]],
-        2:[['bladeL','blade',4,-26,30],['bladeR','blade',4,26,30],['finL','fin',-30,-8,14,9],['finR','fin',-30,8,14,9]],
-        3:[['wing2L','wing',-10,-24,28,10],['wing2R','wing',-10,24,28,10],['spikeL','blade',30,-10,16],['spikeR','blade',30,10,16]]},
- mammoth:{1:[['tuskL','tusk',33,-9,16],['tuskR','tusk',33,9,16],['plateT','plate',-2,0,22,8]],
-        2:[['trackL','tread',0,-28,44,9],['trackR','tread',0,28,44,9],['gunL','gat',34,-5,14],['gunR','gat',34,5,14]],
-        3:[['earL','plate',6,-37,30,10],['earR','plate',6,37,30,10],['armorL','plate',-26,-16,14,8],['armorR','plate',-26,16,14,8]]},
- croc:{1:[['jawL','jaw',31,-4,16,6],['jawR','jaw',31,4,16,6],['tail','fin',-26,0,12,0]],
-        2:[['armorL','plate',0,-22,30,8],['armorR','plate',0,22,30,8],['spines','spines',-4,0,22],['tailF','crest',-30,0,12]],
-        3:[['trackL','tread',0,-34,48,9],['trackR','tread',0,34,48,9],['jaw2L','jaw',40,-8,12,6],['jaw2R','jaw',40,8,12,6]]}};
-for(const c in NP)for(const st in NP[c])NP[c][st]=NP[c][st].map(a=>({n:a[0],sh:a[1],x:a[2],y:a[3],L:a[4],H:a[5]||0,s:a[3]<0?-1:1}));
-function partDraw(car,q){Q=PAL[car];cx.save();cx.translate(q.x,q.y);SH[q.sh](q.s,q.L,q.H);cx.restore();}
+ flame:{1:[['tankL','tank',-4,-23.5,30,13],['tankR','tank',-4,23.5,30,13],['nozzle','twin',0,0,0]],
+        2:[['trackL','tread',-2,-33.5,64,8],['trackR','tread',-2,33.5,64,8],['plateL','plate',-2,-23.5,16,7],['plateR','plate',-2,23.5,16,7]],
+        3:[['hornL','horn',19,-12,20,0,-1],['hornR','horn',19,12,20,0,-1],['armorL','plate',-30,-40,18,7],['armorR','plate',-30,40,18,7]]},
+ raven:{1:[['wingL','wing',-23,-12,25,11],['wingR','wing',-23,13,25,10],['beak','crest',22,0,8]],
+        2:[['bladeL','blade',14,-15,40],['bladeR','blade',14,16,40],['finL','fin',-30,-10,14,18],['finR','fin',-30,10,14,18]],
+        3:[['wing2L','wing',-12,-13,28,20],['wing2R','wing',-12,14,28,19],['spikeL','blade',30,-8,16],['spikeR','blade',30,8,16]]},
+ mammoth:{1:[['armorL','plate',-6,-22,50,16],['armorR','plate',-6,23,50,15],['tusks','tusk2',29,0,10]],
+        2:[['trackL','tread',3.5,-34,77,9],['trackR','tread',3.5,34,77,9],['gunL','gat',36,-6,12],['gunR','gat',36,6,12]],
+        3:[['earL','plate',-6,-40.5,34,7],['earR','plate',-6,40.5,34,7],['bumperL','plate',31,-18,10,8],['bumperR','plate',31,18,10,8]]},
+ croc:{1:[['armorL','plate',-10,-19,40,13],['armorR','plate',-10,21,40,12],['jaws','jaw2',29,0,8,6]],
+        2:[['trackL','tread',1.5,-30.5,78,10],['trackR','tread',1.5,30.5,78,10],['spines','spines',-4,0,22],['tailF','crest',-24,0,8,0,1,-1]],
+        3:[['armor2L','plate',-10,-37.5,30,7],['armor2R','plate',-10,37.5,30,7],['jaw2L','jaw',38,-8,8,6],['jaw2R','jaw',38,8,8,6]]}};
+for(const c in NP)for(const st in NP[c])NP[c][st]=NP[c][st].map(a=>({n:a[0],sh:a[1],x:a[2],y:a[3],L:a[4],H:a[5]||0,s:a[3]<0?-1:1,fy:a[6]||1,fx:a[7]||1}));
+function partDraw(car,q){Q=PAL[car];cx.save();cx.translate(q.x,q.y);if(q.fy!==1||q.fx!==1)cx.scale(q.fx,q.fy);SH[q.sh](q.s,q.L,q.H);cx.restore();}
 /* stage look = base car (stage 0) + every part up to that stage; parts under? no — on top, like the lion's attached parts */
 function partsUpTo(car,st){for(let k=1;k<=st;k++)for(const q of NP[car][k])partDraw(car,q);}
-const C4={flame:1,raven:1,mammoth:1,croc:1};
+const C4={flame:1,raven:1,mammoth:1,croc:1};let FA5=0;
 const _rob=TFN.rob;TFN.rob=function(car,st,tt,aimL,isNew,fix){if(C4[car]&&st>=1&&st<=3&&tt==null&&!window.__RAWST){_rob(car,0,null,aimL,isNew,fix);cx.save();cx.translate(P.x,P.y);cx.rotate(P.ang);try{partsUpTo(car,st);}finally{cx.restore();}return;}return _rob(car,st,tt,aimL,isNew,fix);};
-const _fla=TFN.flame;TFN.flame=function(st,tt,aim){if(st>=1&&st<=3&&tt==null&&!window.__RAWST){_fla(0,null,aim);try{partsUpTo('flame',st);}catch(e){}return;}return _fla(st,tt,aim);};
+const _fla=TFN.flame;TFN.flame=function(st,tt,aim){if(st>=1&&st<=3&&tt==null&&!window.__RAWST){_fla(0,null,aim);FA5=aim||0;try{partsUpTo('flame',st);}catch(e){}finally{FA5=0;}return;}return _fla(st,tt,aim);};
+const _ft=fTips;fTips=function(){const i=fIdx();if(i<1||i>3||window.__RAWST)return _ft();/* v205: 불 나오는 곳 = 새 손그림 노즐 2개 끝 */
+ const k=TFN.fk(0),rel=fAim(),A=vAng(),ca=Math.cos(A),sa=Math.sin(A),L=[];for(const y of[-2.6,2.6]){const lx=6*k+Math.cos(rel)*(20*k+5)-Math.sin(rel)*y,ly=Math.sin(rel)*(20*k+5)+Math.cos(rel)*y;L.push({x:P.x+lx*ca-ly*sa,y:P.y+lx*sa+ly*ca,a:A+rel});}for(const t of L)t.n=L.length;return L;};
+/* v205 Lv20: 시작 = Lv15 모습(기본+부품) 그대로. 몸은 기본 크기에서 Lv20 크기로 한 번에 부드럽게, 손그림 부품은 1.5~2.55초에 하나씩 제자리에서 작아지며 몸 안으로 */
+function L20P(car,tt){const L=[];for(let k=1;k<=3;k++)L.push(...NP[car][k]);const n=L.length;cx.save();cx.translate(P.x,P.y);cx.rotate(P.ang);
+ L.slice().reverse().forEach((q,j)=>{const t0=1.5+j*(.8/Math.max(1,n-1)),p=cl(tt,t0,t0+.25);if(p>=1)return;const sc=1-SSx(p);cx.save();cx.translate(q.x*(1-.3*SSx(p)),q.y*(1-.3*SSx(p)));cx.scale(sc,sc);cx.translate(-q.x,-q.y);partDraw(car,q);cx.restore();});cx.restore();}
 function draw(f,u,flame){const car=CAR,v1=f.nv,PN=NP[car][v1]||[],N=PN.length;
  /* 성전차(drawTFC) 그대로 — 소리 박자, 부품 .5+.3j 출발/.3초 비행/65px/살짝 넘쳤다 딱 고정, 고정 때 불꽃 3개+반짝(LFL, 성전차와 같은 밝기)+0.04초 멈춤. 흔들림·화면 번쩍임 없음 */
  f.ev5=f.ev5||{};const go=(k,t,fn)=>{if(u>=t&&!f.ev5[k]){f.ev5[k]=1;try{fn();}catch(e){}}};
@@ -5926,8 +5935,8 @@ function draw(f,u,flame){const car=CAR,v1=f.nv,PN=NP[car][v1]||[],N=PN.length;
   let dx=q.x,dy=q.y;const L=Math.hypot(dx,dy)||1;dx/=L;dy/=L;
   cx.save();cx.globalAlpha*=Math.min(1,p/.2);cx.translate(dx*d,dy*d);if(rot){cx.translate(q.x,q.y);cx.rotate(rot);cx.translate(-q.x,-q.y);}partDraw(car,q);cx.restore();});
  cx.restore();}
-const _rb=rbTF;rbTF=function(f){if(window.__TFOLD)return _rb(f);if(f.l20){window.__NOA3=1;try{_rb(f);}finally{window.__NOA3=0;}/* v204: 붙어 있던 손그림 부품이 0.2~1.2초에 하나씩 빠져나가며 Lv20 얼굴 변신으로 이어짐 */const tt=f.t,car=CAR,L=[];for(let k=1;k<=3;k++)L.push(...NP[car][k]);const n=L.length;cx.save();cx.translate(P.x,P.y);cx.rotate(P.ang);L.slice().reverse().forEach((q,j)=>{const t0=.2+j*(.7/Math.max(1,n-1)),p=cl(tt,t0,t0+.3);if(p>=1)return;let dx=q.x,dy=q.y;const D=Math.hypot(dx,dy)||1;const d=65*SSx(p);cx.save();cx.globalAlpha*=1-p;cx.translate(dx/D*d,dy/D*d);partDraw(car,q);cx.restore();});cx.restore();return;}/* v203: Lv20은 원래 얼굴 변신(부품이 차례로 펼쳐지며 동물 얼굴) 그대로 */const tt=Math.min(3,f.l20?f.t:f.t/f.D*3);draw(f,tt,0);};
-const _fl=drawFTF;drawFTF=function(f){if(f.l20||window.__TFOLD)return _fl(f);/* v203: Lv20 황소 변신 원래대로 */const u=Math.min(3,f.l20?f.t:f.t/f.D*3);
+const _rb=rbTF;rbTF=function(f){if(window.__TFOLD)return _rb(f);if(f.l20){window.__NOA3=1;window.__L20B=1;try{_rb(f);}finally{window.__NOA3=0;window.__L20B=0;}L20P(CAR,f.t);return;}const tt=Math.min(3,f.t/f.D*3);draw(f,tt,0);};
+const _fl=drawFTF;drawFTF=function(f){if(window.__TFOLD)return _fl(f);if(f.l20){window.__NOA3=1;window.__L20B=1;try{_fl(f);}finally{window.__NOA3=0;window.__L20B=0;}L20P('flame',f.t);return;}/* v203: Lv20 황소 변신 원래대로 */const u=Math.min(3,f.l20?f.t:f.t/f.D*3);
  cx.save();cx.translate(P.x,P.y);{const R=(f.r0+(f.r1-f.r0)*SSx(cl(u,.8,1.7)))*1.15/* v204: 그림자도 부품 붙는 동안 서서히 */,g=cx.createRadialGradient(0,2,R*.2,0,2,R*.85);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.beginPath();cx.ellipse(0,2,R*.85,R*.7,0,0,TAU);cx.fill();}cx.restore();
  draw(f,u,1);};
 })();
