@@ -826,7 +826,7 @@ const RCD={t:[{k:'gat',n:'양팔 개틀링',d:'+10% 기관포 피해',mx:3},{k:'
  f:[{k:'nz',n:'양팔 화염방사기',d:'+10% 화염 피해',mx:3},{k:'storm',n:'불기둥 폭풍',d:'+10% 불기둥 폭풍 피해',mx:3},{k:'hot',n:'고열 화염',d:'+12% 화염 피해',mx:3},{k:'emb',n:'불씨',d:'2초간 화상 피해<br>보스 제외',mx:3},{k:'ovh',n:'과열 충격',d:'10초마다 주변 적 밀쳐내기',mx:1}]};
 /* v108: per-car attack cards (spec car_cards_final.md) */
 const CCD={tank:[{k:'t_dmg',n:'기관총 강화',d:'+15% 기관총 피해',mx:3},{k:'t_rate',n:'공격속도',d:'공격속도 +15%',mx:3},{k:'t_rng',n:'사거리 증가',d:'+15% 기관총 사거리',mx:2}/* v170 */,{k:'t_prc',n:'관통탄',d:'+1 총알 관통',mx:3}],
- flame:[{k:'f_dmg',n:'화염방사 강화',d:'+15% 화염 피해',mx:3},{k:'f_long',n:'긴 불길',d:'+15% 불길 길이',mx:3},{k:'f_wide',n:'넓은 불길',d:'+10° 불길 각도',mx:3},{k:'f_rate',n:'빠른 분사',d:'불길 공격속도 +15%',mx:3}],
+ flame:[{k:'f_dmg',n:'화염방사 강화',d:'+15% 화염 피해',mx:3},{k:'f_long',n:'긴 불길',d:'+7% 불길 길이',mx:3},{k:'f_wide',n:'넓은 불길',d:'+10° 불길 각도',mx:3},{k:'f_rate',n:'빠른 분사',d:'불길 공격속도 +15%',mx:3}],
  raven:[{k:'r_dmg',n:'깃털 공격력',d:'+16% 깃털 피해 (최대 5장)',mx:5},{k:'r_more',n:'넓은 깃털',d:'+50% 깃털 명중 범위',mx:1},{k:'r_rate',n:'빠른 투척',d:'깃털 공격속도 +15%',mx:3},{k:'r_push',n:'깃털 밀치기',d:'돌아오는 깃털이 적을 밀쳐요',mx:1}/* v148: 멀리 던지기 removed */],
  mammoth:[{k:'m_dmg',n:'코 개틀링 강화',d:'+15% 코 개틀링 피해',mx:3},{k:'m_more',n:'탄줄기 추가',d:'+1 탄줄기 (40% 피해)',mx:1}],
  croc:[{k:'c_dmg',n:'이빨 강화',d:'+15% 이빨 피해',mx:3},{k:'c_rate',n:'빠른 투척',d:'이빨 공격속도 +10%',mx:3},{k:'c_more',n:'튕김 추가',d:'+1 튕김',mx:1}]};
@@ -896,7 +896,7 @@ function wUpd(dt){const cd=P.cdMul;if(BC.on&&TUNE.bull.stopWeapons)return;if(RBC
 const FTURN=+(Q.get('fturn')||4.7),FSL=+(Q.get('fsl')||.88),FLK=+(Q.get('flk')||1.15),FKB=+(Q.get('fkb')||1);
 /* v69 flame balance */const FUNEV=[[1,.35],[5,.80],[10,.95],[15,.95]],FFO=[.80,.55,.55,.32];/* v69 tuned: see report */
 function fLvI(T){const l=G.lv||1;if(l<=T[0][0])return T[0][1];for(let i=1;i<T.length;i++)if(l<=T[i][0]){const[a,A]=T[i-1],[b,B]=T[i];return A+(B-A)*(l-a)/(b-a);}return T[T.length-1][1];}
-function flameUpd(w,L,E,cd,dt){if(G.tf){w.fa=0;w.hold=0;G.flm=null;return;}const _fb=Math.min(4,Math.floor((G.lv||1)/5))/* v165 (GPT 1102e): cone by player level 150/55,175/55,200/60,225/60,250/60 */,R=(1+.15*CK('f_long'))*[168.75,196.875,225,253.125,281.25][_fb]/* v201: 영태 — 사거리 ×0.75 *//* v199: 기본 불길 사거리 ×1.5 (was 150/175/200/225/250) */,arc=[55,55,60,60,60][_fb]*Math.PI/360+CK('f_wide')*5*Math.PI/180;/* v108 wide flame (+10deg full) */
+function flameUpd(w,L,E,cd,dt){if(G.tf){w.fa=0;w.hold=0;G.flm=null;return;}const _fb=Math.min(4,Math.floor((G.lv||1)/5))/* v165 (GPT 1102e): cone by player level 150/55,175/55,200/60,225/60,250/60 */,R=(1+.07*CK('f_long'))/* v201: 카드당 +7% */*[168.75,196.875,225,253.125,281.25][_fb]/* v201: 영태 — 사거리 ×0.75 *//* v199: 기본 불길 사거리 ×1.5 (was 150/175/200/225/250) */,arc=[55,55,60,60,60][_fb]*Math.PI/360+CK('f_wide')*5*Math.PI/180;/* v108 wide flame (+10deg full) */
  const B=G.boss;let t0=(B&&!B.dead&&!BV(B)&&Math.hypot(B.x-P.x,B.y-P.y)<R+B.r+20)?B:nearest(1,R+40)[0];
  const ta=t0?Math.atan2(t0.y-P.y,t0.x-P.x):(w.aim??P.ang);let a=w.aim??ta;let dA=Math.atan2(Math.sin(ta-a),Math.cos(ta-a));const mx=FTURN*dt;a+=Math.max(-mx,Math.min(mx,dA));w.aim=a;
  if(t0)w.hold=.35;else w.hold=Math.max(0,(w.hold||0)-dt);const on=w.hold>0;w.fa=Math.max(0,Math.min(1,(w.fa||0)+(on?dt:-dt)/.2));
