@@ -1,0 +1,14 @@
+
+# Capacitor / Android test branch
+node_modules/
+www/
+.idea/
+*.log
+.DS_Store
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/captures/
+android/*.iml
+android/app/*.iml

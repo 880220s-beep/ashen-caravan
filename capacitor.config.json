@@ -1,0 +1,8 @@
+{
+  "appId": "com.ashencaravan.test",
+  "appName": "잿빛 성전차",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": true
+  }
+}
