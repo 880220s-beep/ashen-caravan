@@ -5874,8 +5874,8 @@ function build(f,flame){const m=cx.getTransform(),D=Math.max(1,Math.min(4,Math.h
  const ba=bbox(da,n),bb=bbox(db,n);let r=1;if(ba&&bb)r=Math.sqrt(((ba[2]-ba[0]+1)*(ba[3]-ba[1]+1))/((bb[2]-bb[0]+1)*(bb[3]-bb[1]+1)));r=Math.max(.5,Math.min(1,r));
  /* new parts = what the new stage has outside the old body (same world scale) — these fly in and make the car bigger */
  const C=3,M=Math.ceil(n/C),cell=new Uint8Array(M*M);
- for(let y=0;y<n;y++)for(let x=0;x<n;x++){const i=(y*n+x)*4;if(db[i+3]>60&&da[i+3]<=30)cell[((y/C)|0)*M+((x/C)|0)]++;}
- for(let i=0;i<cell.length;i++)cell[i]=cell[i]>=3?1:0;
+ /* v203: 부품 = 새 단계에서 이전 차와 달라지는 곳 전부(바깥+안쪽). 이전 차는 그대로 두고 그 위에 덮어 붙임 */for(let y=0;y<n;y++)for(let x=0;x<n;x++){const i=(y*n+x)*4;if(db[i+3]>8&&(Math.abs(db[i]-da[i])+Math.abs(db[i+1]-da[i+1])+Math.abs(db[i+2]-da[i+2])+Math.abs(db[i+3]-da[i+3])>24))cell[((y/C)|0)*M+((x/C)|0)]++;}
+ for(let i=0;i<cell.length;i++)cell[i]=cell[i]>=1?1:0;
  /* group cells (gap of 1 cell allowed) */
  const lab=new Int32Array(M*M).fill(-1),comps=[];
  for(let i=0;i<M*M;i++){if(!cell[i]||lab[i]>=0)continue;const st=[i],cs=[];lab[i]=comps.length;while(st.length){const k=st.pop();cs.push(k);const kx=k%M,ky=(k/M)|0;for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){const xx=kx+dx,yy=ky+dy;if(xx<0||yy<0||xx>=M||yy>=M)continue;const j=yy*M+xx;if(cell[j]&&lab[j]<0){lab[j]=comps.length;st.push(j);}}}comps.push(cs);}
@@ -5891,8 +5891,8 @@ function build(f,flame){const m=cx.getTransform(),D=Math.max(1,Math.min(4,Math.h
   const cv=document.createElement('canvas');cv.width=cv.height=n;const g=cv.getContext('2d');g.fillStyle='#000';for(let i=0;i<M*M;i++)if(mk[i])g.fillRect((i%M)*C,((i/M)|0)*C,C,C);g.globalCompositeOperation='source-in';g.drawImage(B,0,0);
   let dx=p.x-c0,dy=p.y-c0;if(Math.abs(dy)<M*.04){dy=0;dx=dx>=0?1:-1;}const L=Math.hypot(dx,dy)||1;return{cv,mk,dx:dx/L,dy:dy/L,d:Math.hypot(p.x-c0,p.y-c0),lx:(p.x-c0)*C/D,ly:(p.y-c0)*C/D};});
  parts.sort((a,b)=>b.d-a.d);
- /* v202: 몸통(코어) = 새 단계 그림에서 날아올 부품만 뺀 것 — 처음부터 끝까지 같은 크기, 2.0초에 바뀌지 않음 */const K=document.createElement('canvas');K.width=K.height=n;const gk=K.getContext('2d');gk.drawImage(B,0,0);gk.globalCompositeOperation='destination-out';gk.fillStyle='#000';for(const q of parts)for(let i=0;i<M*M;i++)if(q.mk[i])gk.fillRect((i%M)*C,((i/M)|0)*C,C,C);
- try{(window.__TFC=window.__TFC||[]).push([CAR,l2?20:s1*5,parts.length]);}catch(e){}
+ let rm=0,tb=0;for(let q=0;q<n*n;q++){if(db[q*4+3]>8)tb++;if(da[q*4+3]>60&&db[q*4+3]<=8)rm++;}/* v203: 새 단계에 없는 이전 차 픽셀 수(마지막 전환 때만 사라짐) */const K=null;
+ try{(window.__TFC=window.__TFC||[]).push([CAR,l2?20:s1*5,parts.length,rm,tb]);}catch(e){}
  f.tfx={A,B,K,r,D,n,parts,l2};}
 function draw(f,u,flame){if(!f.tfx)build(f,flame);const X=f.tfx,N=X.parts.length,w=X.n/X.D;
  /* v202: 성전차(drawTFC) 그대로 — 소리 박자, 부품 .5+.3j 출발/.3초 비행/65px/살짝 넘쳤다 딱 고정, 고정 때 불꽃 3개+반짝(LFL, 성전차와 같은 밝기)+0.04초 멈춤. 흔들림·화면 번쩍임 없음 */
@@ -5904,14 +5904,14 @@ function draw(f,u,flame){if(!f.tfx)build(f,flame);const X=f.tfx,N=X.parts.length
  if(!X.l2){go('c',2.0,()=>beep(300,.08,'square',.08,150));go('d',2.2,()=>beep(150,.12,'square',.12,70));go('g',2.85,()=>beep(75,.12,'square',.1,40));}
  go('e',2.65,()=>{const t=W2(P.r*.9,0);sndShot&&sndShot();RFX.push({k:'trc',x:t.x,y:t.y,a:P.ang,life:.2,max:.2});spk(t.x,t.y,1,'#FFE07A');});
  cx.save();cx.translate(P.x,P.y);cx.rotate(P.ang);
- const UE=X.l2?2.5:2.0;if(u<UE){/* 코어 맥동: 0~.5초에 이전 몸통 → 새 몸통 (크기 같음) */const kc=SSx(cl(u,.2,.5));if(kc<1){cx.save();cx.globalAlpha*=1-kc;cx.drawImage(X.A,-w/2,-w/2,w,w);cx.restore();}if(kc>0){cx.save();cx.globalAlpha*=kc;cx.drawImage(X.K,-w/2,-w/2,w,w);cx.restore();}
+ const UE=X.l2?2.5:2.0;if(u<UE){/* v203: 이전 차는 끝까지 그대로(바뀌지 않음), 부품만 위에 덮어 붙음 */cx.drawImage(X.A,-w/2,-w/2,w,w);
   X.parts.forEach((q,j)=>{const t0=T0+.3*j,p=cl(u,t0,t0+.3);if(p<=0)return;
    const d=p<.8?65*(1-SSx(p/.8))-3*SSx(p/.8):-3*(1-SSx((p-.8)/.2)),rot=j===2?(25*Math.PI/180)*(1-SSx(p)):0;
    cx.save();cx.globalAlpha*=Math.min(1,p/.2);cx.translate(q.dx*d,q.dy*d);if(rot)cx.rotate(rot);cx.drawImage(q.cv,-w/2,-w/2,w,w);cx.restore();});}
  else cx.drawImage(X.B,-w/2,-w/2,w,w);/* 2.0초: 코어+부품 = 완성 그림 그대로 (크기 변화 없음) */
  cx.restore();}
-const _rb=rbTF;rbTF=function(f){if(window.__TFOLD)return _rb(f);const tt=Math.min(3,f.l20?f.t:f.t/f.D*3);draw(f,tt,0);};
-const _fl=drawFTF;drawFTF=function(f){if(window.__TFOLD)return _fl(f);const u=Math.min(3,f.l20?f.t:f.t/f.D*3);
+const _rb=rbTF;rbTF=function(f){if(f.l20||window.__TFOLD)return _rb(f);/* v203: Lv20은 원래 얼굴 변신(부품이 차례로 펼쳐지며 동물 얼굴) 그대로 */const tt=Math.min(3,f.l20?f.t:f.t/f.D*3);draw(f,tt,0);};
+const _fl=drawFTF;drawFTF=function(f){if(f.l20||window.__TFOLD)return _fl(f);/* v203: Lv20 황소 변신 원래대로 */const u=Math.min(3,f.l20?f.t:f.t/f.D*3);
  cx.save();cx.translate(P.x,P.y);{const R=(f.r0+(f.r1-f.r0)*SSx(cl(u,2.0,2.2)))*1.15,g=cx.createRadialGradient(0,2,R*.2,0,2,R*.85);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.beginPath();cx.ellipse(0,2,R*.85,R*.7,0,0,TAU);cx.fill();}cx.restore();
  draw(f,u,1);};
 })();
