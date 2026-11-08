@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v214';
+const BUILD='v215';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -6151,7 +6151,7 @@ function ctx(n,u){const tr=u<3;const K={n,u,tr,open:tr?SS(cl(u,.3,.5))*(1-SS(cl(
   (under?K.U:K.O).push({x,y,f:()=>{cx.save();cx.globalAlpha*=a;cx.translate(x+dx*d,y+dy*d);if(rot)cx.rotate(rot);fn();cx.restore();}});};
  K.el=(under,x,y,fn)=>(under?K.U:K.O).push({x,y,f:fn});
  /* 몸통 바뀜 정도: 이번 단계 부품이 잠길 때마다 1/N씩(잠기기 직전 0.2초 동안 부드럽게) */
- K.hk=()=>{if(!tr)return 1;let k=0;for(let j=0;j<NS[n];j++){const tl=.8+.3*j;k+=SS(cl(u,tl-.2,tl+.04));}return k/NS[n];};
+ K.hk=()=>!tr?1:SS(cl(u,2.0,2.2));/* v215: 까마귀 몸통 모양도 2.0~2.2에 한 번에 */
  return K;}
 /* ================= 화염황소 ================= */
 const FC={b:'#CC3A20',d:'#8B2716',l:'#F27C5E'},FR={b:'#A82A18',d:'#6A160C',l:'#E0452A'},ST={b:'#59606C',d:'#2E323A',l:'#8A919C'},BK={b:'#2A2C31',d:'#141518',l:'#4A4D55'},OR='#FF982D';
@@ -6286,10 +6286,10 @@ window.TF206={CARS,SC,CUT,ctx};
 /* draw one car in frame (translate P, rotate P.ang, x forward). base(clipX) draws the old Lv1 art. */
 const NS=[0,3,4,4];
 /* 크기: 부품이 잠길 때마다(.8+.3j) 0.16초 동안 1/N씩 — 한 번에 커지지 않음 */
-function sAt(car,n,u){const a=SC[car][n-1],b=SC[car][n];if(u>=3)return b;const wd=car==='flame'||car==='mammoth'?.3:.12;/* v208: 화염·매머드는 잠길 때마다 0.34초에 걸쳐 부드럽게 */let k=0;for(let j=0;j<NS[n];j++){const tl=.8+.3*j;k+=SS(cl(u,tl-wd,tl+.04));}return a+(b-a)*k/NS[n];}
+function sAt(car,n,u){const a=SC[car][n-1],b=SC[car][n];if(u>=3)return b;return a+(b-a)*SS(cl(u,2.0,2.2));}/* v215 (영태): 사자처럼 — 부품 붙는 동안 몸 크기 그대로, 덮개 닫힐 때(2.0~2.2) 한 번에 부드럽게 커짐 */
 /* o.fs: 화염 몸 배율(1.039)을 바깥에서 이미 곱했으면 1 */
 function drawCar(car,n,u,aim,base,o){o=o||{};const K=ctx(n,u);CARS[car](K,aim);const S=sAt(car,n,u)*(car==='flame'&&!o.fs?FS0:1);
- const rt=n===1&&u<3?SS(cl(u,0,.3)):1;
+ const rt=n===1&&u<3?.23*SS(cl(u,0,.3))+.77*SS(cl(u,2.0,2.2)):1;/* v215: 처음엔 조금만(15%) 접히고 나머지는 커질 때 같이 — 줄었다 커지지 않음, 완성 모습 그대로 */
  cx.save();cx.scale(S,S);
  for(const e of K.U)e.f();
  cx.save();cutPath(car);cx.clip();base();cx.restore();
@@ -6345,7 +6345,7 @@ function l20(f,fl){const car=fl?'flame':CAR,tt=Math.min(3,f.t),g=SS(cl(tt,.3,2.6
 /* 변신 그림 */
 rbTF=function(f){if(window.__TFOLD||!C4[CAR])return pRb(f);if(f.l20)return l20(f,0);const u=Math.min(3,f.t/f.D*3),a=tkAimL();let r;cx.save();cx.translate(P.x,P.y);cx.rotate(P.ang);try{r=T.drawCar(CAR,f.nv,u,a,baseRob(CAR,a));}finally{cx.restore();}ev(f,u,r.K,r.S);};
 drawFTF=function(f){if(window.__TFOLD)return pF(f);if(f.l20)return l20(f,1);const u=Math.min(3,f.t/f.D*3);
- cx.save();cx.translate(P.x,P.y);{const R=(f.r0+(f.r1-f.r0)*SS(cl(u,.8,1.7)))*1.15,g=cx.createRadialGradient(0,2,R*.2,0,2,R*.85);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.beginPath();cx.ellipse(0,2,R*.85,R*.7,0,0,TAU);cx.fill();}
+ cx.save();cx.translate(P.x,P.y);{const R=(f.r0+(f.r1-f.r0)*SS(cl(u,2.0,2.2)))*1.15,g=cx.createRadialGradient(0,2,R*.2,0,2,R*.85);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.beginPath();cx.ellipse(0,2,R*.85,R*.7,0,0,TAU);cx.fill();}
  cx.rotate(P.ang);const fa=fAim(),r=T.drawCar('flame',f.nv,u,fa,baseFla(fa));/* v208: 변신 중에도 노즐이 평소 조준 그대로 — 끝날 때 튀지 않음 */cx.restore();ev(f,u,r.K,r.S);};
 })();
 
