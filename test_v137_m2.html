@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v187';
+const BUILD='v208';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -17,7 +17,7 @@ const Q=new URLSearchParams(location.search);
 const STAR_T=[.75,.5];
 const SKEY=Q.has('dev')?'ac_save_dev':'ac_save';/* v120: dev=1 uses its own save, real progress untouched */const SAVE=(()=>{let s={};try{s=JSON.parse(localStorage.getItem(SKEY)||'{}')||{};}catch(e){}return Object.assign({gold:0,up:{hp:0,dmg:0,spd:0,mag:0},cars:{tank:1},car:'tank',ach:{},stage:1,diff:0,mute:0,noads:0},s);})();
 function saveS(){try{localStorage.setItem(SKEY,JSON.stringify(SAVE));}catch(e){}}
-if(Q.has('dev')){SAVE.gold=SAVE.dia=999999;if(!Q.has('play'))SAVE.clv={};/* v134: opening the dev link resets every car to level 1 (garage upgrades made after that still carry into the run) */}/* v120: dev=1 = fresh game with infinite gold/diamonds (cars, levels, stats start locked) */
+if(SAVE._upv!==208){SAVE._upv=208;SAVE.pu={};SAVE.up={hp:0,dmg:0,spd:0,mag:0};SAVE.clv={};try{localStorage.setItem(SKEY,JSON.stringify(SAVE));}catch(e){}}/* v208 (영태): 차량 강화·상점 강화는 처음 상태에서 시작 — 예전 저장도 한 번 초기화(강화 저장 버전 208) */if(Q.has('dev')){SAVE.gold=SAVE.dia=999999;if(!Q.has('play')){SAVE.clv={};SAVE.pu={};SAVE.up={hp:0,dmg:0,spd:0,mag:0};}/* v134: opening the dev link resets every car to level 1 (garage upgrades made after that still carry into the run) */}/* v120: dev=1 = fresh game with infinite gold/diamonds (cars, levels, stats start locked) */
 const PLAY=Q.has('play')||Q.has('dps');function difOpen(st,d){if(d<=0||Q.has('dev'))return true;/* v82: dev=1 unlocks every difficulty */const W=SAVE.wins||{};return d===1?!!W[st+'n']:!!W[st+'h'];}{SAVE.wins=SAVE.wins||{};if(!SAVE._w81){SAVE._w81=1;const S0=SAVE.stars||{};for(const k in S0)if(S0[k]>0)SAVE.wins[k]=1;try{localStorage.setItem(SKEY,JSON.stringify(SAVE));}catch(e){}}if(SAVE.diff===true)SAVE.diff=1;}const DEVQ=(Q.has('dev')?'&dev=1':'')+(Q.has('vibtest')?'&vibtest=1':'');/* v124: keep vibtest across home/run */const DIFF=Q.get('diff')==='hell'?2:Q.get('diff')==='hard'?1:0;const HELL=DIFF===2;const DHP=DIFF<2?1:[1,1.85,2.6][DIFF],DBHP=DIFF<2?1:[1,1.7,2.0][DIFF],DDMG=[1,1.4,1.85][DIFF];const HELLK={hp:1.28,dmg:1.30,spawn:1.13,boss:1.15,xp:1.05};
 /* ===================== V79 TUNING BLOCK (edit numbers here) ===================== */
 const TUNE={
@@ -225,7 +225,7 @@ const RBXP={raven:1,mammoth:1.05,croc:1};
 /* damage coefficients per stage Lv1/5/10/15/20 (tuned by sim) */
 var RBMP={pc:[0,2,6,99,99],fo:[.6,.7,.88,1,1],w:[5,5,8,28,14],rg:[.9,1,1.1,1.5,1.2]};/* mammoth pierce count / falloff per stage */
 const RBK={"raven":[0.563,0.71,0.586,0.499,0.376],"mammoth":[0.165,0.434,0.466,0.159,0.165],"croc":[0.275,1.58,1.423,0.66,0.578]};
-const RBSZ={"raven":[1.221,1.158,1.011,0.829,1.038],"mammoth":[1.196,1.257,1.189,1.067,0.948],"croc":[1.48,1.269,1.227,1.075,1.074]/*v103: L20 1.212->1.074 (opaque area matched to raven/mammoth)*/};/* on-screen size matched to the lion */
+const RBSZ={"raven":[1.221,1.158,1.011,0.829,1.038],"mammoth":[1.196,1.257,1.189,1.067,0.853],"croc":[1.48,1.269,1.227,1.075,1.074]/*v103: L20 1.212->1.074 (opaque area matched to raven/mammoth)*/};/* on-screen size matched to the lion */
 function GEMOL(){return ({5:'#0B2E24',6:'#14303A',7:'#0E2A36'})[MAP]||'#1E5560';}/* c18: XP crystal outline color per map ground */
 function rbSc(k){if(k!==1){cx.translate(P.x,P.y);cx.scale(k,k);cx.translate(-P.x,-P.y);}}
 const RBP=[];let RBSS=null;
@@ -838,8 +838,8 @@ function rcPool(){return RCD[CAR==='flame'?'f':'t'].filter(x=>RK(x.k)<x.mx).map(
 function applyChoice(c){choices=null;if(c.cc){G.cc=G.cc||{};G.cc[c.k]=CK(c.k)+1;if(pending>0){pending--;openCards();}return;}if(c.rb){G.rc=G.rc||{};G.rc[c.k]=RK(c.k)+1;if(pending>0){pending--;openCards();}return;}if(c.sh){shAdd();if(pending>0){pending--;openCards();}return;}if(c.s){if(c.up)SKL++;else{ACT=c.k;SKL=0;}SKB.cd=0;}else if(c.st)addS(c.k);else if(c.w){addW(c.k);if(c.evo){G.evA={k:c.k,t:0};G.gflash=0;G.stop=0;}}else addP(c.k);if(pending>0){pending--;openCards();}}
 // ---------- input
 const keys={};addEventListener('keydown',e=>keys[e.key.toLowerCase()]=1);addEventListener('keyup',e=>keys[e.key.toLowerCase()]=0);
-let joy=null;/* v206 (영태): 조이스틱 설정 — 위치(자유=누른 곳/왼쪽/가운데/오른쪽), 크기, 투명도 (저장됨) */function JR(){return 40*(SAVE.jsz||100)/100;}function JFIX(){const m=SAVE.jpos||'free';if(m==='free')return null;return m==='r'?{x:W*.74,y:H-275}:{x:W*(m==='l'?.22:.5),y:H-118};/* 오른쪽은 스킬 버튼과 겹치지 않게 그 위 */}
-function drawJoy(){const al=(SAVE.jop==null?40:SAVE.jop)/100;if(al<=0||G.over)return;const R=JR()*1.25;let o=null,k=null;if(joy){const r=cv.getBoundingClientRect();o={x:joy.x0-r.left,y:joy.y0-r.top};let dx=joy.x-joy.x0,dy=joy.y-joy.y0;const l=Math.hypot(dx,dy),m=R*.62;if(l>m){dx*=m/l;dy*=m/l;}k={x:o.x+dx,y:o.y+dy};}else{o=JFIX();if(!o)return;k=o;}cx.save();cx.globalAlpha=al;cx.fillStyle='rgba(20,28,36,.55)';cx.strokeStyle='rgba(255,255,255,.8)';cx.lineWidth=3;cx.beginPath();cx.arc(o.x,o.y,R,0,TAU);cx.fill();cx.stroke();cx.fillStyle='rgba(255,255,255,.85)';cx.beginPath();cx.arc(k.x,k.y,R*.42,0,TAU);cx.fill();cx.restore();}
+let joy=null;/* v208 (영태): 조이스틱 설정 없음 — 항상 누른 곳에 작게 나오고, 손 떼면 사라짐 */function JR(){return 40;}function JFIX(){const m='free';if(m==='free')return null;return m==='r'?{x:W*.74,y:H-275}:{x:W*(m==='l'?.22:.5),y:H-118};/* 오른쪽은 스킬 버튼과 겹치지 않게 그 위 */}
+function drawJoy(){const al=.4;if(!joy||G.over)return;const R=JR()*.85;let o=null,k=null;if(joy){const r=cv.getBoundingClientRect();o={x:joy.x0-r.left,y:joy.y0-r.top};let dx=joy.x-joy.x0,dy=joy.y-joy.y0;const l=Math.hypot(dx,dy),m=R*.62;if(l>m){dx*=m/l;dy*=m/l;}k={x:o.x+dx,y:o.y+dy};}else{o=JFIX();if(!o)return;k=o;}cx.save();cx.globalAlpha=al;cx.fillStyle='rgba(20,28,36,.55)';cx.strokeStyle='rgba(255,255,255,.8)';cx.lineWidth=3;cx.beginPath();cx.arc(o.x,o.y,R,0,TAU);cx.fill();cx.stroke();cx.fillStyle='rgba(255,255,255,.85)';cx.beginPath();cx.arc(k.x,k.y,R*.42,0,TAU);cx.fill();cx.restore();}
 const cxy=e=>{const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};};
 cv.addEventListener('pointerdown',e=>{const p=cxy(e),b=skBtn();if(!G.upause){const bb=bskBtn();if(bb&&Math.hypot(p.x-bb.x,p.y-bb.y)<bb.hit){useL20();e.preventDefault();return;}}if(G.upause){const hb=homeBtn();if(Math.abs(p.x-hb.x)<hb.w/2&&Math.abs(p.y-hb.y)<hb.h/2){location.search='?menu=1'+DEVQ;e.preventDefault();return;}G.upause=0;e.preventDefault();return;}{const pb=pauseBtn();if(Math.hypot(p.x-pb.x,p.y-pb.y)<22&&!G.over){G.upause=1;e.preventDefault();return;}}{const sl=skSlots();if(sl[1]&&Math.hypot(p.x-sl[1].x,p.y-sl[1].y)<sl[1].hit){useCore();e.preventDefault();return;}}if(Math.hypot(p.x-b.x,p.y-b.y)<b.hit){useSkill();e.preventDefault();return;}if(!joy){joy={id:e.pointerId,x0:e.clientX,y0:e.clientY,x:e.clientX,y:e.clientY};const jf=JFIX();if(jf&&Math.hypot(p.x-jf.x,p.y-jf.y)<JR()*1.9){const r=cv.getBoundingClientRect();joy.x0=jf.x+r.left;joy.y0=jf.y+r.top;}};});
 addEventListener('pointermove',e=>{if(joy&&e.pointerId===joy.id){joy.x=e.clientX;joy.y=e.clientY}});const pu=e=>{if(joy&&e.pointerId===joy.id)joy=null;};addEventListener('pointerup',pu);addEventListener('pointercancel',pu);
@@ -2791,12 +2791,12 @@ if(G.tb&&G.tb.life>0&&document.getElementById('res').style.display!=='flex'){con
   const soon=!done&&!lit&&G.veh<3&&G.lv===VEH_LV[G.veh]-1&&G.xp/G.need>=.5;if(soon||lit){cx.font='900 13px system-ui';cx.textAlign='right';cx.lineWidth=3;cx.strokeStyle='#3b2a08';cx.fillStyle='#ffe27a';cx.globalAlpha=.7+.3*Math.sin(G.t*8);cx.strokeText('변신 준비',ix-20,iy+5);cx.fillText('변신 준비',ix-20,iy+5);cx.globalAlpha=1;}}
  {const bar=(hp,mx,col,nm)=>{const bw=W*.8,bx=W*.1,by=H-30;cx.fillStyle='rgba(0,0,0,.5)';rr(bx,by,bw,13,6);cx.fill();cx.fillStyle=col;rr(bx,by,bw*Math.max(0,hp)/mx,13,6);cx.fill();cx.fillStyle='#fff';cx.textAlign='center';cx.font='bold 12px system-ui';cx.lineWidth=3;cx.strokeStyle='#000';cx.strokeText(nm,W/2,by-4);cx.fillText(nm,W/2,by-4);};
   if(G.boss)bar(G.boss.hp,G.boss.max,'#ff4a3a',G.boss.name);else{const m=EN.find(e=>e.mb&&!e.dead);if(m)bar(m.hp,m.max,'#ff7a3a',RBN[m.rk||(STAGE===1?'m1':'m2')]);}}
- if(TUT&&G.t<30&&!AUTO){cx.font='bold 16px system-ui';cx.textAlign='center';cx.lineWidth=4;cx.strokeStyle='#000';cx.fillStyle='#fff';cx.globalAlpha=.6+.4*Math.sin(G.t*4);const m=PLAY0&&G.t<14?'':G.t<8?'👆 화면을 끌어서 움직여요':G.lv<2?'💎 수정을 먹으면 레벨업!':'';if(m){cx.strokeText(m,W/2,H*.62);cx.fillText(m,W/2,H*.62);}cx.globalAlpha=1;}
+ {const sk=document.getElementById('skip');if(sk&&TUT)sk.style.visibility=G.roul?'hidden':'';}/* v208: 룰렛 중 튜토리얼 문구·버튼 숨김 */if(TUT&&G.t<30&&!AUTO&&!G.roul){cx.font='bold 16px system-ui';cx.textAlign='center';cx.lineWidth=4;cx.strokeStyle='#000';cx.fillStyle='#fff';cx.globalAlpha=.6+.4*Math.sin(G.t*4);const m=PLAY0&&G.t<14?'':G.t<8?'👆 화면을 끌어서 움직여요':G.lv<2?'💎 수정을 먹으면 레벨업!':'';if(m){cx.strokeText(m,W/2,H*.62);cx.fillText(m,W/2,H*.62);}cx.globalAlpha=1;}
  if(G.upause){cx.fillStyle='rgba(0,0,0,.5)';cx.fillRect(0,0,W,H);cx.fillStyle='#fff';cx.font='900 32px system-ui';cx.textAlign='center';cx.fillText('일시정지',W/2,H/2);cx.font='bold 16px system-ui';cx.fillText('화면을 누르면 계속',W/2,H/2+30);const hb=homeBtn();cx.fillStyle='#FFC83D';rr(hb.x-hb.w/2,hb.y-hb.h/2,hb.w,hb.h,14);cx.fill();cx.fillStyle='#2a1e05';cx.font='900 20px system-ui';cx.fillText('🏠 홈으로',hb.x,hb.y+7);}
  if(BAN&&BAN.life>0&&/^(최종 각성!|1단 합체!|2단 합체!|3단 합체!|적 떼 접근!|⚠ 강적 출현!|⚠ 보스 출현!)$/.test(BAN.s||'')&&!G.roul&&document.getElementById('res').style.display!=='flex'){if(BAN.kill){cx.globalAlpha=Math.min(1,BAN.life*8);cx.font='900 15px system-ui';cx.textAlign='center';cx.lineWidth=4;cx.strokeStyle='#3b2a08';cx.fillStyle='#ffe27a';cx.strokeText(BAN.s,W/2,64,190);cx.fillText(BAN.s,W/2,64,190);cx.globalAlpha=1;}else{cx.globalAlpha=Math.min(1,BAN.life*2);cx.font=BAN.small?'900 22px system-ui':BAN.big?'900 '+Math.round(Math.min(46,W*.11)*(1+Math.max(0,BAN.life-1.6)*1.5))+'px system-ui':'bold 30px system-ui';cx.textAlign='center';cx.lineWidth=6;cx.strokeStyle='#3b2a08';cx.fillStyle='#ffe27a';{const by=BAN.small?140:H*.28;cx.strokeText(BAN.s,W/2,by);cx.fillText(BAN.s,W/2,by);}cx.globalAlpha=1;}}
  for(let i=0;i<POPS.length;i++){const p=POPS[i];cx.globalAlpha=Math.min(1,p.life*2);cx.font='900 24px system-ui';cx.textAlign='center';cx.lineWidth=5;cx.strokeStyle='#1a1030';cx.fillStyle=p.c;const yy=H*.42-(POPS.length-1-i)*30;cx.strokeText(p.s,W/2,yy);cx.fillText(p.s,W/2,yy);}cx.globalAlpha=1;
  if(G.ready&&!G.tf){/* v133: 변신 준비 완료, ~.18s 6px upward slide-in then hold (no pulse/blink) */const q=Math.min(1,(G.t-(G.ready.t0??G.t))/.18),e=1-(1-q)*(1-q),Y=H*.28+6*(1-e);cx.save();cx.globalAlpha=e;cx.textAlign='center';cx.textBaseline='alphabetic';/* v199: 한 줄 + 무지개 1안 — 도현체, 진한 #26313D 테두리, 파스텔 무지개가 옆으로 흐름(2.8초 한 바퀴), 깜빡임·맥동·발광 없음 */cx.font='36px "Do Hyeon",system-ui,sans-serif';try{cx.letterSpacing='2px';}catch(_){}const T='변신 준비 완료',tw=cx.measureText(T).width;cx.lineJoin='round';cx.lineWidth=7;cx.strokeStyle='#26313D';cx.strokeText(T,W/2,Y);if(!window.__RBP||window.__RBP.w!==Math.round(tw)){const w=Math.max(1,Math.round(tw)),c=document.createElement('canvas');c.width=2*w;c.height=1;const g=c.getContext('2d'),gr=g.createLinearGradient(0,0,2*w,0),RC=['#E8A0A0','#EBC48F','#E6DE98','#A8D8A0','#94C8DC','#A9A6DE','#D4A2D6'];for(let k=0;k<=14;k++)gr.addColorStop(k/14,RC[k%7]);g.fillStyle=gr;g.fillRect(0,0,2*w,1);window.__RBP={w,p:cx.createPattern(c,'repeat')};}const RB=window.__RBP,ph=((G.t%2.8)/2.8)*2*RB.w;try{RB.p.setTransform(new DOMMatrix([1,0,0,1,W/2-tw/2-ph,0]));}catch(_){}cx.fillStyle=RB.p;cx.fillText(T,W/2,Y);try{cx.letterSpacing='0px';}catch(_){}/* 부제 '곧 변신해요!' 뺌 */cx.restore();}
- if(TUT&&PLAY0&&G.t<14&&!G.paused){const tx=G.t<5?'👆 화면을 끌어서 움직여요':G.t<10?'🔫 공격은 알아서 해요':'💎 보석을 먹으면 레벨업, 카드를 골라요';cx.save();cx.textAlign='center';cx.font='900 19px system-ui';cx.lineWidth=5;cx.strokeStyle='#000';cx.fillStyle='#fff';cx.strokeText(tx,W/2,H*.72);cx.fillText(tx,W/2,H*.72);cx.restore();}
+ if(TUT&&PLAY0&&G.t<14&&!G.paused&&!G.roul){const tx=G.t<5?'👆 화면을 끌어서 움직여요':G.t<10?'🔫 공격은 알아서 해요':'💎 보석을 먹으면 레벨업, 카드를 골라요';cx.save();cx.textAlign='center';cx.font='900 19px system-ui';cx.lineWidth=5;cx.strokeStyle='#000';cx.fillStyle='#fff';cx.strokeText(tx,W/2,H*.72);cx.fillText(tx,W/2,H*.72);cx.restore();}
  drawSkill();drawBsk();if(RBCAR)rbSkHud();
  if(G.roul)drawRoul();
  if(G.over){cx.fillStyle='rgba(0,0,0,.5)';cx.fillRect(0,0,W,H);cx.fillStyle='#fff';cx.font='bold 32px system-ui';cx.textAlign='center';cx.fillText(G.win?'승리!':'게임 오버',W/2,H/2);}}
@@ -5687,13 +5687,13 @@ const $=id=>document.getElementById(id),fmt=n=>n===Infinity?'∞':(+n).toLocaleS
 let TAB='home',GSEL=null;
 const DC=['#3D8BFF','#FF8A2B','#E53935'];
 function bar(){return '<div class="h2top"><div class="h2pill">💰 <b>'+fmt(SAVE.gold)+'</b></div><div class="h2pill dia">💎 <b>'+fmt(SAVE.dia)+'</b></div><button class="h2ic" id="hSet" aria-label="설정">⚙️</button></div>';}
-/* v206 (영태): 아래 줄 = 차고 / 홈 / 무한모드 / 상점 (상점 = 기존 영구 강화 화면, 무한모드 = 준비 중) */function tabs(){return '<div class="v15tb">'+[['gar','🔧','차고'],['home','🗺️','홈'],['inf','♾️','무한모드'],['up','🏪','상점'],['set','⚙️','설정']].map(([k,i,n])=>'<button data-tb="'+k+'" class="'+(TAB===k?'on':'')+'"><i>'+i+'</i>'+n+'</button>').join('')+'</div>';}
+/* v208 (영태): 아래 줄 = 차고 / 무한모드 / 홈 / 상점 / 설정 (홈 가운데) (상점 = 기존 영구 강화 화면, 무한모드 = 준비 중) */function tabs(){return '<div class="v15tb">'+[['gar','🔧','차고'],['inf','♾️','무한모드'],['home','🗺️','홈'],['up','🏪','상점'],['set','⚙️','설정']].map(([k,i,n])=>'<button data-tb="'+k+'" class="'+(TAB===k?'on':'')+'"><i>'+i+'</i>'+n+'</button>').join('')+'</div>';}
 function draw(id,el,pl){const cv=document.createElement('canvas'),r=el.getBoundingClientRect(),S=Math.max(64,Math.round(Math.max(r.width,r.height)*(devicePixelRatio||1)));cv.width=cv.height=S;el.prepend(cv);
  h9prep().then(M=>{const v=M[(pl||'g')+id]||M['s'+id];if(!v)return;const g=cv.getContext('2d'),[x0,y0,bw,bh]=v.bb,k=Math.min(S*.96/Math.max(bw,bh),S*.55/Math.sqrt(v.n||bw*bh));/* v117: equal visual size */g.imageSmoothingQuality='high';g.drawImage(v.im,x0,y0,bw,bh,(S-bw*k)/2,(S-bh*k)/2,bw*k,bh*k);});}
 const cname=c=>c[1].replace(/^[^가-힣A-Za-z]+/,'');
 function cfm(q,info,yes,car){const d=document.createElement('div');d.className='v15cf';d.innerHTML='<div class="bx"><div class="q">'+q+'</div>'+(car?'<div class="pc" data-c="'+car+'"></div>':'')+'<div class="i">'+info+'</div><div class="r"><button class="v15b g" data-n>아니오</button><button class="v15b" data-y>예</button></div></div>';document.body.appendChild(d);const pc=d.querySelector('.pc');if(pc)draw(car,pc);d.querySelector('[data-n]').onclick=()=>d.remove();d.querySelector('[data-y]').onclick=()=>{d.remove();yes();};}window.V116CF=cfm;
 function myCar(){return SAVE.cars[SAVE.car]?SAVE.car:(CARS.find(c=>SAVE.cars[c[0]])||CARS[0])[0];}
-function frame(body){const m=$('menu');$('gar').style.display='none';G.paused=true;m.className='ov v15';m.style.cssText='';m.innerHTML='<div class="v15w">'+bar()+body+tabs()+'<div style="position:fixed;left:6px;bottom:calc(env(safe-area-inset-bottom) + 2px);font:700 10px system-ui;color:#8A96A8;opacity:.8;pointer-events:none;z-index:5">BUILD '+BUILD+'</div></div>';m.style.display='flex';m.style.height=innerHeight+'px';
+function frame(body){const m=$('menu');$('gar').style.display='none';G.paused=true;m.className='ov v15';m.style.cssText='';m.innerHTML='<div class="v15w">'+bar()+body+tabs()+'<div style="position:absolute;left:18px;top:calc(env(safe-area-inset-top) + 49px);font:700 9px system-ui;line-height:10px;color:#8A96A8;opacity:.8;pointer-events:none;z-index:5">BUILD '+BUILD+'</div></div>';m.style.display='flex';m.style.height=innerHeight+'px';
  m.querySelectorAll('[data-tb]').forEach(b=>b.onclick=()=>{if(b.dataset.tb==='inf'){soon('♾️ 무한모드');return;}if(b.dataset.tb==='set'){window.SET206&&SET206();return;}TAB=b.dataset.tb;render();});$('hSet').onclick=()=>window.SET206?SET206():showSettings();m.querySelectorAll('.v15car[data-c],.v15p[data-c]').forEach(u=>draw(u.dataset.c,u));return m;}
 function soon(t){const d=document.createElement('div');d.className='v15cf';d.innerHTML='<div class="bx"><div class="q">'+t+'</div><div class="i">준비 중이에요!</div><div class="r"><button class="v15b" data-y>확인</button></div></div>';document.body.appendChild(d);d.querySelector('[data-y]').onclick=()=>d.remove();d.onclick=e=>{if(e.target===d)d.remove();};}
 /* v206 (영태): 홈 = 큰 칸에서 맵 넘기기(‹ ›) → 바로 아래 난이도 → 출동. 출동을 누르면 차량 선택 창이 한 번 더 뜨고, 고른 차로 출발 */
@@ -5999,10 +5999,10 @@ drawRoul=function(){const R0=G.roul,own=R0.own,n=own.length,res=own.indexOf(R0.k
  const vw=292,cy=py+112,vx=(W-vw)/2,Pp=60;
  let off,rk=0;if(!R0.applied){const k=Math.min(1,R0.t/R0.spin);off=(n*3+res)*(1-(1-k)**2.4)*Pp;}else{off=(n*3+res)*Pp;rk=Math.min(1,(R0.t-R0.spin)/.3);}
  cx.save();A.cut(cx,vx,cy-38,vw,76,6);cx.fillStyle=C.ol;cx.fill();cx.clip();const st=Math.floor((off-vw/2)/Pp)-1;
- for(let i=st;i<st+8;i++){const k=own[((i%n)+n)%n];const x=W/2+i*Pp-off;if(R0.applied&&Math.abs(x-W/2)<2)continue;A.card(cx,x,cy,52,IK[k]||k);}
+ for(let i=st;i<st+8;i++){const k=own[((i%n)+n)%n];const x=W/2+i*Pp-off;if(R0.applied&&Math.abs(x-W/2)<2)continue;A.card(cx,x,cy,52,IK[k]||k);/* v208: 칸 대비 — 밝은 테두리, 가운데에서 멀수록 살짝 어둡게(거리에 따라 부드럽게) */A.cut(cx,x-26,cy-26,52,52,6.24);cx.strokeStyle='rgba(255,255,255,.6)';cx.lineWidth=1.6;cx.stroke();{const dm=.38*Math.min(1,Math.abs(x-W/2)/60);if(dm>.01){A.cut(cx,x-26,cy-26,52,52,6.24);cx.fillStyle='rgba(8,12,18,'+dm+')';cx.fill();}}}
  cx.restore();A.cut(cx,vx,cy-38,vw,76,6);cx.strokeStyle=C.ol;cx.lineWidth=2;cx.stroke();
- if(!R0.applied){cx.beginPath();cx.rect(W/2-31,cy-33,62,66);cx.strokeStyle=C.ol;cx.lineWidth=6;cx.stroke();cx.strokeStyle=C.br;cx.lineWidth=3;cx.stroke();cx.beginPath();cx.moveTo(W/2-7,cy-44);cx.lineTo(W/2+7,cy-44);cx.lineTo(W/2,cy-35);cx.closePath();A.fs(cx,C.brL,C.ol,1.5);}
- else{const e=1-Math.pow(1-rk,3),sz=52+32*e,k=R0.kind==='pas'?R0.pk:R0.k;A.card(cx,W/2,cy+16*e,sz,IK[k]||k);cx.beginPath();cx.rect(W/2-sz/2-3,cy+16*e-sz/2-3,sz+6,sz+6);cx.strokeStyle=C.br;cx.lineWidth=3;cx.stroke();
+ if(!R0.applied){cx.beginPath();cx.rect(W/2-31,cy-33,62,66);cx.strokeStyle=C.ol;cx.lineWidth=7;cx.stroke();cx.strokeStyle='#FFD45A';cx.lineWidth=4;cx.stroke();cx.beginPath();cx.moveTo(W/2-7,cy-44);cx.lineTo(W/2+7,cy-44);cx.lineTo(W/2,cy-35);cx.closePath();A.fs(cx,C.brL,C.ol,1.5);}
+ else{const e=1-Math.pow(1-rk,3),sz=52+32*e,k=R0.kind==='pas'?R0.pk:R0.k;A.card(cx,W/2,cy+16*e,sz,IK[k]||k);cx.beginPath();cx.rect(W/2-sz/2-3,cy+16*e-sz/2-3,sz+6,sz+6);cx.strokeStyle=C.ol;cx.lineWidth=7;cx.stroke();cx.strokeStyle='#FFD45A';cx.lineWidth=4;cx.stroke();
   cx.globalAlpha=e;A.label(cx,R0.msg||'',W/2,py+ph-(R0.stars?42:30),17,R0.kind==='evo'?'#9fe0ff':C.iv);if(R0.stars)A.label(cx,'★'.repeat(R0.stars),W/2,py+ph-20,16,C.brL);cx.globalAlpha=1;}
  cx.font='13px system-ui';cx.textAlign='center';cx.textBaseline='alphabetic';cx.fillStyle='rgba(241,229,197,.75)';cx.fillText('탭하여 건너뛰기',W/2,H*.9);cx.restore();};
 /* ---- croc awakening: same timing, new eye (octagonal jade plate, amber slit eye, brow plate) ---- */
@@ -6107,7 +6107,8 @@ const _fl=drawFTF;drawFTF=function(f){if(window.__TFOLD)return _fl(f);if(f.l20){
  draw(f,u,1);};
 })();
 </script>
-<script>/* v207 (영태 OK): 화염·까마귀·매머드·악어 Lv5/10/15 변신 = 사자 원리. 기존 차(기본 그림)가 몸체로 남고, 차 자신의 장치가 조금씩 바뀌면서 부품이 잠김.
+<script>/* v208 (영태): 화염 Lv5 어깨판이 몸 밑에서 밀려 나옴(갑자기 안 커짐)·Lv15 액자 대신 옆 볼판·노즐 조준 그대로, 까마귀 몸통 자체가 단계마다 바뀜, 매머드 진짜 포탑+큰 포, Lv5 앞부분은 잘리지 않고 접혀 들어감.
+   v207 (영태 OK): 화염·까마귀·매머드·악어 Lv5/10/15 변신 = 사자 원리. 기존 차(기본 그림)가 몸체로 남고, 차 자신의 장치가 조금씩 바뀌면서 부품이 잠김.
    0~0.3 무기 수납 / 0.3~0.5 판·덮개 열림 / 0.5~1.7 부품 0.3초씩 날아와 잠김(잠길 때 핵심 장치 바뀜, 크기도 잠길 때마다 조금씩 = 사자처럼 부품 붙을 때만 커짐) / 2.0~2.2 판 닫힘 / 2.5~2.7 무기 전개. 흔들림 없음, 반짝임 = 사자와 같은 LFL.
    Lv20 = 기존 얼굴 변신 그대로 (Lv15 모습에서 이어짐). 판정·능력치·공격·소리 박자 그대로. */
 (function(){
@@ -6133,11 +6134,13 @@ function ctx(n,u){const tr=u<3;const K={n,u,tr,open:tr?SS(cl(u,.3,.5))*(1-SS(cl(
  lk:(lv,j)=>lv<n||(lv===n&&u>=.8+.3*j),ph:(lv,f)=>lv<n?1:lv>n?0:f(u),
  U:[],O:[],mounts:[]};
  /* part j of level lv at mount (x,y): same drawing flying in and locked. lion: start .5+.3j, .3s, 65 out, 3 overshoot, j=2 turns 25deg */
- K.part=(lv,j,x,y,fn,dir,under)=>{if(lv>n)return;if(lv===n)K.mounts[j]=[x,y];let d=0,rot=0,a=1;if(lv===n&&tr){const t0=.5+.3*j,p=cl(u,t0,t0+.3);if(p<=0)return;
-   d=p<.8?65*(1-SS(p/.8))-3*SS(p/.8):p<1?-3*(1-SS((p-.8)/.2)):0;rot=j===2&&p<1?(25*PI/180)*(1-SS(p)):0;a=Math.min(1,p/.2);}
+ K.part=(lv,j,x,y,fn,dir,under,em)=>{if(lv>n)return;if(lv===n)K.mounts[j]=[x,y];let d=0,rot=0,a=1;if(lv===n&&tr){const t0=.5+.3*j,p=cl(u,t0,t0+.3);if(p<=0)return;
+   if(em){d=-em*(1-SS(p));}else{d=p<.8?65*(1-SS(p/.8))-3*SS(p/.8):p<1?-3*(1-SS((p-.8)/.2)):0;rot=j===2&&p<1?(25*PI/180)*(1-SS(p)):0;a=Math.min(1,p/.2);}}
   let dx=dir?dir[0]:x,dy=dir?dir[1]:y;const L=Math.hypot(dx,dy)||1;dx/=L;dy/=L;
   (under?K.U:K.O).push({x,y,f:()=>{cx.save();cx.globalAlpha*=a;cx.translate(x+dx*d,y+dy*d);if(rot)cx.rotate(rot);fn();cx.restore();}});};
  K.el=(under,x,y,fn)=>(under?K.U:K.O).push({x,y,f:fn});
+ /* 몸통 바뀜 정도: 이번 단계 부품이 잠길 때마다 1/N씩(잠기기 직전 0.2초 동안 부드럽게) */
+ K.hk=()=>{if(!tr)return 1;let k=0;for(let j=0;j<NS[n];j++){const tl=.8+.3*j;k+=SS(cl(u,tl-.2,tl+.04));}return k/NS[n];};
  return K;}
 /* ================= 화염황소 ================= */
 const FC={b:'#CC3A20',d:'#8B2716',l:'#F27C5E'},FR={b:'#A82A18',d:'#6A160C',l:'#E0452A'},ST={b:'#59606C',d:'#2E323A',l:'#8A919C'},BK={b:'#2A2C31',d:'#141518',l:'#4A4D55'},OR='#FF982D';
@@ -6148,12 +6151,12 @@ function flame(K,aim){OL='#142233';const n=K.n,o=K.open,w=K.wpn;
  for(const s of[-1,1])K.part(2,s<0?0:1,-3,s*25,()=>tread(-24,20,9),null,1);
  K.part(2,3,-21,0,()=>{BX(-5,-9,3,9,2,BK);for(const y of[-5.5,-2,1.5,5])HL(-3.5,y,1.5,y,OR,1.2);},[-1,0],1);
  /* front nose block (body: replaces the clipped head), covers open sideways */
- const fn=K.ph(1,u=>SS(cl(u,.3,1.0)));K.el(1,8,0,()=>{cx.save();cx.translate(-11*(1-fn),0);BX(1,-9,12,9,4,FC);HL(3,-6,10,-6,'rgba(255,255,255,.25)',1);if(o>0){R(9,-3.2,13,3.2,1.5,'#C9A04A',1);}cx.restore();});
- for(const s of[-1,1])K.el(0,10,s*6,()=>{if(fn<=0)return;cx.save();cx.translate(-11*(1-fn),s*4*o);PL(M(s,[5,3,13,3,14,9,6,10]),FR,1.4);cx.restore();});
- /* Lv5 shoulders (lock .8/1.1), push out a little in Lv10 */
- for(const s of[-1,1])K.part(1,s<0?0:1,-2,s*(13+sh),()=>{PL(M(s,[-11,-1,9,-1,6,11,-8,11]),FC,1.5);BO(-5,s*5,1);BO(3,s*5,1);if(K.lk(2,1))CI(-1,s*8,1.6,OR,1);});
+ const fn=K.ph(1,u=>SS(cl(u,.08,.6)));K.el(1,8,0,()=>{cx.save();cx.translate(-11*(1-fn),0);BX(1,-9,12,9,4,FC);HL(3,-6,10,-6,'rgba(255,255,255,.25)',1);if(o>0){R(9,-3.2,13,3.2,1.5,'#C9A04A',1);}cx.restore();});
+ for(const s of[-1,1])K.el(1,10,s*6,()=>{if(fn<=0)return;cx.save();cx.translate(-11*(1-fn),s*4*o);PL(M(s,[5,3,13,3,14,9,6,10]),FR,1.4);cx.restore();});
  /* Lv15 shoulder reinforcement on the tracks */
- for(const s of[-1,1])K.part(3,s<0?0:1,-6,s*30,()=>{PL(M(s,[-12,-3,11,-3,8,5,-10,5]),FR,1.4);HL(-6,s*.8,5,s*.8,OR,1.3);});
+ for(const s of[-1,1])K.part(3,s<0?0:1,-6,s*25.5,()=>{PL(M(s,[-12,-3,11,-3,8,5,-10,5]),FR,1.4);HL(-6,s*.8,5,s*.8,OR,1.3);BO(-9,s*-1.2,.9);BO(7,s*-1.2,.9);},[0,s],1,7);
+ /* Lv5 shoulders (lock .8/1.1), push out a little in Lv10 */
+ for(const s of[-1,1])K.part(1,s<0?0:1,-2,s*(13+sh),()=>{PL(M(s,[-11,-1,9,-1,6,11,-8,11]),FC,1.5);BO(-5,s*5,1);BO(3,s*5,1);if(K.lk(2,1))CI(-1,s*8,1.6,OR,1);},[0,s],1,10);
  /* core: single nozzle -> twin (Lv5) -> guarded (Lv10) -> thick housed twin (Lv15). Turns to aim around (7,0) */
  const nz=(c,w)=>{cx.save();cx.translate(7,0);cx.rotate(aim||0);
    if(c===0){R(0,-3,13*w,3,2,BK.b,1.3);R(13*w-2,-3.6,13*w+2,3.6,1.5,OR,1.1);cx.restore();return;}
@@ -6167,7 +6170,7 @@ function flame(K,aim){OL='#142233';const n=K.n,o=K.open,w=K.wpn;
  /* Lv10 nozzle guard plates (front flanks) */
  K.part(2,2,14,0,()=>{for(const s of[-1,1])PL(M(s,[-4,10,7,10,10,15,-3,16]),ST,1.3);},[1,0]);
  /* Lv15 straight front brace frame (bars, not horns) + nozzle collar */
- K.part(3,2,18,0,()=>{for(const s of[-1,1])BX(-8,s*15,8,s*18.5,1.5,ST,1.3);BX(6,-18.5,9.5,18.5,1.5,ST,1.3);BO(7.7,-12,1);BO(7.7,12,1);},[1,0]);
+ K.part(3,2,14,0,()=>{for(const s of[-1,1]){PL(M(s,[-9,9.5,6,9.5,10,12.5,9,18.5,-9,19.5]),ST,1.4);HL(-6,s*14.5,6,s*14.5,'#2E323A',1.2);BO(-5.5,s*17,1);BO(5,s*17,1);}},[1,0]);
  K.part(3,3,8,0,()=>{cx.translate(-8,0);nz(3,w);},[1,0]);
 }
 /* ================= 칼까마귀 ================= */
@@ -6175,6 +6178,15 @@ const RV={b:'#2A2F3E',d:'#16171D',l:'#566078'},RB={b:'#3A3F52',d:'#1E212B',l:'#8
 function raven(K){OL='#06070A';const n=K.n,o=K.open,w=K.wpn;
  const core=K.lk(3,2)?3:K.lk(1,2)?1:0,cut=K.lk(2,2);const ax=K.ph(1,u=>SS(cl(u,.3,.8))),align=K.ph(1,u=>SS(cl(u,1.4,1.6)));
  const fold=n===2&&K.tr?-.2*o:0,sp3=n===3&&K.tr?o:0;
+ /* v208: 몸통 자체가 단계마다 바뀜 — 둥근 캡슐(Lv1) → 뾰족한 동체(Lv5) → 길고 넓은 동체+용골(Lv10) → 각진 동체+갈라진 꼬리깃(Lv15). 부품이 잠길 때마다 조금씩 */
+ K.el(0,0,0,()=>{const HS=[[9.5,0,8,-4.5,4,-6.3,-3,-6.5,-8.5,-6.2,-11,-3.5,-11.5,0],[12.5,0,9.5,-4,4,-7,-4,-7.4,-10,-6.6,-14,-4.6,-11.5,0],[13.5,0,10,-4.6,4,-8.1,-5,-8.5,-12,-7.2,-17,-5.6,-13,0],[14.5,0,10.5,-5.1,3,-9.3,-6,-9.6,-13,-8.2,-19,-6.6,-14,0]];
+  const k=K.hk(),A=HS[Math.max(0,n-1)],B=HS[n],h=A.map((v,i)=>LP(v,B[i],k)),q=[];for(let i=0;i<h.length;i+=2)q.push(h[i],h[i+1]);for(let i=h.length-4;i>=2;i-=2)q.push(h[i],-h[i+1]);
+  PL(q,RV,1.5);const g=(n-1+k)/3;/* 0..1 over Lv5..Lv15 */
+  cx.save();cx.beginPath();cx.moveTo(q[0],q[1]);for(let i=2;i<q.length;i+=2)cx.lineTo(q[i],q[i+1]);cx.closePath();cx.clip();
+  for(const sg of[-1,1]){cx.beginPath();cx.moveTo(h[0]-2,0);for(let i=2;i<h.length-2;i+=2)cx.lineTo(h[i]*.92,sg*(Math.abs(h[i+1])-1.6));cx.strokeStyle='#C9A04A';cx.lineWidth=1.1;cx.stroke();}
+  if(g>1/3){const e=Math.min(1,(g-1/3)*3);HL(-14*e-2,0,h[0]-3,0,'#566078',1.6);}
+  if(g>2/3){const e=Math.min(1,(g-2/3)*3);for(const sg of[-1,1])HL(-9,sg*4,-9-8*e,sg*(4+1.8*e),'#C9A04A',1.1);}
+  cx.restore();});
  /* Lv10 rear thruster pod (under) */
  K.part(2,3,-20,0,()=>{for(const s of[-1,1]){BX(-6,s*3,3,s*9,2.5,RB,1.3);CI(-6,s*6,1.8,'rgba(255,190,90,.85)',0);}},[-1,0],1);
  /* Lv10 big angled wing armour (under the blades) */
@@ -6189,7 +6201,7 @@ function raven(K){OL='#06070A';const n=K.n,o=K.open,w=K.wpn;
  for(const s of[-1,1])K.part(3,s<0?0:1,-9,s*22,()=>{for(let i=0;i<2;i++){const x=-4+i*6;PL(M(s,[x-3,-3,x+3.5,-3,x,6,x-6,7]),RB,1.3);HL(x-1,s*4.5,x-4.5,s*6,'#D8DCE6',1.1);}});
  /* centre: small gold dot -> lock ring (Lv5) -> triangle drive (Lv15); cover slides back in Lv15 */
  K.el(0,-7,0,()=>{if(sp3>0){cx.save();cx.translate(-5*sp3,0);BX(-11,-4.5,-4,4.5,2,RB,1.2);cx.restore();}});
- K.el(0,1,0,()=>{if(core===1){CI(0,0,6,GD.b,1.4);CI(0,0,3,'#16171D',1);BO(-3.5,-3.5,.7);BO(3.5,3.5,.7);}else if(core===3){PG([-6,-7,8,0,-6,7],GD.b,1.4);PG([-4,-4,4,0,-4,4],GD.l,0);CI(-1,0,2,'#16171D',1);}});
+ K.el(0,1,0,()=>{if(core===0){CI(-1,0,3,GD.b,1.1);CI(-1,0,1.3,'#16171D',0);}else if(core===1){CI(0,0,6,GD.b,1.4);CI(0,0,3,'#16171D',1);BO(-3.5,-3.5,.7);BO(3.5,3.5,.7);}else if(core===3){PG([-6,-7,8,0,-6,7],GD.b,1.4);PG([-4,-4,4,0,-4,4],GD.l,0);CI(-1,0,2,'#16171D',1);}});
  K.part(1,2,0,0,()=>{CI(0,0,6,GD.b,1.4);CI(0,0,3,'#16171D',1);},[0,-1]);
  K.part(3,2,0,0,()=>{PG([-6,-7,8,0,-6,7],GD.b,1.4);CI(-1,0,2,'#16171D',1);},[0,-1]);
  /* front cutter: new diamond (Lv5) -> long cutter (Lv10); retracts/extends with the weapon beat */
@@ -6204,7 +6216,7 @@ const MB={b:'#7A5236',d:'#3B271A',l:'#A8774C'},MS={b:'#B88A4A',d:'#6E5028',l:'#D
 function mammoth(K,aim){OL='#1E140D';const n=K.n,o=K.open,w=K.wpn;
  const core=K.lk(3,2)?3:K.lk(1,2)?1:0,sleeve=K.lk(2,2);const hinge=K.ph(2,u=>SS(cl(u,.3,.5))),cap4=n===3&&K.tr?o:0,nose=K.ph(1,u=>SS(cl(u,.3,2.0)));
  /* Lv10 reinforced tracks (under), rear recoil support */
- for(const s of[-1,1])K.part(2,s<0?0:1,-1,s*22,()=>tread(-24,22,9),null,1);
+ for(const s of[-1,1])K.part(2,s<0?0:1,-1,s*23.5,()=>tread(-24,22,9),null,1);
  K.part(2,3,-21,0,()=>{BX(-5,-8,3,8,2,ST,1.3);HL(-5,-4.5,-11,-7,'#2E323A',2.6);HL(-5,4.5,-11,7,'#2E323A',2.6);},[-1,0],1);
  /* front plate slides forward on its rails (body, replaces the clipped head) */
  K.el(1,16,0,()=>{const x=6+10*nose;R(13,-3,x,3,1,'#2C2826',1);BX(x-2,-8,x+5,8,2.5,MB,1.5);for(const y of[-4,0,4])HL(x,y,x+3.5,y,'#3B271A',1.2);});
@@ -6213,16 +6225,21 @@ function mammoth(K,aim){OL='#1E140D';const n=K.n,o=K.open,w=K.wpn;
  /* Lv5 track armour; Lv10 swings out on its hinge */
  for(const s of[-1,1])K.part(1,s<0?0:1,-2,s*13,()=>{cx.save();cx.translate(-18,0);cx.rotate(s*.12*hinge);cx.translate(18,0);PL(M(s,[-19,-1,16,-1,19,3,19,7,16,9,-19,9,-21,6,-21,2]),MB,1.5);HL(-14,s*6.5,13,s*6.5,'#C99A50',1.2);cx.restore();});
  /* Lv15 double shoulder armour */
- for(const s of[-1,1])K.part(3,s<0?0:1,3,s*27,()=>{PL(M(s,[-12,-4,10,-5,13,2,-9,5]),MB,1.4);PL(M(s,[-8,1.5,12,0,13,6,-5,8]),MS,1.3);});
+ for(const s of[-1,1])K.part(3,s<0?0:1,3,s*25,()=>{PL(M(s,[-12,-4,10,-5,13,2,-9,5]),MB,1.4);PL(M(s,[-8,1.5,12,0,13,6,-5,8]),MS,1.3);});
  /* Lv15 front clamps (short metal latches) */
- K.part(3,3,26,0,()=>{BX(-5,-13,-2,13,1.5,ST,1.3);for(const s of[-1,1]){BX(-3,s*5,5,s*10,1.5,ST,1.2);R(3,s*5.5,6.5,s*9.5,1,'#D8DDE3',1);}},[1,0]);
+ K.part(3,3,23.5,0,()=>{BX(-5,-13,-2,13,1.5,ST,1.3);for(const s of[-1,1]){BX(-3,s*5,5,s*10,1.5,ST,1.2);R(3,s*5.5,6.5,s*9.5,1,'#D8DDE3',1);}},[1,0]);
  /* core turret (turns to aim): brass turret+barrel (Lv5) -> sleeve (Lv10) -> octagonal heavy turret (Lv15); 4 cap pieces open in Lv15 */
- const tur=(c,w)=>{cx.save();cx.rotate(aim||0);if(c===3){const L=21*w;R(4,-3.8,4+L,3.8,2,'#2C2826',1.3);BX(10,-5.5,17,5.5,1.5,ST,1.3);const p=[];for(let i=0;i<8;i++){const a=PI/8+i*PI/4;p.push(Math.cos(a)*11,Math.sin(a)*11);}PL(p,MS,1.5);CI(0,0,4.5,'#2C2826',1.2);BO(-6,-4,1);BO(-6,4,1);cx.restore();return;}
-  const L=(c===2?17:14)*w;R(4,-2.5,4+L,2.5,1.5,'#2C2826',1.3);if(c===2)BX(8,-4,16,4,1.5,ST,1.3);
-  for(const [dx,dy] of[[-1,-1],[1,-1],[-1,1],[1,1]]){cx.save();cx.translate(dx*2.5*cap4,dy*2.5*cap4);BX(dx*7.5,dy*7.5,0,0,2,MS,1.3);cx.restore();}CI(0,0,3.3,'#2C2826',1.1);cx.restore();};
+ /* v208: 진짜 포탑 — 포탑 링(받침) + 둥근 포탑(두 쪽, Lv15 변신 때 양옆으로 열림) + 방패판 + 굵은 주포·포구 제동기. Lv10 = 포신 덮개, Lv15 = 팔각 중포탑 */
+ const brake=(x,r)=>{BX(x-3.5,-r-1.4,x+1.2,r+1.4,1,ST,1.2);HL(x-2.2,-r-.6,x-2.2,r+.6,'#2E323A',1);};
+ const tur=(c,w)=>{cx.save();cx.rotate(aim||0);
+  if(c===3){const L=25*w;R(4,-4.3,4+L,4.3,2,'#2C2826',1.4);BX(11,-6,19,6,1.5,ST,1.3);if(L>8)brake(4+L,4.3);const p=[];for(let i=0;i<8;i++){const a=PI/8+i*PI/4;p.push(Math.cos(a)*11.5,Math.sin(a)*11.5);}PL(p,MS,1.6);BX(6,-6.5,12,6.5,1.5,MT,1.3);CI(-2,0,4.5,'#2C2826',1.2);CI(-2,0,2.2,MT.b,0);BO(-7,-5,1);BO(-7,5,1);BO(3,-7.5,1);BO(3,7.5,1);cx.restore();return;}
+  const r=c===2?3.5:3.1,L=(c===2?22:19)*w;CI(0,0,10,'#2C2826',1.4);for(let i=0;i<6;i++){const a=i*PI/3;BO(Math.cos(a)*8.6,Math.sin(a)*8.6,.7);}
+  R(4,-r,4+L,r,1.6,'#2C2826',1.3);if(c===2)BX(10,-4.9,18,4.9,1.5,ST,1.3);if(L>7)brake(4+L,r);
+  for(const sg of[-1,1]){cx.save();cx.translate(0,sg*2.5*cap4);cx.beginPath();cx.rect(-12,sg>0?0:-12,24,12);cx.clip();CI(0,0,7.6,MS.b,1.5);cx.fillStyle=MS.l;cx.globalAlpha*=.5;cx.fillRect(-5.5,sg>0?.5:-6.8,9,1.8);cx.restore();}
+  HL(-7.4,0,7.4,0,MS.d,1.3);BX(4.5,-5.2,9,5.2,1.5,MT,1.3);CI(-2.5,0,2.8,'#2C2826',1.1);BO(-2.5,0,.8);cx.restore();};
  K.el(0,-1,0,()=>{cx.save();cx.translate(-1,0);if(core===1||(core===2))tur(sleeve?2:1,w);if(core===3)tur(3,w);cx.restore();});
  K.part(1,2,-1,0,()=>tur(1,w),[0,-1]);
- K.part(2,2,-1,0,()=>{cx.save();cx.rotate(aim||0);BX(8,-4,16,4,1.5,ST,1.3);cx.restore();},[1,0]);
+ K.part(2,2,-1,0,()=>{cx.save();cx.rotate(aim||0);BX(10,-4.9,18,4.9,1.5,ST,1.3);cx.restore();},[1,0]);
  K.part(3,2,-1,0,()=>tur(3,w),[0,-1]);
 }
 /* ================= 악어이빨 ================= */
@@ -6252,20 +6269,22 @@ const CARS={flame,raven,mammoth,croc};
 const CUT={flame:[3,12.5,8.5,19],raven:[8.6,7,8.6,13],mammoth:[12.2,9.2,16.5,16],croc:[9,6.2,11.5,11]};/* [x centre, |y| limit of centre, x sides, |y| max sides] */
 function cutPath(car){const c=CUT[car];cx.beginPath();cx.moveTo(-90,-90);cx.lineTo(c[2],-90);cx.lineTo(c[2],-c[1]);cx.lineTo(c[0],-c[1]);cx.lineTo(c[0],c[1]);cx.lineTo(c[2],c[1]);cx.lineTo(c[2],90);cx.lineTo(-90,90);cx.closePath();}
 function seam(car){const c=CUT[car];cx.beginPath();cx.moveTo(c[0],-c[1]+1);cx.lineTo(c[0],c[1]-1);cx.strokeStyle=OL;cx.lineWidth=1.6;cx.lineCap='round';cx.stroke();}
-const SC={flame:[1,1.25,1.27,1.27],raven:[1,1.36,1.30,1.40],mammoth:[1,1.36,1.35,1.22],croc:[1,1.45,1.31,1.37]};
+const SC={flame:[1,1.25,1.27,1.32],raven:[1,1.36,1.30,1.40],mammoth:[1,1.30,1.30,1.30],croc:[1,1.45,1.31,1.37]};
 const FS0=1.039;/* flame: v198 Lv1 body factor, kept for every stage so nothing jumps */
 window.TF206={CARS,SC,CUT,ctx};
 /* draw one car in frame (translate P, rotate P.ang, x forward). base(clipX) draws the old Lv1 art. */
 const NS=[0,3,4,4];
 /* 크기: 부품이 잠길 때마다(.8+.3j) 0.16초 동안 1/N씩 — 한 번에 커지지 않음 */
-function sAt(car,n,u){const a=SC[car][n-1],b=SC[car][n];if(u>=3)return b;let k=0;for(let j=0;j<NS[n];j++){const tl=.8+.3*j;k+=SS(cl(u,tl-.12,tl+.04));}return a+(b-a)*k/NS[n];}
+function sAt(car,n,u){const a=SC[car][n-1],b=SC[car][n];if(u>=3)return b;const wd=car==='flame'||car==='mammoth'?.3:.12;/* v208: 화염·매머드는 잠길 때마다 0.34초에 걸쳐 부드럽게 */let k=0;for(let j=0;j<NS[n];j++){const tl=.8+.3*j;k+=SS(cl(u,tl-wd,tl+.04));}return a+(b-a)*k/NS[n];}
 /* o.fs: 화염 몸 배율(1.039)을 바깥에서 이미 곱했으면 1 */
 function drawCar(car,n,u,aim,base,o){o=o||{};const K=ctx(n,u);CARS[car](K,aim);const S=sAt(car,n,u)*(car==='flame'&&!o.fs?FS0:1);
  const rt=n===1&&u<3?SS(cl(u,0,.3)):1;
  cx.save();cx.scale(S,S);
  for(const e of K.U)e.f();
  cx.save();cutPath(car);cx.clip();base();cx.restore();
- if(rt<1){cx.save();cutPath(car);cx.rect(-200,-200,400,400);cx.clip('evenodd');cx.translate(-26*rt,0);base();cx.restore();}
+ /* v208: 기존 앞부분은 세로로 잘려 사라지지 않고, 제 모양 그대로 몸 쪽으로 접혀 들어감(가운데·옆 따로, 앞뒤로 눌림), 둥근 끝은 남음 */
+ {const c=CUT[car],sx=1-.65*rt,sy=1-.2*rt;/* 끝까지 35% 길이로 남아 앞이 둥글게 마무리됨 */
+  for(const [x0,yy,X] of[[c[0],[-c[1],c[1]],c[0]],[c[2],[c[1],90],c[2]],[c[2],[-90,-c[1]],c[2]]]){cx.save();cx.beginPath();cx.rect(X,yy[0],200,yy[1]-yy[0]);cx.clip();cx.translate(x0,0);cx.scale(sx,yy[0]<0&&yy[1]>0?sy:1);cx.translate(-x0,0);base();cx.restore();}}
  if(rt>0){cx.save();cx.globalAlpha*=Math.min(1,rt*3);OL={flame:'#142233',raven:'#06070A',mammoth:'#1E140D',croc:'#142016'}[car];seam(car);cx.restore();}
  for(const e of K.O)e.f();
  cx.restore();return{K,S};}
@@ -6273,7 +6292,8 @@ TF206.sAt=sAt;TF206.NS=NS;TF206.FS0=FS0;TF206.nozTip=nozTip;TF206.seam=seam;
 TF206.drawCar=drawCar;TF206.cutPath=cutPath;
 })();
 
-/* v207 (영태): 화염황소·칼까마귀·매머드포·악어이빨 Lv5/10/15 = 사자 원리(TF206, 차 자체가 부품 잠길 때마다 바뀜). v204/v205 손그림 부품 대체.
+/* v208: 화염 변신 중 노즐 조준 = 평소와 같음.
+   v207 (영태): 화염황소·칼까마귀·매머드포·악어이빨 Lv5/10/15 = 사자 원리(TF206, 차 자체가 부품 잠길 때마다 바뀜). v204/v205 손그림 부품 대체.
    잠김 3/4/4번, 잠길 때 반짝(LFL)·불꽃·소리 = 사자와 같음, 흔들림 없음. Lv20 = 기존 얼굴 변신 그대로, Lv15 모습에서 이어짐. */
 (function(){if(!window.TF206)return;
 const T=TF206,SS=x=>x<=0?0:x>=1?1:x*x*(3-2*x),cl=(u,a,b)=>Math.max(0,Math.min(1,(u-a)/(b-a))),C4={flame:1,raven:1,mammoth:1,croc:1};
@@ -6301,9 +6321,9 @@ function bAt(car,tt){const g1=SS(cl(tt,.3,2.6)),g2=SS(cl(tt,.3,2.5));const K=TFN
  if(car==='flame')return(K[0]+(K[4]-K[0])*g1)*(BSZ[0]+(BSZ[4]-BSZ[0])*g1)/(K[0]*BSZ[0]);const Z=RBSZ[car];return(K[0]+(K[4]-K[0])*g1)*(Z[0]+(Z[4]-Z[0])*g2)/(K[0]*Z[0]);}
 /* 기존 Lv20 그림은 시작할 때 이미 기존 Lv15 크기(기본의 A0배) — 새 Lv15 크기에 맞춰 시작 */
 const A0={raven:2.0,mammoth:2.02,croc:1.48};
-function l20(f,fl){const car=fl?'flame':CAR,tt=Math.min(3,f.t),g=SS(cl(tt,.3,2.6)),S3=T.SC[car][3]*(fl?T.FS0:1),bE=bAt(car,3),Bt=S3+(bE-S3)*g,m=fl?Bt/bAt(car,tt):(S3/A0[car])+(1-S3/A0[car])*g,rel=1;
+function l20(f,fl){const car=fl?'flame':CAR,tt=Math.min(3,f.t),g=SS(cl(tt,.3,2.6)),S3=T.SC[car][3]*(fl?T.FS0:1),bE=bAt(car,3),Bt=S3+(bE-S3)*g,m=(fl?Bt/bAt(car,tt):(S3/A0[car])+(1-S3/A0[car])*g)*(car==='mammoth'?1-.1*g:1)/* v208: 매머드 Lv20 = 다른 차 크기(평소 Lv20 크기 ×0.9와 같게 끝남) */,rel=1;
  const old=()=>{window.__TFOLD=1;window.__NOA3=1;window.__L20B=1;try{fl?pF(f):pRb(f);}finally{window.__TFOLD=0;window.__NOA3=0;window.__L20B=0;}};
- const K=T.ctx(3,3);T.CARS[car](K,0);const els=[...K.U.map(e=>[e,0]),...K.O.map(e=>[e,1])],N=els.length;
+ const K=T.ctx(3,3);T.CARS[car](K,fl?fAim():0);/* v208: 화염 노즐 조준 그대로 이어짐 */const els=[...K.U.map(e=>[e,0]),...K.O.map(e=>[e,1])],N=els.length;
  const shr=(e,j)=>{const t0=1.5+(N-1-j)*(.8/Math.max(1,N-1)),p=cl(tt,t0,t0+.25);if(p>=1)return;const s=1-SS(p);cx.save();cx.translate(e.x*(1-.3*SS(p)),e.y*(1-.3*SS(p)));cx.scale(s,s);cx.translate(-e.x,-e.y);e.f();cx.restore();};
  const CF=()=>{cx.translate(P.x,P.y);cx.rotate(P.ang);cx.scale(Bt,Bt);},BK=()=>{cx.scale(1/Bt,1/Bt);cx.rotate(-P.ang);cx.scale(m,m);cx.translate(-P.x,-P.y);};
  cx.save();CF();els.forEach(([e,o],j)=>{if(!o)shr(e,j);});cx.restore();
@@ -6315,7 +6335,7 @@ function l20(f,fl){const car=fl?'flame':CAR,tt=Math.min(3,f.t),g=SS(cl(tt,.3,2.6
 rbTF=function(f){if(window.__TFOLD||!C4[CAR])return pRb(f);if(f.l20)return l20(f,0);const u=Math.min(3,f.t/f.D*3),a=tkAimL();let r;cx.save();cx.translate(P.x,P.y);cx.rotate(P.ang);try{r=T.drawCar(CAR,f.nv,u,a,baseRob(CAR,a));}finally{cx.restore();}ev(f,u,r.K,r.S);};
 drawFTF=function(f){if(window.__TFOLD)return pF(f);if(f.l20)return l20(f,1);const u=Math.min(3,f.t/f.D*3);
  cx.save();cx.translate(P.x,P.y);{const R=(f.r0+(f.r1-f.r0)*SS(cl(u,.8,1.7)))*1.15,g=cx.createRadialGradient(0,2,R*.2,0,2,R*.85);g.addColorStop(0,'rgba(0,0,0,.18)');g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.beginPath();cx.ellipse(0,2,R*.85,R*.7,0,0,TAU);cx.fill();}
- cx.rotate(P.ang);const r=T.drawCar('flame',f.nv,u,0,baseFla(0));cx.restore();ev(f,u,r.K,r.S);};
+ cx.rotate(P.ang);const fa=fAim(),r=T.drawCar('flame',f.nv,u,fa,baseFla(fa));/* v208: 변신 중에도 노즐이 평소 조준 그대로 — 끝날 때 튀지 않음 */cx.restore();ev(f,u,r.K,r.S);};
 })();
 
 </script>
@@ -6329,13 +6349,10 @@ drawFTF=function(f){if(window.__TFOLD)return pF(f);if(f.l20)return l20(f,1);cons
    +'<div class="r" style="margin-top:10px"><button class="v15b'+(vOn?'':' g')+'" id="v206" style="flex:1;font-size:18px">'+(vOn?'📳 진동 켜짐':'📴 진동 꺼짐')+'</button></div>'
    +'<div class="i" style="font-size:13px;color:#A3AEBF">눌러서 켜기/끄기</div>'
    +SL('sfx','💥 효과음',SAVE.sfx==null?100:SAVE.sfx,0,100)
-   +'<div style="margin-top:12px;font-size:15px;text-align:left">🕹️ 조이스틱 위치</div><div class="r" style="margin-top:6px;gap:5px">'+[['free','누른 곳'],['l','왼쪽'],['c','가운데'],['r','오른쪽']].map(([k,t])=>'<button class="v15b'+((SAVE.jpos||'free')===k?'':' g')+'" data-jp="'+k+'" style="flex:1;font-size:14px;padding:8px 2px">'+t+'</button>').join('')+'</div>'
-   +SL('jsz','🕹️ 조이스틱 크기',SAVE.jsz||100,60,150)+SL('jop','🕹️ 조이스틱 진하기',SAVE.jop==null?40:SAVE.jop,0,100)
    +(inGame?'<div class="r"><button class="v15b g" id="q206" style="flex:1">그만하기</button><button class="v15b" id="c206" style="flex:1">계속하기</button></div>':'<div class="r"><button class="v15b g" id="c206" style="flex:1">닫기</button></div>')+'</div>';
    {const q=d.querySelector('#q206');if(q)q.onclick=e=>{e.stopPropagation();location.search='?menu=1'+(typeof DEVQ!=='undefined'?DEVQ:'');};}/* 그만하기 = 기존 일시정지 → 홈 버튼과 같음 (판 보상 없음) */
    d.querySelector('#s206').onclick=e=>{e.stopPropagation();SAVE.mute=SAVE.mute?0:1;if(!SAVE.mute&&SAVE.sfx===0)SAVE.sfx=100;saveS();applySnd();rd();if(!SAVE.mute)try{beep(880,.08,'triangle',.1);}catch(_){}};
    d.querySelector('#v206').onclick=e=>{e.stopPropagation();SAVE.novib=SAVE.novib?0:1;saveS();rd();if(!SAVE.novib)try{navigator.vibrate&&navigator.vibrate(70);}catch(_){}};
-   d.querySelectorAll('[data-jp]').forEach(x=>x.onclick=e=>{e.stopPropagation();SAVE.jpos=x.dataset.jp;saveS();rd();});
    d.querySelectorAll('input[data-sl]').forEach(x=>x.oninput=e=>{const k=x.dataset.sl,v=+x.value;SAVE[k]=v;d.querySelector('#l_'+k).textContent=v+'%';if(k==='sfx'){if(typeof AC!=='undefined'&&AC&&AC.__mg)AC.__mg.gain.value=v/100;}if(k==='bgm'){if(typeof AC!=='undefined'&&AC&&AC.__bg)AC.__bg.gain.value=v/100;}saveS();});
    d.querySelectorAll('input[data-sl]').forEach(x=>x.onchange=()=>{if(x.dataset.sl==='sfx'&&!SAVE.mute)try{beep(880,.08,'triangle',.1);}catch(_){}});
    d.querySelector('#c206').onclick=e=>{e.stopPropagation();d.remove();onClose&&onClose();};};
