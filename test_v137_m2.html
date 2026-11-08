@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v216';
+const BUILD='v217';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -6258,7 +6258,7 @@ const CO={b:'#3F5E34',d:'#22341D',l:'#6C8A55'},CL={b:'#5C7F4A',d:'#2E4526',l:'#8
 function croc(K){OL='#142016';const n=K.n,o=K.open,w=K.wpn;
  const core=K.lk(3,2)?3:K.lk(1,2)?1:0,sleeve=K.lk(2,2);const sideO=n===3&&K.tr?o:0,nose=K.ph(1,u=>SS(cl(u,.3,2.0))),tuck=K.ph(3,u=>SS(cl(u,.3,2.0)));
  /* Lv10 triangle cutter plates (under the side frames), rear roller cover */
- for(const s of[-1,1])K.part(2,s<0?0:1,-5,s*17,()=>{cx.save();cx.rotate(s*.15*tuck);PL(M(s,[-9,-2,8,-2,-5,15,-16,12]),CL,1.4);cx.restore();},null,1);
+ for(const s of[-1,1])K.part(2,s<0?0:1,-5,s*(14+2.5*tuck),()=>{cx.save();cx.rotate(s*.15*tuck);{const f=.75+.15*tuck;cx.scale(f,f);}/* v217 (영태): 옆 날개 조금 작게 — Lv10·Lv15 전체 크기 = 사자와 같게 (Lv15 접힐 때 같이 맞춰짐) */PL(M(s,[-9,-2,8,-2,-5,15,-16,12]),CL,1.4);cx.restore();},null,1);
  K.part(2,3,-17,0,()=>{BX(-5,-8,3,8,2,CD,1.3);for(const y of[-4.5,-1.5,1.5,4.5])HL(-3.5,y,1.5,y,'#6C8A55',1);},[-1,0],1);
  /* front square guard slides forward (body, replaces the clipped snout) */
  K.el(1,13,0,()=>{const x=3+9.5*nose;R(9,-2.5,x,2.5,1,'#1F2B1E',1);BX(x-1,-7,x+6,7,2,CO,1.4);for(const y of[-3.5,0,3.5])HL(x+1,y,x+4.5,y,'#22341D',1.2);});
@@ -6273,7 +6273,7 @@ function croc(K){OL='#142016';const n=K.n,o=K.open,w=K.wpn;
  K.part(3,2,-2,0,()=>{cx.translate(2,0);BX(-13,-8,9,8,2,CD,1.4);for(let i=0;i<5;i++){const x=-10+i*3.8;cx.beginPath();cx.moveTo(x,-6);cx.lineTo(x+3.6,0);cx.lineTo(x,6);cx.strokeStyle='#B5CF9C';cx.lineWidth=2.2;cx.stroke();}},[0,-1]);
  /* Lv10 front sleeve (extends with the weapon beat), Lv15 multi-stage collar */
  K.part(2,2,20,0,()=>{BX(0,-5,8*w,5,2,ST,1.3);HL(1,-2.5,7*w,-2.5,'rgba(255,255,255,.25)',1);},[1,0]);
- K.part(3,3,27,0,()=>{BX(-1,-7,3.5,7,1.5,ST,1.3);BX(3.5,-4.5,7,4.5,1.5,ST,1.3);},[1,0]);
+ K.part(3,3,25,0,()=>{BX(-1,-7,3.5,7,1.5,ST,1.3);BX(3.5,-4.5,7,4.5,1.5,ST,1.3);},[1,0]);
 }
 const CARS={flame,raven,mammoth,croc};
 /* front of the old Lv1 art that is replaced by the new nose: cut line x at the hull, with the tracks/wheels allowed a little further. The front slides back into the hull 0~0.3s of Lv5 (weapon retract). */
