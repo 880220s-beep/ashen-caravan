@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v215';
+const BUILD='v216';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -6280,7 +6280,7 @@ const CARS={flame,raven,mammoth,croc};
 const CUT={flame:[3,12.5,8.5,19],raven:[8.6,7,8.6,13],mammoth:[12.2,9.2,16.5,16],croc:[9,6.2,11.5,11]};/* [x centre, |y| limit of centre, x sides, |y| max sides] */
 function cutPath(car){const c=CUT[car];cx.beginPath();cx.moveTo(-90,-90);cx.lineTo(c[2],-90);cx.lineTo(c[2],-c[1]);cx.lineTo(c[0],-c[1]);cx.lineTo(c[0],c[1]);cx.lineTo(c[2],c[1]);cx.lineTo(c[2],90);cx.lineTo(-90,90);cx.closePath();}
 function seam(car){const c=CUT[car];cx.beginPath();cx.moveTo(c[0],-c[1]+1);cx.lineTo(c[0],c[1]-1);cx.strokeStyle=OL;cx.lineWidth=1.6;cx.lineCap='round';cx.stroke();}
-const SC={flame:[1,1.25,1.27,1.32],raven:[1,1.36,1.30,1.40],mammoth:[1,1.30,1.30,1.30],croc:[1,1.45,1.31,1.37]};
+const SC={flame:[1,1.25,1.25,1.25],raven:[1,1.36,1.30,1.40],mammoth:[1,1.30,1.30,1.30],croc:[1,1.45,1.45,1.45]};/* v216 (영태): 화염·악어 = 사자처럼 몸은 Lv5에서만 커지고 Lv10·15는 Lv5 크기 그대로(부품만 붙음, 줄어들지 않음). 까마귀·매머드는 그대로 */
 const FS0=1.039;/* flame: v198 Lv1 body factor, kept for every stage so nothing jumps */
 window.TF206={CARS,SC,CUT,ctx};
 /* draw one car in frame (translate P, rotate P.ang, x forward). base(clipX) draws the old Lv1 art. */
