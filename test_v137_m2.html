@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v220';
+const BUILD='v221';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -6380,10 +6380,10 @@ function croc(K){OL='#142016';const n=K.n,o=K.open,w=K.wpn;
  /* front square guard slides forward (body, replaces the clipped snout) */
  K.el(1,13,0,()=>{const x=3+9.5*nose;R(9,-2.5,x,2.5,1,'#1F2B1E',1);BX(x-1,-7,x+6,7,2,CO,1.4);for(const y of[-3.5,0,3.5])HL(x+1,y,x+4.5,y,'#22341D',1.2);});
  /* tile grid covers open sideways (Lv5, body), rollers under them; cassette replaces the grid */
- K.el(0,-1,0,()=>{if(core===0&&o>0){R(-13,-6,10,6,2,'#1F2B1E',0);for(const x of[-10,-4,2,8])R(x-1.6,-5,x+1.6,5,1,ST.b,1);for(const s of[-1,1]){cx.save();cx.translate(0,s*4*o);for(let i=0;i<5;i++)BX(-11+i*4.4,0,-7.6+i*4.4,s*5,1.2,CL,1);cx.restore();}}
-  else if(core>=1){const W=core===3?8:6.5,N=core===3?5:4;BX(-13,-W,9,W,2,CD,1.4);for(let i=0;i<N;i++){const x=-10+i*(19/N)*((n===2&&K.tr)?w:1);cx.beginPath();cx.moveTo(x,-W+2);cx.lineTo(x+3.6,0);cx.lineTo(x,W-2);cx.strokeStyle='#B5CF9C';cx.lineWidth=2.2;cx.lineJoin='miter';cx.stroke();}}});
+ K.el(0,-1,0,()=>{if((core===0||n===1&&K.tr)&&o>0){R(-13,-6,10,6,2,'#1F2B1E',0);for(const x of[-10,-4,2,8])R(x-1.6,-5,x+1.6,5,1,ST.b,1);for(const s of[-1,1]){cx.save();cx.translate(0,s*4*o);for(let i=0;i<5;i++)BX(-11+i*4.4,0,-7.6+i*4.4,s*5,1.2,CL,1);cx.restore();}}
+  if(core>=1){const W=core===3?8:6.5,N=core===3?5:4;BX(-13,-W,9,W,2,CD,1.4);for(let i=0;i<N;i++){const x=-10+i*(19/N)*((n===2&&K.tr)?w:1);cx.beginPath();cx.moveTo(x,-W+2);cx.lineTo(x+3.6,0);cx.lineTo(x,W-2);cx.strokeStyle='#B5CF9C';cx.lineWidth=2.2;cx.lineJoin='miter';cx.stroke();}}});
  /* Lv5 side frames; open outward in Lv15 to show the grooves */
- for(const s of[-1,1])K.part(1,s<0?0:1,-1,s*11,()=>{cx.save();cx.translate(0,s*3.5*sideO);for(let i=0;i<3;i++){const x0=-19+13*i;BX(x0,0,x0+12.4,s*9,1.8,CO,1.3);BO(x0+3,s*4.5,.8);BO(x0+9.4,s*4.5,.8);}cx.restore();if(K.lk(2,1))CI(-3,s*5,1.8,'#C9A04A',1);});
+ for(const s of[-1,1])K.part(1,s<0?0:1,-1,s*11,()=>{cx.save();cx.translate(0,s*3.5*sideO+s*4*(n===1&&K.tr?o:0));for(let i=0;i<3;i++){const x0=-19+13*i+(i-1)*3*(n===1&&K.tr?o:0);BX(x0,0,x0+12.4,s*9,1.8,CO,1.3);BO(x0+3,s*4.5,.8);BO(x0+9.4,s*4.5,.8);}cx.restore();if(K.lk(2,1))CI(-3,s*5,1.8,'#C9A04A',1);});
  /* Lv15 riveted armour */
  for(const s of[-1,1])K.part(3,s<0?0:1,-2,s*21,()=>{BX(-18,-3.6,17,3.6,2,CD,1.4);for(let x=-14;x<=14;x+=5.5){cx.fillStyle='#8A9E78';cx.fillRect(x-.9,-.9,1.8,1.8);}});
  K.part(1,2,-2,0,()=>{cx.translate(2,0);BX(-13,-6.5,9,6.5,2,CD,1.4);for(let i=0;i<4;i++){const x=-10+i*4.75;cx.beginPath();cx.moveTo(x,-4.5);cx.lineTo(x+3.6,0);cx.lineTo(x,4.5);cx.strokeStyle='#B5CF9C';cx.lineWidth=2.2;cx.stroke();}},[0,-1]);
@@ -6405,7 +6405,29 @@ const NS=[0,3,4,4];
 /* 크기: 부품이 잠길 때마다(.8+.3j) 0.16초 동안 1/N씩 — 한 번에 커지지 않음 */
 function sAt(car,n,u){const a=SC[car][n-1],b=SC[car][n];if(u>=3)return b;return a+(b-a)*SS(cl(u,2.0,2.2));}/* v215 (영태): 사자처럼 — 부품 붙는 동안 몸 크기 그대로, 덮개 닫힐 때(2.0~2.2) 한 번에 부드럽게 커짐 */
 /* o.fs: 화염 몸 배율(1.039)을 바깥에서 이미 곱했으면 1 */
-function drawCar(car,n,u,aim,base,o){o=o||{};const K=ctx(n,u);CARS[car](K,aim);const S=sAt(car,n,u)*(car==='flame'&&!o.fs?FS0:1);
+/* v221 (영태): 악어 Lv5 변신 = 다른 차처럼 몸판이 닫히면서 커짐 — 옆 레일 0.3~0.5 열림·2.0~2.2 닫힘, 꼬리 0.6~0.8 몸 밑으로·2.55~2.75 제자리 (단단한 부품, 그림자 그대로) */
+const CROCB=function(u,K,base){const SS=x=>x<=0?0:x>=1?1:x*x*(3-2*x),cl=(a,b)=>Math.max(0,Math.min(1,(u-a)/(b-a)));
+ const d=4*K.open,T=5*SS(cl(.6,.8))*(1-SS(cl(2.55,2.75)));
+ if(d<=0&&T<=0)return base;
+ const C=CanvasRenderingContext2D.prototype,SH='rgba(0, 0, 0, 0.2)';
+ /* Lv1 art draw order: ground shadow, tail (fills 0-2), side rails (fills 3,4: separate plates under the hull), hull + rest (5..).
+    Each pass redraws the art but only lets its own pieces through, so every piece moves as one solid shape. */
+ const run=(sel)=>{const o={fill:C.fill,stroke:C.stroke,fillRect:C.fillRect,strokeRect:C.strokeRect,drawImage:C.drawImage};let k=-1,cur=false;
+  C.fill=function(){if(String(this.fillStyle)===SH){cur=sel==='s';}else{k++;cur=sel!=='s'&&sel(k);}if(cur)return o.fill.apply(this,arguments);};
+  C.stroke=function(){if(cur)return o.stroke.apply(this,arguments);};
+  C.fillRect=function(){if(cur)return o.fillRect.apply(this,arguments);};C.strokeRect=function(){if(cur)return o.strokeRect.apply(this,arguments);};C.drawImage=function(){if(cur)return o.drawImage.apply(this,arguments);};
+  try{base();}finally{Object.assign(C,o);}};
+ return function(){
+  run('s');
+  /* tail: slides forward under the hull 0.6-0.8, slides back into place 2.55-2.75 */
+  cx.save();cx.translate(T,0);run(k=>k<=2);cx.restore();
+  /* dark inside, seen only while the side rails stand open */
+  if(d>0){cx.fillStyle='#1F2B1E';cx.beginPath();cx.roundRect(-10.5,-6-d,20.5,12+2*d,3);cx.fill();}
+  /* side rails = body plates: open outward with the covers (0.3-0.5), close back in while the body grows (2.0-2.2) */
+  for(const [kk,s] of[[3,-1],[4,1]]){cx.save();cx.translate(0,s*d);run(k=>k===kk);cx.restore();}
+  run(k=>k>=5);
+ };};
+function drawCar(car,n,u,aim,base,o){o=o||{};const K=ctx(n,u);if(car==='croc'&&n===1&&u<3)base=CROCB(u,K,base);CARS[car](K,aim);const S=sAt(car,n,u)*(car==='flame'&&!o.fs?FS0:1);
  const rt=n===1&&u<3?.23*SS(cl(u,0,.3))+.77*SS(cl(u,2.0,2.2)):1;/* v215: 처음엔 조금만(15%) 접히고 나머지는 커질 때 같이 — 줄었다 커지지 않음, 완성 모습 그대로 */
  cx.save();cx.scale(S,S);
  for(const e of K.U)e.f();
