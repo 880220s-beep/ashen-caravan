@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v228';
+const BUILD='v229';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -464,7 +464,12 @@ const NOADS=SAVE.noads;// placeholder only: remove-ads purchase not built yet
 const UPG={hp:{n:'❤️ 최대 체력',d:'+10씩'},dmg:{n:'💥 공격력',d:'+6%씩'},spd:{n:'💨 이동 속도',d:'+4%씩'},mag:{n:'🧲 줍는 범위',d:'+12%씩'}};const UPMAX=5,upCost=l=>100+l*100;
 const ACH=[{id:'win1',n:'1스테이지 보스 잡기',r:'💰 150 골드'},{id:'lv18',n:'레벨 20 되기 (왕관 개화 포격요새)',r:'💰 200 골드'},{id:'kill500',n:'한 판에 적 500마리',r:'💰 100 골드'}];
 let TUT=false;try{TUT=!localStorage.getItem('ac_tut');}catch(e){}
-const AUTO=Q.has('auto'),GOD=Q.has('god'),SPEED=Math.max(1,+Q.get('speed')||1),MAP=Math.min(8,Math.max(1,+Q.get('stage')||1)),STAGE=MAP===1?1:2,T0=+Q.get('t')||0;
+/* v229 (영태 OK): 무한모드 — MAP/STAGE는 읽기 전용 값(보통 판은 예전과 똑같이 고정), 무한모드에서만 보스가 나온 동안 그 보스의 맵 번호로 바뀜 */const ENDL=PLAY&&Q.has('endless');var MAPC=ENDL?8:Math.min(8,Math.max(1,+Q.get('stage')||1)),MAP0=MAPC;Object.defineProperty(window,'MAP',{get(){return MAPC;},configurable:true});Object.defineProperty(window,'STAGE',{get(){return MAPC===1?1:2;},configurable:true});
+/* v229: 무한모드에서만 — 맵별 보스 모듈을 전부 설치하고, 지금 나온 보스의 맵 모듈만 동작 (보통 판에서는 아무것도 안 함) */var EMAP=MAP0,ESTK=[],EMODS={},EPX=new WeakSet();
+function EUSR(f){if(EPX.has(f))return true;try{return !/\{\s*\[native code\]\s*\}\s*$/.test(Function.prototype.toString.call(f));}catch(e){return false;}}
+function EMOD(n){if(!ENDL)return;const snap={},gd={},all=new Set(Object.getOwnPropertyNames(window));for(const k of all){let v;try{v=window[k];}catch(e){continue;}if(typeof v!=='function'||k==='EMOD'||k==='EMOD_END'||!EUSR(v))continue;snap[k]=v;const g=new Proxy(v,{apply(t,th,a){if(!ESTK.length)return Reflect.apply(t,th,a);const c=MAPC;MAPC=ESTK[ESTK.length-1];try{return Reflect.apply(t,th,a);}finally{MAPC=c;}}});gd[k]=g;try{window[k]=g;}catch(e){}}EMODS[n]=EMODS[n]||[];EMODS[n].push({snap,gd,all,c0:MAPC});MAPC=n;}
+function EMOD_END(n){if(!ENDL)return;const R=EMODS[n][EMODS[n].length-1];MAPC=R.c0;for(const k of Object.getOwnPropertyNames(window)){let v;try{v=window[k];}catch(e){continue;}const old=R.snap[k],g=R.gd[k];if(g!==undefined&&v===g){try{window[k]=old;}catch(e){}continue;}if(typeof v!=='function'||v===old||(old===undefined&&R.all.has(k)))continue;const neu=v;try{const gb=k==='goblin';const px=new Proxy(neu,{apply(t,th,a){if(EMAP!==n||(gb&&!(a[0]&&a[0].em===n))){const o=old;return o?Reflect.apply(o,th,a):undefined;}ESTK.push(MAPC);MAPC=n;try{return Reflect.apply(t,th,a);}finally{MAPC=ESTK.pop();}}});EPX.add(px);window[k]=px;}catch(e){}}}
+const AUTO=Q.has('auto'),GOD=Q.has('god'),SPEED=Math.max(1,+Q.get('speed')||1),T0=+Q.get('t')||0;
 const cv=document.getElementById('c');let cx=cv.getContext('2d');let W,H;
 function rs(){H=innerHeight;W=Math.min(innerWidth,Math.round(H*0.6));window.DPR=Math.min(2,devicePixelRatio||1);/* c17: DPR cap 3 -> 2 */cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);cv.style.width=W+'px';cv.style.height=H+'px';}rs();addEventListener('resize',rs);
 let seed=12345;const R=()=>(seed=(seed*16807)%2147483647)/2147483647;
@@ -3606,12 +3611,12 @@ D[8]=M(['종탑 순찰기','걷는형',p=>{wh(-.55,.55);wh(.55,.55);Pg([-.3,-1,.
  ['쌍문 절단기','중간보스',p=>{trk(-.55,.35,1.2);trk(.55,.35,1.2);R(0,.35,.9,1.1,p.a,.1);R(-.85,-.2,.35,1.6,p.b,.04);R(.85,-.2,.35,1.6,p.b,.04);R(0,-.9,2.05,.3,MET,.04);C(0,.4,.18,p.k);}],
  ['대성당 종루왕','보스',p=>{Pg([-1.2,1.0,-.95,0,-.6,-.75,0,-1.05,.6,-.75,.95,0,1.2,1.0],p.a);R(0,.95,2.6,.3,p.k,.1);Pg([-.55,.8,-.45,0,-.25,-.45,.25,-.45,.45,0,.55,.8],p.b);C(0,1.25,.22,MET);C(0,-.75,.14,p.k);}]);
 
-const P0=MAPS[MAP].p,DM=D[MAP];window.__V133={map:MAP,names:Object.fromEntries(Object.entries(DM).map(([k,v])=>[k,v[0]]))};
+const P0=MAPS[MAP].p,DM=D[MAP];window.__V133D=D;/* v229: 무한모드 보스 이름용 */window.__V133={map:MAP,names:Object.fromEntries(Object.entries(DM).map(([k,v])=>[k,v[0]]))};
 if(MAP>1){RBN.m2=DM.mid[0];RBN.b2=DM.boss[0];}else{RBN.m1=DM.mid[0];RBN.b1=DM.boss[0];}
 const CCH=new Map(),ND=16;
-const SPRB={f:-1,n:0};function spr(role,ang,Upx,fr){fr=fr||0;const dpr=window.DPR||1,u=Math.max(2,(MAP>=5&&MAP<=8)?Math.round(Upx*dpr)/* v89: whole device px on map 5 so idle/attack frames don't double cache misses */:Math.round(Upx*dpr*2)/2),d=((Math.round((ang+Math.PI/2)/(2*Math.PI)*ND)%ND)+ND)%ND,key=role+'|'+d+'|'+u+'|'+fr;let c=CCH.get(key);if(c)return c;/* v96: at most 2 new sprite rasters per frame; over budget, reuse the nearest cached size (1-3px off) for that frame */{const fn=window.__fc|0;if(SPRB.f!==fn){SPRB.f=fn;SPRB.n=0;}if(SPRB.n>=2){for(let k=1;k<=4;k++)for(const s of[-1,1]){const q=CCH.get(role+'|'+d+'|'+(u+s*k)+'|'+fr);if(q)return q;}}SPRB.n++;}
+const SPRB={f:-1,n:0};function spr(role,ang,Upx,fr){fr=fr||0;const dpr=window.DPR||1,u=Math.max(2,(MAP>=5&&MAP<=8)?Math.round(Upx*dpr)/* v89: whole device px on map 5 so idle/attack frames don't double cache misses */:Math.round(Upx*dpr*2)/2),d=((Math.round((ang+Math.PI/2)/(2*Math.PI)*ND)%ND)+ND)%ND,key=(MAP===MAP0?'':MAP+'#')+role+'|'+d+'|'+u+'|'+fr;let c=CCH.get(key);/* v229: 무한모드 다른 맵 보스 그림은 따로 저장 (보통 판은 그대로) */if(c)return c;/* v96: at most 2 new sprite rasters per frame; over budget, reuse the nearest cached size (1-3px off) for that frame */{const fn=window.__fc|0;if(SPRB.f!==fn){SPRB.f=fn;SPRB.n=0;}if(SPRB.n>=2){for(let k=1;k<=4;k++)for(const s of[-1,1]){const q=CCH.get(role+'|'+d+'|'+(u+s*k)+'|'+fr);if(q)return q;}}SPRB.n++;}
  if(CCH.size>1500)CCH.clear();const n=Math.ceil(u*4.2+8);c=document.createElement('canvas');c.width=c.height=n;const V129=false,c0=c;/* v130: v129 auto pass removed */if(V129){c=document.createElement('canvas');c.width=c.height=n;}g=c.getContext('2d');g.translate(n/2,n/2);if(!V129)g.rotate(d/ND*2*Math.PI);U=u;LW=Math.max(1.5,2*dpr*Math.min(1,u/(10*dpr))+.3);
- try{if(MAP===1&&window.M1P)M1P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===2&&window.M2P)M2P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===3&&window.M3P)M3P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===5&&window.M5P)M5P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===6&&window.M6P)M6P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===7&&window.M7P)M7P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===8&&window.M8P)M8P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===4&&window.M4P)M4P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===4){const c4={walk:'#2E5FD4',fast:'#0C8EA6',tank:'#3E8E2E',shoot:'#A87810',heavy:'#7A4A26',elite:'#6E6E6E',mid:'#2E5A47',boss:'#34495C'};LW=1.5*dpr;/* c15 */DM[role][2]({a:c4[role]||P0.a,b:'#A9C3D6',d:P0.d,k:role==='elite'?'#25323F':P0.k},fr);}else DM[role][2](P0);}catch(err){console.error(err)}if(V129){try{c=V129D(c,c0,d/ND*2*Math.PI,role,u,dpr,MAP);}catch(err){console.error(err);c=c0;}}CCH.set(key,c);return c;}window.V129spr=spr;window.V129roles=()=>Object.keys(DM);
+ try{if(MAP===1&&window.M1P)M1P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===2&&window.M2P)M2P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===3&&window.M3P)M3P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===5&&window.M5P)M5P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===6&&window.M6P)M6P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===7&&window.M7P)M7P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===8&&window.M8P)M8P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===4&&window.M4P)M4P.draw(g,role,u,dpr,d/ND*2*Math.PI,fr);else if(MAP===4){const c4={walk:'#2E5FD4',fast:'#0C8EA6',tank:'#3E8E2E',shoot:'#A87810',heavy:'#7A4A26',elite:'#6E6E6E',mid:'#2E5A47',boss:'#34495C'};LW=1.5*dpr;/* c15 */D[MAP][role][2]({a:c4[role]||MAPS[MAP].p.a,b:'#A9C3D6',d:MAPS[MAP].p.d,k:role==='elite'?'#25323F':MAPS[MAP].p.k},fr);}else (MAP===MAP0?DM:D[MAP])[role][2](MAP===MAP0?P0:MAPS[MAP].p);}catch(err){console.error(err)}if(V129){try{c=V129D(c,c0,d/ND*2*Math.PI,role,u,dpr,MAP);}catch(err){console.error(err);c=c0;}}CCH.set(key,c);return c;}window.V129spr=spr;window.V129roles=()=>Object.keys(DM);
 function blit(role,x,y,ang,Uw,shy,fr){const T=cx.getTransform(),sc=Math.hypot(T.a,T.b)/(window.DPR||1),c=spr(role,ang,Uw*sc,fr),dpr=window.DPR||1,w=c.width/dpr/sc;
  cx.fillStyle='rgba(0,0,0,.25)';cx.beginPath();cx.ellipse(x+Uw*.1,y+Uw*(shy||.35),Uw*1.1,Uw*.55,0,0,TAU);cx.fill();
  /* v137k perf: the cached sprite is already 1:1 device size; stamp it on whole device pixels (no resampling) for the boss and for everything frozen in the raven awakening */
@@ -3963,7 +3968,7 @@ const SH={
  shard(){return[norm([[-45,-250],[45,-250],[30,-80],[12.5,250],[-12.5,250],[-30,40]])];}
 };
 return{inZ,path,trace,bb,mid,inset,scale,warn,wp,SH,star,radial,rot,thick};})();
-(function(){if(MAP!==1)return;window.BW209=e=>e===G.boss?!!(e.st&&e.st!=='walk'):(e.m1==='king'&&(e.bs==='warn'||e.bs==='dash'||e.bs==='tusk'));/* v209: 보스 공격 겹침 방지용 '공격 중' 판정 */
+EMOD(1);(function(){if(MAP!==1)return;window.BW209=e=>e===G.boss?!!(e.st&&e.st!=='walk'):(e.m1==='king'&&(e.bs==='warn'||e.bs==='dash'||e.bs==='tusk'));/* v209: 보스 공격 겹침 방지용 '공격 중' 판정 */
 const O='#142233';
 const C={rat:'#655649',ratL:'#86766A',dog:'#4F4B4A',dogL:'#77706C',boar:'#5A4032',boarL:'#8A6A55',king:'#3E2E26',kingL:'#6A5040',pl:'#4A5560',pl2:'#56616D',plE:'#8E9BA8',brass:'#C9963A',brassL:'#F2C94C'};
 let SC=1;const px=v=>v/SC;/* screen px -> world units */
@@ -4256,9 +4261,9 @@ function wrap(e,fn){if(!e._sqOn)return fn();const t=G.t-e._sqT;if(!(t>=0&&t<.1))
 /* v170: the hit squash above scaled EVERYTHING drawn inside goblin()/drawBoss(), including the floor warnings and their rims -> every hit stretched the marks. Floor-mark drawers now undo the squash (local transforms kept). */
 let SQS=null;window.UNSQT=T=>SQS?SQS.M.multiply(T):T;window.UNSQ=(f,th,a)=>{if(!SQS)return f.apply(th,a);const s=SQS;cx.save();cx.setTransform(s.M.multiply(cx.getTransform()));SQS=null;try{return f.apply(th,a);}finally{SQS=s;cx.restore();}};
 const _g=goblin;goblin=function(e){return wrap(e,()=>_g(e));};const _db=drawBoss;drawBoss=function(b){return wrap(b,()=>_db(b));};
-const _tl=drawTall;drawTall=function(v){const r=_tl.apply(this,arguments);let any=0;for(const s of ST){const t=G.t-s.t;if(!(t>=0&&t<.11))continue;const m=cx.getTransform();if(!any){cx.save();any=1;}const X=m.a*s.x+m.c*s.y+m.e,Y=m.b*s.x+m.d*s.y+m.f;cx.setTransform(1,0,0,1,0,0);cx.globalAlpha=1-t/.11;cx.drawImage(s.sp,Math.round(X-s.sp.width/2),Math.round(Y-s.sp.height/2));cx.setTransform(m);}if(any)cx.restore();return r;};})();
+const _tl=drawTall;drawTall=function(v){const r=_tl.apply(this,arguments);let any=0;for(const s of ST){const t=G.t-s.t;if(!(t>=0&&t<.11))continue;const m=cx.getTransform();if(!any){cx.save();any=1;}const X=m.a*s.x+m.c*s.y+m.e,Y=m.b*s.x+m.d*s.y+m.f;cx.setTransform(1,0,0,1,0,0);cx.globalAlpha=1-t/.11;cx.drawImage(s.sp,Math.round(X-s.sp.width/2),Math.round(Y-s.sp.height/2));cx.setTransform(m);}if(any)cx.restore();return r;};})();EMOD_END(1);
 </script><script>/* v137: map-2 attack patterns (GPT plan). Floor warnings only (band / fan / circle), fill grows, no blink/flash/shake/numbers. Warn .9s (normal/elite), 1.2s (mid/boss). Direction locked when warning ends. Short pause after every charge/hit. Stats & spawns unchanged. */
-(function(){if(MAP!==2)return;window.BW209=e=>e===G.boss?!!(e._k6&&e._k6.s!=='walk'):(e.m2==='warn'||e.m2==='mdash'||e.m2==='cwarn');/* v209 */
+EMOD(2);(function(){if(MAP!==2)return;window.BW209=e=>e===G.boss?!!(e._k6&&e._k6.s!=='walk'):(e.m2==='warn'||e.m2==='mdash'||e.m2==='cwarn');/* v209 */
 const px=v=>{const T=cx.getTransform();return v/Math.max(.05,Math.hypot(T.a,T.b)/(window.DPR||1));};const WN=.9,WB=1.2,WG209=1.4/* v209: 집게 예고 1.4초 */,RED='rgba(232,69,44,',SHELL='#E8A93A';
 /* v137i: charge passes through; side knockback 140 over .25s (ease-out), perpendicular to dash; contact damage ignored during it */
 function m2kb(x,y,a){const nx=-Math.sin(a),ny=Math.cos(a),sd=((P.x-x)*nx+(P.y-y)*ny)>=0?1:-1;P._kb={nx:nx*sd,ny:ny*sd,t:0};P._kbT=.45;}
@@ -4450,12 +4455,12 @@ const _db=drawBoss;drawBoss=function(b){if(b){if((b.st==='m2gw'||b.st==='m2gc2'|
  {const _d6=drawBoss;drawBoss=function(b){const r=_d6.apply(this,arguments);try{if(b&&!b.dead)arms(b);}catch(err){console.error(err);}return r;};}
 }
 
-})();
+})();EMOD_END(2);
 </script>
 <script>/* v138: map-3 (잿빛 황야) rebuild, MAP===3 only. Colour set A (cool blue/teal/white), new sprites with attack pose (fr 1), same sizes as other maps.
  Mid-boss 균열 절단기: zigzag crack 500x70 14% /5s; donut safe r105 danger r190 13% /6s. Boss 잿불 압착왕: lava 3-hit r60 at player spot 11% /8s; 4-corner plate press 4x r105 15% /10s.
  Every attack: .9s steady red floor warning (fill grows, no blink) -> hit once -> 1.75s lingering lava (4% per .5s). No bullets, jump, shake, flash or numbers. Hard: regular enemies HP x1.25 atk x1.2. */
-(function(){if(MAP!==3)return;
+EMOD(3);(function(){if(MAP!==3)return;
 /* ---------- sprites ---------- */
 const PALA={walk:['#B8DCE5','#39778B','#142735'],fast:['#65B8ED','#E5F3FA','#14283D'],tank:['#318C91','#D5EFEB','#102E35'],shoot:['#477DCA','#DAE9FA','#15243D'],heavy:['#D5DEE8','#47769D','#1C2938'],elite:['#789CE0','#E6ECF7','#202C48'],mid:['#ECF3F5','#248B9B','#142B38'],boss:['#253F64','#D3EAF2','#0C1728']};
 const MET='#A9B8C6',DRK='#22303E',GL='#9FE6F2';let g,U,LW,A,B,O;
@@ -4550,11 +4555,11 @@ const _g=goblin;goblin=function(e){if(e.mb){window.__M2FR=Z.some(z=>z.src===e&&z
  if(e.burn>0||e.fsl>0||e.l2s>0){cx.save();cx.globalAlpha=.28;cx.fillStyle='#ff7a2a';cx.beginPath();cx.arc(e.x,e.y,Uw*.9,0,TAU);cx.fill();cx.restore();}
  if(e.hp<e.max){const r=e.r;cx.fillStyle='rgba(0,0,0,.4)';cx.fillRect(e.x-r,e.y-r-10,r*2,4);cx.fillStyle='#ff5a4a';cx.fillRect(e.x-r,e.y-r-10,r*2*e.hp/e.max,4);}};
 const _db=drawBoss;drawBoss=function(b){if(b)window.__M2FR=b._busy?1:0;const r=_db(b);window.__M2FR=0;return r;};
-})();
+})();EMOD_END(3);
 </script>
 <script>/* v139: map-4 (설원) build, MAP===4 only. Straight regulars, hex fill-up warnings #C8372D (no blink), cap 3 / 2 with mid or boss.
  압설기 눈덩이 8%/8s, 철갑 고드름 10%/7s, 쌍날 부메랑 10%/6s + 얼음 퍽 8%x2/5s, 압설왕 우박 15%/8s, 눈보라 20%/10s, 빙판 깨짐 15%x2/12s. No shake, flash, blink or numbers. HP/attack unchanged. */
-(function(){if(MAP!==4)return;
+EMOD(4);(function(){if(MAP!==4)return;
 const RC='200,55,45',AW=()=>!!(window.AWKON&&AWKON());
 const px=v=>{const T=cx.getTransform();return v/Math.max(.05,Math.hypot(T.a,T.b)/(window.DPR||1));};
 const MHP=f=>f*G.maxhp/(DDMG*MAPK*1.1);
@@ -4640,11 +4645,11 @@ const _g=goblin;goblin=function(e){const pose=busy(e)?1:0;if(e.mb||e.elite){wind
   if(e.hp<e.max){const r=e.r;cx.fillStyle='rgba(0,0,0,.4)';cx.fillRect(e.x-r,e.y-r-10,r*2,4);cx.fillStyle='#ff5a4a';cx.fillRect(e.x-r,e.y-r-10,r*2*e.hp/e.max,4);}return;}
  return _g(e);};
 const _db=drawBoss;drawBoss=function(b){if(b)window.__M2FR=b._busy?1:0;const r=_db(b);window.__M2FR=0;return r;};
-})();
+})();EMOD_END(4);
 </script>
 <script>/* v88 (c18): map-5 (늪지) build, MAP===5 only. Replaces map 5's shared mid-boss/boss patterns. Red #C8372D slow-fill warnings (no blink), one hit per cast, cap 3 / 2 with mid or boss.
  수면 분출 12%/7s (철갑 14%/6s, bigger), 갈대 빗살 14%/6s, 수면 파문 12%x2/7.5s, 연꽃 범람 23%/9.5s, 수문 내려찍기 17%/11s (1단), 거머리 사슬 16%/9.5s. % already includes the map multiplier. No shake, flash, blink or numbers. Regular enemies unchanged. */
-(function(){if(MAP!==5)return;
+EMOD(5);(function(){if(MAP!==5)return;
 const RC='200,55,45',AW=()=>!!(window.AWKON&&AWKON());
 const px=v=>{const T=cx.getTransform();return v/Math.max(.05,Math.hypot(T.a,T.b)/(window.DPR||1));};
 const MHP=f=>f*G.maxhp/(DDMG*MAPK*1.1);
@@ -4815,7 +4820,7 @@ if(window.POSTEN){const _pe=POSTEN;window.POSTEN=function(){_pe();try{topDraw();
  {const pc=window.POSTCAR;window.POSTCAR=function(){if(pc)pc();try{sedDraw();}catch(err){console.error(err);}};}
 }
 
-})();
+})();EMOD_END(5);
 </script>
 <script>/* v89: map-5 sprites (M5P) + poses + own look for the boss's shield summons. MAP===5 only. Cached per facing/size/frame like the other maps; drawn with the whole-pixel blit. */
 /* M5P draft: map-5 (swamp) robots in the adopted map-2 M2P style (part(): fill + light band + shade band + worn chips + outline; bolts, seams, lamps, attack pose fr).
@@ -4912,7 +4917,7 @@ const PAL5={walk:['#D8A563','#EADBB6','#2A1A14'],fast:['#EEE3C0','#B5532F','#2A1
 window.M5P={roles:Object.keys(DR),PAL:PAL5,draw(ctx,role,U,d,a,f){g=ctx;u=U;dpr=d||1;LW=Math.max(px(1.6),Math.min(px(3),u*.085));const c=Math.cos(-(a||0)),s=Math.sin(-(a||0)),v=Math.SQRT1_2;lv=[v*c-v*s,v*s+v*c];const q=PAL5[role]||PAL5.walk;MC=q[0];MCD=DK(q[0],.18);AC=q[1];ACD=DK(q[1],.3);N=q[2];HL=q[3]||mix(q[0],255,.35);g.lineJoin='round';(DR[role]||DR.walk)(f||0);}};
 })();
 
-(function(){if(MAP!==5)return;
+EMOD(5);(function(){if(MAP!==5)return;
 const busy=e=>!!(window.M5Z&&M5Z.some(z=>z.src===e&&z.t<z.wn));
 const near=e=>Math.hypot(P.x-e.x,P.y-e.y)<e.r+P.r+45;
 /* mark the shield summons the boss spawns (every 9 s, 5 at a time) */
@@ -4921,11 +4926,11 @@ const _g=goblin;goblin=function(e){if(e.mb){window.__M2FR=busy(e)?1:0;const r=_g
  if(e.elite){window.__M2FR=(busy(e)||near(e))?1:0;const r=_g(e);window.__M2FR=0;return r;}
  window.__M2FR=(busy(e)||near(e))?1:0;const r=_g(e);window.__M2FR=0;return r;};
 const _db=drawBoss;drawBoss=function(b){if(b)window.__M2FR=b._busy?1:0;const r=_db(b);window.__M2FR=0;return r;};
-})();
+})();EMOD_END(5);
 </script>
 <script>/* v90 (c18): map-6 (폐철도역) build, MAP===6 only. Replaces map 6's shared mid-boss/boss patterns. Same rules as map 5: red #C8372D slow-fill warnings (no blink), one hit per cast, at most 3 warnings at once (2 while a mid-boss or boss is up).
  큰 적/정예: 레일 돌진 12%/7s (정예 14%/6s, longer+wider; slides along the rail after the hit). 중간보스: 분기 전환 14%/6s (Y-fork of two rails), 건널목 차단 12%x2/7.5s (two crossing bars, near then far). 보스: 탈선 돌진 20%/9.5s (wide rail + slide), 화차 낙하 15%/10s (3 freight cars, staggered, one hit), 증기 분출 17%/8.5s (ring, safe right next to the boss). No shake, flash, blink or numbers. Regular enemies unchanged. */
-(function(){if(MAP!==6)return;
+EMOD(6);(function(){if(MAP!==6)return;
 const RC='200,55,45',AW=()=>!!(window.AWKON&&AWKON());
 const px=v=>{const T=cx.getTransform();return v/Math.max(.05,Math.hypot(T.a,T.b)/(window.DPR||1));};
 const MHP=f=>f*G.maxhp/(DDMG*MAPK*1.1);
@@ -4992,7 +4997,7 @@ function zDraw(z){if(z.t<0||z.brk)return;cx.save();const V=WV7;/* v107 shared wa
  cx.restore();}
 {const _pp=window.POSTPOOL;window.POSTPOOL=function(){if(_pp)_pp();for(const z of Z)zDraw(z);};}
 {const _dd6=drawBoss;drawBoss=function(b){const z=b&&Z.find(z=>z.nm==='derail'&&z.src===b&&z.t>=z.wn&&z.t<z.wn+(z.dT||.25));if(!z)return _dd6(b);const s=b.st,c=b.ca;b.st='m2ch';b.ca=z.an;try{return _dd6(b);}finally{b.st=s;b.ca=c;}};}/* v104: boss faces its locked 탈선 돌진 direction during the dash */
-})();
+})();EMOD_END(6);
 </script>
 <script>/* v90: map-6 sprites (M6P) + poses + own look for the boss's shield summons. MAP===6 only. Cached per facing/size/frame like the other maps; drawn with the whole-pixel blit. */
 /* M6P: map-6 (폐철도역, abandoned rail yard) robots in the adopted map-2 M2P style (part(): fill + light band + shade band + worn chips + outline; bolts, seams, lamps, attack pose fr).
@@ -5077,7 +5082,7 @@ const PAL6={walk:['#E2B33A','#3A3D44','#1E1A14'],fast:['#2E8A84','#EFE3C4','#142
 window.M6P={roles:Object.keys(DR),PAL:PAL6,draw(ctx,role,U,d,a,f){g=ctx;u=U;dpr=d||1;LW=Math.max(px(1.6),Math.min(px(3),u*.085));const c=Math.cos(-(a||0)),s=Math.sin(-(a||0)),v=Math.SQRT1_2;lv=[v*c-v*s,v*s+v*c];const q=PAL6[role]||PAL6.walk;MC=q[0];MCD=DK(q[0],.18);AC=q[1];ACD=DK(q[1],.3);N=q[2];HL=q[3]||mix(q[0],255,.35);g.lineJoin='round';(DR[role]||DR.walk)(f||0);}};
 })();
 
-(function(){if(MAP!==6)return;
+EMOD(6);(function(){if(MAP!==6)return;
 const busy=e=>!!(window.M6Z&&M6Z.some(z=>z.src===e&&z.t<z.wn));
 const near=e=>Math.hypot(P.x-e.x,P.y-e.y)<e.r+P.r+45;
 /* mark the shield summons the boss spawns (every 9 s, 5 at a time) */
@@ -5086,11 +5091,11 @@ const _g=goblin;goblin=function(e){if(e.mb){window.__M2FR=busy(e)?1:0;const r=_g
  if(e.elite){window.__M2FR=(busy(e)||near(e))?1:0;const r=_g(e);window.__M2FR=0;return r;}
  window.__M2FR=(busy(e)||near(e))?1:0;const r=_g(e);window.__M2FR=0;return r;};
 const _db=drawBoss;drawBoss=function(b){if(b)window.__M2FR=b._busy?1:0;const r=_db(b);window.__M2FR=0;return r;};
-})();
+})();EMOD_END(6);
 </script>
 <script>/* v91 (c18): map-7 (번개 고원) build, MAP===7 only. Replaces map 7's shared mid-boss/boss patterns. Same rules as maps 5-6: red #C8372D slow-fill warnings (no blink), one hit per cast, at most 3 warnings (2 while a mid-boss or boss is up).
  큰 적/정예: 낙뢰 12%/7s (정예 14%/6s, bigger). 중간보스: 쌍극 방전 14%/6s (two poles beside the player + the arc between them, one hit), 십자 방전 12%x2/7.5s (+ then x). 보스: 낙뢰 폭풍 15%/10s (5 strikes, staggered, one hit), 송전 십자 18%/9s (4 long arms), 첨탑 과부하 22%/11s (big disc, run out). No shake, flash, blink or numbers. Regular enemies unchanged. */
-(function(){if(MAP!==7)return;
+EMOD(7);(function(){if(MAP!==7)return;
 const RC='200,55,45',AW=()=>!!(window.AWKON&&AWKON());
 const px=v=>{const T=cx.getTransform();return v/Math.max(.05,Math.hypot(T.a,T.b)/(window.DPR||1));};
 const MHP=f=>f*G.maxhp/(DDMG*MAPK*1.1);
@@ -5175,7 +5180,7 @@ function zDraw(z){if(z.t<0||z.brk)return;if(z.rig&&z.t>=z.wn&&z.t<z.wn+z.dur){co
  else{const q=Math.min(1,(z.t-z.wn)/.3);if(z.sh==='band')V.bandCool(z.x,z.y,z.an,z.L,z.w,q,px,z.dash);else V.cool(m=>path(z,m),q,px);}
  cx.restore();}
 {const _pp=window.POSTPOOL;window.POSTPOOL=function(){if(_pp)_pp();for(const z of Z)zDraw(z);};}
-})();
+})();EMOD_END(7);
 </script>
 <script>/* v91: map-7 sprites (M7P) + poses + own look for the boss's shield summons. MAP===7 only. Cached per facing/size/frame like the other maps; drawn with the whole-pixel blit. */
 /* M7P: map-7 (번개 고원, lightning plateau) robots in the adopted map-2 M2P style (part(): fill + light band + shade band + worn chips + outline; bolts, seams, lamps, attack pose fr).
@@ -5254,7 +5259,7 @@ const PAL7={walk:['#C9763A','#2A2E38','#1E140C','#E9E4D6'],fast:['#4FC3E0','#F2E
 window.M7P={roles:Object.keys(DR),PAL:PAL7,draw(ctx,role,U,d,a,f){g=ctx;u=U;dpr=d||1;LW=Math.max(px(1.6),Math.min(px(3),u*.085));const c=Math.cos(-(a||0)),s=Math.sin(-(a||0)),v=Math.SQRT1_2;lv=[v*c-v*s,v*s+v*c];const q=PAL7[role]||PAL7.walk;MC=q[0];MCD=DK(q[0],.18);AC=q[1];ACD=DK(q[1],.3);N=q[2];HL=q[3]||mix(q[0],255,.35);g.lineJoin='round';(DR[role]||DR.walk)(f||0);}};
 })();
 
-(function(){if(MAP!==7)return;
+EMOD(7);(function(){if(MAP!==7)return;
 const busy=e=>!!(window.M7Z&&M7Z.some(z=>z.src===e&&z.t<z.wn));
 const near=e=>Math.hypot(P.x-e.x,P.y-e.y)<e.r+P.r+45;
 /* mark the shield summons the boss spawns (every 9 s, 5 at a time) */
@@ -5263,11 +5268,11 @@ const _g=goblin;goblin=function(e){if(e.mb){window.__M2FR=busy(e)?1:0;const r=_g
  if(e.elite){window.__M2FR=(busy(e)||near(e))?1:0;const r=_g(e);window.__M2FR=0;return r;}
  window.__M2FR=(busy(e)||near(e))?1:0;const r=_g(e);window.__M2FR=0;return r;};
 const _db=drawBoss;drawBoss=function(b){if(b)window.__M2FR=b._busy?1:0;const r=_db(b);window.__M2FR=0;return r;};
-})();
+})();EMOD_END(7);
 </script>
 <script>/* v92 (c18): map-8 (잿빛 대성당) build, MAP===8 only. Replaces map 8's shared mid-boss/boss patterns. Same rules as maps 5-7: red #C8372D slow-fill warnings (no blink), one hit per cast, at most 3 warnings (2 while a mid-boss or boss is up).
  큰 적/정예: 파쇄 내리치기 12%/7s (wide short slab in front; 정예 14%/6s, bigger). 중간보스: 성문 닫기 14%/6s (door band across the player), 종소리 파동 12%x2/7.5s (inner ring, then outer). 보스: 대종 울림 16%/10s (3 rings rolling out, one hit), 유리창 낙하 18%/9s (3 tall strips, stand in a gap), 종루 붕괴 22%/11s (big disc with 3 safe pads). No shake, flash, blink or numbers. Regular enemies unchanged. */
-(function(){if(MAP!==8)return;
+EMOD(8);(function(){if(MAP!==8)return;
 const RC='200,55,45',AW=()=>!!(window.AWKON&&AWKON());
 const px=v=>{const T=cx.getTransform();return v/Math.max(.05,Math.hypot(T.a,T.b)/(window.DPR||1));};
 const MHP=f=>f*G.maxhp/(DDMG*MAPK*1.1);
@@ -5330,7 +5335,7 @@ function zDraw(z){if(z.t<0||z.brk)return;cx.save();const V=WV7;/* v107 shared wa
  else{const q=Math.min(1,(z.t-z.wn)/.3);if(z.sh==='band')V.bandCool(z.x,z.y,z.an,z.L,z.w,q,px,z.dash);else V.cool(m=>path(z,m),q,px);}
  cx.restore();}
 {const _pp=window.POSTPOOL;window.POSTPOOL=function(){if(_pp)_pp();for(const z of Z)zDraw(z);};}
-})();
+})();EMOD_END(8);
 </script>
 <script>/* v92: map-8 sprites (M8P) + poses + own look for the boss's shield summons. MAP===8 only. Cached per facing/size/frame like the other maps; drawn with the whole-pixel blit. */
 /* M8P: map-8 (잿빛 대성당, ashen cathedral) robots in the adopted map-2 M2P style (part(): fill + light band + shade band + worn chips + outline; bolts, seams, lamps, attack pose fr).
@@ -5407,7 +5412,7 @@ const PAL8={walk:['#3E6FB0','#E6DCC2','#0E1626','#D9A43A'],fast:['#D9A43A','#2C3
 window.M8P={roles:Object.keys(DR),PAL:PAL8,draw(ctx,role,U,d,a,f){g=ctx;u=U;dpr=d||1;LW=Math.max(px(1.6),Math.min(px(3),u*.085));const c=Math.cos(-(a||0)),s=Math.sin(-(a||0)),v=Math.SQRT1_2;lv=[v*c-v*s,v*s+v*c];const q=PAL8[role]||PAL8.walk;MC=q[0];MCD=DK(q[0],.18);AC=q[1];ACD=DK(q[1],.3);N=q[2];HL=q[3]||mix(q[0],255,.35);g.lineJoin='round';(DR[role]||DR.walk)(f||0);}};
 })();
 
-(function(){if(MAP!==8)return;
+EMOD(8);(function(){if(MAP!==8)return;
 const busy=e=>!!(window.M8Z&&M8Z.some(z=>z.src===e&&z.t<z.wn));
 const near=e=>Math.hypot(P.x-e.x,P.y-e.y)<e.r+P.r+45;
 /* mark the shield summons the boss spawns (every 9 s, 5 at a time) */
@@ -5416,7 +5421,7 @@ const _g=goblin;goblin=function(e){if(e.mb){window.__M2FR=busy(e)?1:0;const r=_g
  if(e.elite){window.__M2FR=(busy(e)||near(e))?1:0;const r=_g(e);window.__M2FR=0;return r;}
  window.__M2FR=(busy(e)||near(e))?1:0;const r=_g(e);window.__M2FR=0;return r;};
 const _db=drawBoss;drawBoss=function(b){if(b)window.__M2FR=b._busy?1:0;const r=_db(b);window.__M2FR=0;return r;};
-})();
+})();EMOD_END(8);
 </script>
 
 
@@ -5459,18 +5464,18 @@ const _pp=window.POSTPOOL;window.POSTPOOL=function(){if(_pp)_pp();for(const f of
    cx.save();cx.fillStyle='rgb(255,165,60)';for(const m of f.em){const u=(f.t*.6+m.ph)%1;cx.globalAlpha=(1-u)*.8*k;cx.beginPath();cx.arc(m.x+Math.sin(u*6+m.ph*9)*6,m.y-12-u*46,1.8,0,TAU);cx.fill();}cx.restore();}}};
 })();</script>
 <script>/* v124: map 7 - 첨탑 과부하 lingering fire was too faint on a phone (26 small flames spread over r235, mostly under the boss sprite, 22% floor tint). Visual only: denser, bigger flame patches + warmer floor; same 2s, same damage. */
-(function(){if(MAP!==7||!window.FIRE96)return;const _f=FIRE96,F=window.FIREL;window.FIRE96=function(z){const r=_f.apply(this,arguments);const o=F[F.length-1];if(o&&(z.nm==='over'||(o.a||o.r||0)>150)){const R=o.a||o.r||200;o.fl=[];const N=70;for(let k=0;k<N*6&&o.fl.length<N;k++){const a=Math.random()*TAU,d=Math.sqrt(Math.random())*(R-10),x=o.x+Math.cos(a)*d,y=o.y+Math.sin(a)*d;o.fl.push({x,y,s:1.1+Math.random()*.8,ph:Math.random()*TAU,w:3+Math.random()*2.4});}o.fl.sort((p,q)=>p.y-q.y);o.em=o.fl.slice(0,14).map((f,i)=>({x:f.x,y:f.y,ph:i/14}));o._v124=1;}return r;};
+EMOD(7);(function(){if(MAP!==7||!window.FIRE96)return;const _f=FIRE96,F=window.FIREL;window.FIRE96=function(z){const r=_f.apply(this,arguments);const o=F[F.length-1];if(o&&(z.nm==='over'||(o.a||o.r||0)>150)){const R=o.a||o.r||200;o.fl=[];const N=70;for(let k=0;k<N*6&&o.fl.length<N;k++){const a=Math.random()*TAU,d=Math.sqrt(Math.random())*(R-10),x=o.x+Math.cos(a)*d,y=o.y+Math.sin(a)*d;o.fl.push({x,y,s:1.1+Math.random()*.8,ph:Math.random()*TAU,w:3+Math.random()*2.4});}o.fl.sort((p,q)=>p.y-q.y);o.em=o.fl.slice(0,14).map((f,i)=>({x:f.x,y:f.y,ph:i/14}));o._v124=1;}return r;};
  for(const k in _f)window.FIRE96[k]=_f[k];
- const _pp=window.POSTPOOL;window.POSTPOOL=function(){for(const f of F){if(!f._v124||f.t>=1.7)continue;const k=f.t<1.5?1:Math.max(0,(1.7-f.t)/.2);cx.save();cx.globalAlpha=k;cx.beginPath();cx.ellipse(f.x,f.y,f.a,f.b,f.ro||0,0,TAU);cx.fillStyle='rgba(235,110,35,.2)';cx.fill();cx.restore();}if(_pp)_pp();};})();
+ const _pp=window.POSTPOOL;window.POSTPOOL=function(){for(const f of F){if(!f._v124||f.t>=1.7)continue;const k=f.t<1.5?1:Math.max(0,(1.7-f.t)/.2);cx.save();cx.globalAlpha=k;cx.beginPath();cx.ellipse(f.x,f.y,f.a,f.b,f.ro||0,0,TAU);cx.fillStyle='rgba(235,110,35,.2)';cx.fill();cx.restore();}if(_pp)_pp();};})();EMOD_END(7);
 </script>
 <script>/* v125b: map-7 boss bind/tower/arm leave VISUAL-ONLY lingering fire (nd: no damage) on the exact hit area, v124 flame density/size; same 2s fade */
-(function(){if(MAP!==7||!window.FIRE96)return;const F=window.FIREL;
+EMOD(7);(function(){if(MAP!==7||!window.FIRE96)return;const F=window.FIREL;
 window.VF125=function(z){let q=z;if(z.sh==='chain'){const dx=P.x-z.x,dy=P.y-z.y,L=Math.hypot(dx,dy);if(L<8)return;q={sh:'band',x:z.x,y:z.y,an:Math.atan2(dy,dx),L,w:34};}
  if(q.sh!=='band')return;const n0=F.length;FIRE96(q);if(F.length<=n0)return;const o=F[F.length-1];o.nd=1;FIRES.n--;FIRES.vis=(FIRES.vis||0)+1;
  const N=Math.max(8,Math.min(40,Math.round(q.L/15))),ux=Math.cos(q.an),uy=Math.sin(q.an);o.fl=[];
  for(let k=0;k<N;k++){const l=(k+.2+Math.random()*.6)/N*q.L,w=(Math.random()-.5)*(q.w-12);o.fl.push({x:q.x+ux*l-uy*w,y:q.y+uy*l+ux*w,s:1.05+Math.random()*.7,ph:Math.random()*TAU,w:3+Math.random()*2.4});}
  o.fl.sort((p,r)=>p.y-r.y);o.em=o.fl.filter((_,i)=>i%4===0).slice(0,8).map((f,i,a)=>({x:f.x,y:f.y,ph:i/a.length}));};
-VF125.nm={};/* v128: old skills removed */})();
+VF125.nm={};/* v128: old skills removed */})();EMOD_END(7);
 </script>
 <script>/* v128: per-boss aftermath looks (visual only). Replaces the generic fire LOOK on boss hits; damage of fire that already hurt stays. Map 7: lightning on every hit area (boss, mid-boss, big). No flash/blink/shake/numbers. Caps: 30 zones, 40 points each. */
 (function(){if(!window.FIRE96||!window.FIREL)return;const F=window.FIREL,TAUx=Math.PI*2;
@@ -5653,9 +5658,9 @@ window.WV7=(function(){const OR='#FF9A2E',DK='rgba(20,10,5,.85)',FL='rgba(255,15
 (function(){const _u=update;update=function(dt){_u(dt);for(const e of EN){if(e._hp110||e.dead)continue;e._hp110=1;if(e===G.boss||e.boss)continue;const k=e.mb?.6:(e.elite||e.v==='big')?1:1.2;if(k!==1){e.hp*=k;if(e.max)e.max*=k;}}};})();
 </script>
 <script>/* v111: map-6 boss always faces its travel direction while it moves (never the player); holds the last travel facing while standing still */
-(function(){if(MAP!==6)return;const _d=drawBoss;drawBoss=function(b){if(!b||window.V112HEAD)return _d.apply(this,arguments);/* v122: v112 owns facing (no second, unsmoothed heading fighting it) */
+EMOD(6);(function(){if(MAP!==6)return;const _d=drawBoss;drawBoss=function(b){if(!b||window.V112HEAD)return _d.apply(this,arguments);/* v122: v112 owns facing (no second, unsmoothed heading fighting it) */
  if(b._vx6!=null){const dx=b.x-b._vx6,dy=b.y-b._vy6;if(dx*dx+dy*dy>.04)b._tv6=Math.atan2(dy,dx);}b._vx6=b.x;b._vy6=b.y;
- const a=(b._tfaT>G.t&&b._tfa!=null)?b._tfa:b._tv6;if(a==null)return _d.apply(this,arguments);const px=P.x,py=P.y;P.x=b.x+Math.cos(a)*1e4;P.y=b.y+Math.sin(a)*1e4;try{return _d.apply(this,arguments);}finally{P.x=px;P.y=py;}};})();
+ const a=(b._tfaT>G.t&&b._tfa!=null)?b._tfa:b._tv6;if(a==null)return _d.apply(this,arguments);const px=P.x,py=P.y;P.x=b.x+Math.cos(a)*1e4;P.y=b.y+Math.sin(a)*1e4;try{return _d.apply(this,arguments);}finally{P.x=px;P.y=py;}};})();EMOD_END(6);
 </script>
 <script>/* v112: ALL maps - every enemy (regular, big, elite, mid-boss, boss) faces its actual travel direction from its position change (smoothed); standing still keeps the last travel heading; never turns to the player. Draw-only: sprite aims come from P / e.ang, so both point along the heading for that one draw call. */
 (function(){const ST=window.V112ST={n:0,ok:0};
@@ -5732,7 +5737,7 @@ const cname=c=>c[1].replace(/^[^가-힣A-Za-z]+/,'');
 function cfm(q,info,yes,car){const d=document.createElement('div');d.className='v15cf';d.innerHTML='<div class="bx"><div class="q">'+q+'</div>'+(car?'<div class="pc" data-c="'+car+'"></div>':'')+'<div class="i">'+info+'</div><div class="r"><button class="v15b g" data-n>아니오</button><button class="v15b" data-y>예</button></div></div>';document.body.appendChild(d);const pc=d.querySelector('.pc');if(pc)draw(car,pc);d.querySelector('[data-n]').onclick=()=>d.remove();d.querySelector('[data-y]').onclick=()=>{d.remove();yes();};}window.V116CF=cfm;
 function myCar(){return SAVE.cars[SAVE.car]?SAVE.car:(CARS.find(c=>SAVE.cars[c[0]])||CARS[0])[0];}
 function frame(body){const m=$('menu');$('gar').style.display='none';G.paused=true;m.className='ov v15';m.style.cssText='';m.innerHTML='<div class="v15w">'+bar()+body+tabs()+'<div style="position:absolute;left:18px;top:calc(env(safe-area-inset-top) + 49px);font:700 9px system-ui;line-height:10px;color:#8A96A8;opacity:.8;pointer-events:none;z-index:5">BUILD '+BUILD+'</div></div>';m.style.display='flex';m.style.height=innerHeight+'px';
- m.querySelectorAll('[data-tb]').forEach(b=>b.onclick=()=>{if(b.dataset.tb==='inf'){soon('♾️ 무한모드',INF8()?'곧 열려요':'맵 8 쉬움 클리어 시 열림');return;}if(b.dataset.tb==='set'){window.SET206&&SET206();return;}TAB=b.dataset.tb;render();});$('hSet').onclick=()=>window.SET206?SET206():showSettings();m.querySelectorAll('.v15car[data-c],.v15p[data-c]').forEach(u=>draw(u.dataset.c,u));return m;}
+ m.querySelectorAll('[data-tb]').forEach(b=>b.onclick=()=>{if(b.dataset.tb==='inf'&&!INF8()){soon('♾️ 무한모드','맵 8 쉬움 클리어 시 열림');return;}if(b.dataset.tb==='set'){window.SET206&&SET206();return;}TAB=b.dataset.tb;render();});$('hSet').onclick=()=>window.SET206?SET206():showSettings();m.querySelectorAll('.v15car[data-c],.v15p[data-c]').forEach(u=>draw(u.dataset.c,u));return m;}
 function soon(t,msg){const d=document.createElement('div');d.className='v15cf';d.innerHTML='<div class="bx"><div class="q">'+t+'</div><div class="i">'+(msg||'준비 중이에요!')+'</div><div class="r"><button class="v15b" data-y>확인</button></div></div>';document.body.appendChild(d);d.querySelector('[data-y]').onclick=()=>d.remove();d.onclick=e=>{if(e.target===d)d.remove();};}
 /* v206 (영태): 홈 = 큰 칸에서 맵 넘기기(‹ ›) → 바로 아래 난이도 → 출동. 출동을 누르면 차량 선택 창이 한 번 더 뜨고, 고른 차로 출발 */
 function home(){clrSync();SAVE.diff=mDiff(SAVE.stage);const s=STG[SAVE.stage-1]||STG[0],n=STG.length,op=mapOpen(SAVE.stage-1);
@@ -5779,7 +5784,8 @@ function upg(){const m=frame('<div class="v15h v15hU">⬆️ 영구 강화 · �
  const ok=()=>{saveS();beep(880,.1,'triangle',.12);const l=m.querySelector('.v15ls'),y=l?l.scrollTop:0;upg();const l2=$('menu').querySelector('.v15ls');if(l2)l2.scrollTop=y;};
  const pn=k=>(PU.find(x=>x[0]===k)||[,''])[1];m.querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{const k=b.dataset.pg,v=SAVE.pu[k]||0,c=60*(v+1);if(v>=PUMAX||SAVE.gold<c)return;cfm('골드로 업그레이드 할까요?',pn(k)+' '+v+' → '+(v+1)+'<br>💰 '+fmt(c),()=>{if((SAVE.pu[k]||0)!==v||SAVE.gold<c)return;SAVE.gold-=c;SAVE.pu[k]=v+1;ok();});});
  m.querySelectorAll('[data-pd]').forEach(b=>b.onclick=()=>{const k=b.dataset.pd,v=SAVE.pu[k]||0,c=10*(v+1);if(v>=PUMAX||SAVE.dia<c)return;cfm('다이아로 업그레이드 할까요?',pn(k)+' '+v+' → '+(v+1)+'<br>💎 '+fmt(c),()=>{if((SAVE.pu[k]||0)!==v||SAVE.dia<c)return;SAVE.dia-=c;SAVE.pu[k]=v+1;ok();});});}
-function render(){if(TAB==='gar')garage();else if(TAB==='up')upg();else home();}
+function render(){if(TAB==='gar')garage();else if(TAB==='up')upg();else if(TAB==='inf'&&INF8())endless();else home();}
+/* v229 (영태 OK): 무한모드 화면 = 출동 차량(지금 고른 차) · 그 차의 최고 기록 · 출동 (맵 8 고정) */function endless(){const id=myCar(),c=CARS.find(x=>x[0]===id),R=(SAVE.endR||{})[id],ms=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');const rec=R?'최고 기록 · 웨이브 '+R.w+'<br>⏱️ '+ms(R.t)+' · 💀 '+fmt(R.k)+' · 👑 '+R.b+(R.r?' · 부활':''):'아직 기록 없음';frame('<div class="v15st"><img class="bg" src="assets/home_maps/map8.jpg" alt=""><div class="v15car" data-c="'+id+'"><div class="v15sh"></div></div><div class="v15nm">'+cname(c)+'</div><div class="v15sub">Lv '+cLv(id)+' · 맵 8<br>'+rec+'</div></div><button class="v15y" id="eStart">출동</button>');$('eStart').onclick=()=>{SAVE.car=id;saveS();location.search='?play=1&stage=8&endless=1&car='+id+DEVQ;};}
 window.V115={render,set:t=>{TAB=t;render();}};
 showMenu=function(){TAB='home';render();};
 showGarage=function(tab){TAB=tab===1?'up':'gar';render();};
@@ -6823,4 +6829,58 @@ window.TF20R={drawAt,units,list,AIMU,ON,tf20};
 try{if(ON[CAR])setTimeout(()=>{try{const u=units(CAR);u.exA.forEach(prep);u.exB.forEach(prep);}catch(e){}},800);}catch(e){}/* 미리 준비 (첫 변신 프레임 끊김 방지) */
 })();
 </script>
+<script>/* v229 (영태 OK 21:46, /workspace/specs/endless_plan_final.md): 무한모드 판. 맵 8 고정, 60초 웨이브(보스전 시간 별도), 5웨이브마다 맵 1→8 보스(그 맵 기술 그대로), 중간보스 없음.
+ 적 체력 ×1.08/웨이브(11웨이브부터 ×1.15), 공격 ×1.03/웨이브, 생성 +4%p/웨이브(최대 1.4배), 속도·화면 상한 그대로. 보스 체력 = 맵 8 쉬움 보스 ×0.5 × 웨이브 체력 배율, 보스 처치 시 최대 체력 10% 회복.
+ 10웨이브 완료 후 1회 버프 3택1. 보스당 골드 100 (하루 600, 결과 광고 +25%로 하루 최대 750, 모든 차량 합산, 한국 자정 초기화). 첫 기록 10·20·30웨이브 골드 200·300·300 (저장 전체 1회씩, 하루 상한 밖). 차량별 최고 기록 저장. */
+(function(){if(typeof ENDL==='undefined'||!ENDL||!PLAY)return;
+const KST=()=>new Date(Date.now()+9*36e5).toISOString().slice(0,10);
+const HPm=w=>Math.pow(1.08,Math.min(w,10)-1)*Math.pow(1.15,Math.max(0,w-10));
+const ATm=w=>Math.pow(1.03,w-1);
+const SPm=w=>Math.min(1.4,1+.04*(w-1));
+const B8=289000;/* 맵 8 쉬움 보스 최대 체력 (보통 판에서 잰 값) */
+const ES=window.__ES={w:1,wt:0,boss:0,bn:0,gold:0,fr:0,rev:0,buff:null,bp:0,lastEm:8,emT:-1,warn:0,ok:0,bT:0,nr:0,HPm,ATm,SPm};
+const day=()=>{const k=KST();if(!SAVE.endG||SAVE.endG.d!==k)SAVE.endG={d:k,g:0,a:0};return SAVE.endG;};window.__ESday=day;
+function rec(){SAVE.endR=SAVE.endR||{};const R=SAVE.endR[CAR],cw=ES.w-1;if(cw<1)return;if(!R||cw>R.w){SAVE.endR[CAR]={w:cw,t:Math.round(G.t),k:G.kills,b:ES.bn,r:ES.rev?1:0};ES.nr=1;saveS();}}
+function done(){const cw=ES.w;ES.w++;ES.wt=0;ES.warn=0;rec();
+ if(cw===10||cw===20||cw===30){SAVE.endFR=SAVE.endFR||{};if(!SAVE.endFR[cw]){SAVE.endFR[cw]=1;const g=cw===10?200:300;SAVE.gold+=g;ES.fr+=g;saveS();BAN={s:'🎉 '+cw+'웨이브 첫 기록 💰+'+g,life:2.5,big:1};}}
+ if(cw===10&&!ES.buff)ES.bp=1;}
+function spawnB(){const k=((ES.w/5-1)%8)+1;ES.boss=1;EMAP=k;ES.lastEm=k;G.bossSpawned=false;const c=MAPC;MAPC=k;ES.ok=1;try{spawnBoss();}finally{ES.ok=0;MAPC=c;}
+ const b=G.boss;if(!b){ES.boss=0;EMAP=8;return;}b.em=k;try{const D=window.__V133D;if(D&&D[k]&&D[k].boss)b.name=D[k].boss[0];}catch(e){}ES.bT=B8*.5*HPm(ES.w);b.hp=b.max=ES.bT;}
+{const _sb=spawnBoss;spawnBoss=function(){if(!ES.ok)return;return _sb.apply(this,arguments);};}
+{const _se=spawnE;spawnE=function(){const e=_se.apply(this,arguments);if(e&&MAPC!==MAP0)e.em=MAPC;return e;};}/* 보스가 부른 적 = 그 보스 맵 표시 */
+for(const nm of['bossUpd','drawBoss','hit','goblin']){const f=window[nm];if(typeof f!=='function')continue;window[nm]=function(){const b=nm==='bossUpd'?G.boss:arguments[0];if(!b||!b.em)return f.apply(this,arguments);const c=MAPC;MAPC=b.em;try{return f.apply(this,arguments);}finally{MAPC=c;}};}
+bossDie=function(){const b=G.boss;if(!b)return;CHEST.push({x:b.x,y:b.y,boss:1,t:0});G.chests++;gainXp(40);dropPot(b.x,b.y,'hp');dropPot(b.x,b.y,'mag');G.bossDone=true;G.boss=null;G.stop=.3;G.gflash=.15;shk(25,1);ring(b.x,b.y,400,'#fff3a0',1);for(let i=0;i<40;i++)GEM.push({x:b.x+rnd(-120,120),y:b.y+rnd(-120,120),v:5,big:1});
+ G.hp=Math.min(G.maxhp,G.hp+G.maxhp*.1);/* 보스 처치 = 최대 체력 10% 회복 */
+ const D=day(),g=Math.min(100,Math.max(0,600-D.g));D.g+=g;SAVE.gold+=g;ES.gold+=g;saveS();
+ ES.bn++;ES.boss=0;ES.emT=G.t+3;G.bossSpawned=false;done();};
+{const _h=hurt;hurt=function(d){arguments[0]=d*ATm(ES.w);return _h.apply(this,arguments);};}
+{const _d=director;director=function(dt){spawnAcc+=dt*(SPm(ES.w)-1);return _d.apply(this,arguments);};}
+{const _r=doRevive;doRevive=function(){ES.rev=1;return _r.apply(this,arguments);};}
+giveAch=function(){};/* 무한모드 = 목표(업적) 없음 */
+const hud=document.createElement('div');hud.id='eHUD';hud.style.cssText='position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 44px);transform:translateX(-50%);z-index:5;pointer-events:none;color:#fff;font:900 15px system-ui;text-shadow:0 2px 0 #000;white-space:nowrap';document.body.appendChild(hud);let hs='';
+function buffPick(){ES.bp=0;G.paused=true;const d=document.createElement('div');d.className='v15cf';d.style.zIndex='40';
+ d.innerHTML='<div class="bx"><div class="q">10웨이브 돌파!<br>버프 하나 선택</div><div class="i">이번 판에만</div><div class="r" style="flex-direction:column">'+[['dmg','💥 공격 +10%'],['cd','⚡ 쿨타임 −5%'],['hp','❤️ 최대 체력 +10%']].map(([k,n])=>'<button class="v15b" data-b="'+k+'">'+n+'</button>').join('')+'</div></div>';
+ ['pointerdown','pointerup','touchstart','touchend','mousedown','mouseup'].forEach(k=>d.addEventListener(k,e=>e.stopPropagation()));document.body.appendChild(d);
+ const pick=k=>{if(ES.buff)return;ES.buff=k;if(k==='dmg')P.dmgMul*=1.1;else if(k==='cd')P.cdMul=(P.cdMul||1)*.95;else{const a=Math.round(G.maxhp*.1);G.maxhp+=a;G.hp+=a;}d.remove();G.paused=false;};
+ d.querySelectorAll('[data-b]').forEach(b=>b.onclick=e=>{e.stopPropagation();pick(b.dataset.b);});if(AUTO)setTimeout(()=>pick('dmg'),300);}
+{const _u=update;update=function(dt){EMAP=G.boss&&G.boss.em?G.boss.em:(G.t<ES.emT?ES.lastEm:8);G.miniBoss=1;G.miniDead=1;G.bossWarn=G.bossWarn||1;
+ const t0=G.t,r=_u.apply(this,arguments),d=G.t-t0;const hk=HPm(ES.w);
+ for(const e of EN){if(e._ew)continue;e._ew=ES.w;if(e===G.boss||e.mb||hk===1)continue;e.hp*=hk;e.max*=hk;}
+ const b=G.boss;if(b&&b.em&&ES.bT&&b.max!==ES.bT){b.hp=b.hp/b.max*ES.bT;b.max=ES.bT;}
+ if(d>0&&!ES.boss&&!G.over){ES.wt+=d;if(ES.w%5===0){if(ES.wt>=57.5&&!ES.warn){ES.warn=1;BAN={s:'⚠ 보스 출현!',life:2.5,big:1};try{sndBoss();}catch(e){}}if(ES.wt>=60)spawnB();}else if(ES.wt>=60)done();}
+ if(ES.bp&&!G.paused&&!G.upause&&!G.roul&&!G.over&&!G.tf&&!G.robo&&!document.querySelector('.v15cf'))buffPick();
+ const s='웨이브 '+ES.w+(ES.boss?' · 👑 보스':'');if(s!==hs){hs=s;hud.textContent=s;}hud.style.display=G.over?'none':'';return r;};}
+showRes=function(){rec();const D=day(),mm=Math.floor(G.t/60),ss=String(Math.floor(G.t%60)).padStart(2,'0'),R=(SAVE.endR||{})[CAR],r=$('res');ACHQ.length=0;BAN=null;
+ r.innerHTML='<h1>파괴됨</h1><div style="color:#aab">♾️ 무한모드 · 맵 8</div><div class="box"><div class="ln">🌊 완료한 웨이브<b>'+(ES.w-1)+'</b></div><div class="ln">⏱️ 버틴 시간<b>'+mm+':'+ss+'</b></div><div class="ln">💀 잡은 적<b>'+G.kills+'</b></div><div class="ln">👑 잡은 보스<b>'+ES.bn+'</b></div><div class="ln">⭐ 레벨<b>'+G.lv+'</b></div>'
+  +'<div class="ln">💰 보스 골드 (오늘 '+D.g+'/600)<b style="color:#ffd24a">+'+ES.gold+'</b></div>'+(ES.fr?'<div class="ln">🎉 첫 기록 보상<b style="color:#ffd24a">+'+ES.fr+'</b></div>':'')+'<div class="ln" style="border-top:1px solid #665;padding-top:4px">💰 총 획득<b style="color:#ffe27a;font-size:20px">+'+(ES.gold+ES.fr)+'</b></div></div>'
+  +(R?'<div class="box"><div class="ln">🏆 '+(ES.nr?'새 최고 기록!':'최고 기록')+'<b>웨이브 '+R.w+'</b></div></div>':'')
+  +'<div class="gold">가진 골드 💰 '+SAVE.gold+'</div><button class="big" id="rRetry">🔁 다시 하기</button><button class="sm" id="rHome" style="height:52px;margin-top:6px">🏠 홈으로</button>';
+ r.style.background='rgba(0,0,0,.85)';r.style.display='flex';$('rRetry').onclick=()=>location.reload();$('rHome').onclick=()=>{location.search='?menu=1'+DEVQ;};
+ window.__res={wave:ES.w-1,t:G.t,kills:G.kills,boss:ES.bn,gold:ES.gold,fr:ES.fr,rev:ES.rev};
+ try{adRes222(0);}catch(err){console.error(err);}
+ {const w=$('ad222r'),gb=r.querySelector('.gold'),g25=Math.min(Math.round(ES.gold*.25),Math.max(0,750-D.g-D.a));if(w&&gb&&ES.gold>0&&g25>0){const bs='height:46px;width:72vw;max-width:320px;border:2px solid #8a6516;border-radius:12px;background:linear-gradient(#3a3218,#2a2410);color:#ffe27a;font:900 16px system-ui;cursor:pointer';
+  const bG=document.createElement('button');bG.id='adG229';bG.style.cssText=bs;bG.textContent='📺 광고 보고 골드 +25% (💰+'+g25+')';w.prepend(bG);const off=t=>{bG.disabled=true;bG.style.opacity='.55';bG.style.cursor='default';bG.textContent=t;};
+  if(adLeft222()<=0||!adRunOk222())off('📺 광고 보고 골드 (오늘/이번 판 횟수 끝)');
+  bG.onclick=()=>{if(bG.disabled||adLeft222()<=0||!adRunOk222())return;bG.disabled=true;adWatch222(()=>{const D2=day(),g=Math.min(g25,Math.max(0,750-D2.g-D2.a));D2.a+=g;G.adN=(G.adN||0)+1;SAVE.gold+=g;saveS();gb.textContent='가진 골드 💰 '+SAVE.gold;off('✔ 보스 골드 +'+g+' 받음');window.__res.adGold=g;try{beep(880,.1,'triangle',.12);}catch(_){}},()=>{bG.disabled=false;});};}}};
+})();</script>
 </body></html>
