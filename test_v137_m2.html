@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v231';
+const BUILD='v232';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -464,11 +464,11 @@ const NOADS=SAVE.noads;// placeholder only: remove-ads purchase not built yet
 const UPG={hp:{n:'❤️ 최대 체력',d:'+10씩'},dmg:{n:'💥 공격력',d:'+6%씩'},spd:{n:'💨 이동 속도',d:'+4%씩'},mag:{n:'🧲 줍는 범위',d:'+12%씩'}};const UPMAX=5,upCost=l=>100+l*100;
 const ACH=[{id:'win1',n:'1스테이지 보스 잡기',r:'💰 150 골드'},{id:'lv18',n:'레벨 20 되기 (왕관 개화 포격요새)',r:'💰 200 골드'},{id:'kill500',n:'한 판에 적 500마리',r:'💰 100 골드'}];
 let TUT=false;try{TUT=!localStorage.getItem('ac_tut');}catch(e){}
-/* v229 (영태 OK): 무한모드 — MAP/STAGE는 읽기 전용 값(보통 판은 예전과 똑같이 고정), 무한모드에서만 보스가 나온 동안 그 보스의 맵 번호로 바뀜 */const ENDL=PLAY&&Q.has('endless');var MAPC=ENDL?8:Math.min(8,Math.max(1,+Q.get('stage')||1)),MAP0=MAPC;Object.defineProperty(window,'MAP',{get(){return MAPC;},configurable:true});Object.defineProperty(window,'STAGE',{get(){return MAPC===1?1:2;},configurable:true});
+/* v229 (영태 OK): 무한모드 — MAP/STAGE는 읽기 전용 값(보통 판은 예전과 똑같이 고정), 무한모드에서만 보스가 나온 동안 그 보스의 맵 번호로 바뀜 */const ENDL=PLAY&&Q.has('endless');var MAPC=Math.min(8,Math.max(1,+Q.get('stage')||1)),MAP0=MAPC;/* v232: 무한모드도 맵마다 그 맵 판을 새로 불러옴 */Object.defineProperty(window,'MAP',{get(){return MAPC;},configurable:true});Object.defineProperty(window,'STAGE',{get(){return MAPC===1?1:2;},configurable:true});
 /* v229: 무한모드에서만 — 맵별 보스 모듈을 전부 설치하고, 지금 나온 보스의 맵 모듈만 동작 (보통 판에서는 아무것도 안 함) */var EMAP=MAP0,ESTK=[],EMODS={},EPX=new WeakSet();
 function EUSR(f){if(EPX.has(f))return true;try{return !/\{\s*\[native code\]\s*\}\s*$/.test(Function.prototype.toString.call(f));}catch(e){return false;}}
-function EMOD(n){if(!ENDL)return;const snap={},gd={},all=new Set(Object.getOwnPropertyNames(window));for(const k of all){let v;try{v=window[k];}catch(e){continue;}if(typeof v!=='function'||k==='EMOD'||k==='EMOD_END'||!EUSR(v))continue;snap[k]=v;const g=new Proxy(v,{apply(t,th,a){if(!ESTK.length)return Reflect.apply(t,th,a);const c=MAPC;MAPC=ESTK[ESTK.length-1];try{return Reflect.apply(t,th,a);}finally{MAPC=c;}}});gd[k]=g;try{window[k]=g;}catch(e){}}EMODS[n]=EMODS[n]||[];EMODS[n].push({snap,gd,all,c0:MAPC});MAPC=n;}
-function EMOD_END(n){if(!ENDL)return;const R=EMODS[n][EMODS[n].length-1];MAPC=R.c0;for(const k of Object.getOwnPropertyNames(window)){let v;try{v=window[k];}catch(e){continue;}const old=R.snap[k],g=R.gd[k];if(g!==undefined&&v===g){try{window[k]=old;}catch(e){}continue;}if(typeof v!=='function'||v===old||(old===undefined&&R.all.has(k)))continue;const neu=v;try{const gb=k==='goblin';const px=new Proxy(neu,{apply(t,th,a){if(EMAP!==n||(gb&&!(a[0]&&a[0].em===n))){const o=old;return o?Reflect.apply(o,th,a):undefined;}ESTK.push(MAPC);MAPC=n;try{return Reflect.apply(t,th,a);}finally{MAPC=ESTK.pop();}}});EPX.add(px);window[k]=px;}catch(e){}}}
+const EMX=false;/* v232: 맵 여러 개 동시 설치 끔 (무한모드가 맵마다 새로 불러오므로 필요 없음) */function EMOD(n){if(!EMX)return;const snap={},gd={},all=new Set(Object.getOwnPropertyNames(window));for(const k of all){let v;try{v=window[k];}catch(e){continue;}if(typeof v!=='function'||k==='EMOD'||k==='EMOD_END'||!EUSR(v))continue;snap[k]=v;const g=new Proxy(v,{apply(t,th,a){if(!ESTK.length)return Reflect.apply(t,th,a);const c=MAPC;MAPC=ESTK[ESTK.length-1];try{return Reflect.apply(t,th,a);}finally{MAPC=c;}}});gd[k]=g;try{window[k]=g;}catch(e){}}EMODS[n]=EMODS[n]||[];EMODS[n].push({snap,gd,all,c0:MAPC});MAPC=n;}
+function EMOD_END(n){if(!EMX)return;const R=EMODS[n][EMODS[n].length-1];MAPC=R.c0;for(const k of Object.getOwnPropertyNames(window)){let v;try{v=window[k];}catch(e){continue;}const old=R.snap[k],g=R.gd[k];if(g!==undefined&&v===g){try{window[k]=old;}catch(e){}continue;}if(typeof v!=='function'||v===old||(old===undefined&&R.all.has(k)))continue;const neu=v;try{const gb=k==='goblin';const px=new Proxy(neu,{apply(t,th,a){if(EMAP!==n||(gb&&!(a[0]&&a[0].em===n))){const o=old;return o?Reflect.apply(o,th,a):undefined;}ESTK.push(MAPC);MAPC=n;try{return Reflect.apply(t,th,a);}finally{MAPC=ESTK.pop();}}});EPX.add(px);window[k]=px;}catch(e){}}}
 const AUTO=Q.has('auto'),GOD=Q.has('god'),SPEED=Math.max(1,+Q.get('speed')||1),T0=+Q.get('t')||0;
 const cv=document.getElementById('c');let cx=cv.getContext('2d');let W,H;
 function rs(){H=innerHeight;W=Math.min(innerWidth,Math.round(H*0.6));window.DPR=Math.min(2,devicePixelRatio||1);/* c17: DPR cap 3 -> 2 */cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);cv.style.width=W+'px';cv.style.height=H+'px';}rs();addEventListener('resize',rs);
@@ -5785,7 +5785,7 @@ function upg(){const m=frame('<div class="v15h v15hU">⬆️ 영구 강화 · �
  const pn=k=>(PU.find(x=>x[0]===k)||[,''])[1];m.querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{const k=b.dataset.pg,v=SAVE.pu[k]||0,c=60*(v+1);if(v>=PUMAX||SAVE.gold<c)return;cfm('골드로 업그레이드 할까요?',pn(k)+' '+v+' → '+(v+1)+'<br>💰 '+fmt(c),()=>{if((SAVE.pu[k]||0)!==v||SAVE.gold<c)return;SAVE.gold-=c;SAVE.pu[k]=v+1;ok();});});
  m.querySelectorAll('[data-pd]').forEach(b=>b.onclick=()=>{const k=b.dataset.pd,v=SAVE.pu[k]||0,c=10*(v+1);if(v>=PUMAX||SAVE.dia<c)return;cfm('다이아로 업그레이드 할까요?',pn(k)+' '+v+' → '+(v+1)+'<br>💎 '+fmt(c),()=>{if((SAVE.pu[k]||0)!==v||SAVE.dia<c)return;SAVE.dia-=c;SAVE.pu[k]=v+1;ok();});});}
 function render(){if(TAB==='gar')garage();else if(TAB==='up')upg();else if(TAB==='inf'&&INF8())endless();else home();}
-/* v229 (영태 OK): 무한모드 화면 = 출동 차량(지금 고른 차) · 그 차의 최고 기록 · 출동 (맵 8 고정) */function endless(){const id=myCar(),c=CARS.find(x=>x[0]===id),R=(SAVE.endR||{})[id],ms=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');const rec=R?'최고 기록 · 웨이브 '+R.w+'<br>⏱️ '+ms(R.t)+' · 💀 '+fmt(R.k)+' · 👑 '+R.b+(R.r?' · 부활':''):'아직 기록 없음';frame('<div class="v15st"><img class="bg" src="assets/home_maps/map8.jpg" alt=""><div class="v15car" data-c="'+id+'"><div class="v15sh"></div></div><div class="v15nm">'+cname(c)+'</div><div class="v15sub">Lv '+cLv(id)+' · 맵 8<br>'+rec+'</div></div><button class="v15y" id="eStart">출동</button>');$('eStart').onclick=()=>pickCar(()=>{location.search='?play=1&stage=8&endless=1&car='+SAVE.car+DEVQ;});/* v231 (영태): 무한모드 출동도 일반 맵과 같은 차량 선택 창 */}
+/* v229 (영태 OK): 무한모드 화면 = 출동 차량(지금 고른 차) · 그 차의 최고 기록 · 출동 (맵 8 고정) */function endless(){const S=SAVE.endS&&SAVE.endS.car&&SAVE.cars[SAVE.endS.car]?SAVE.endS:null,id=S?S.car:myCar(),c=CARS.find(x=>x[0]===id),R=(SAVE.endR2||{})[id],ms=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0'),mOf=n=>((n-1)%8)+1,sg=n=>'맵 '+mOf(n)+(n>8?' · '+Math.ceil(n/8)+'바퀴':''),U=(car,n,ct)=>'?play=1&stage='+mOf(n)+'&diff=hard&endless=1&car='+car+(ct?'&cont=1':'')+DEVQ;/* v232: 이어하기 있으면 그 차 · 그 차 기록 */const rec=R?'최고 기록 · '+sg(R.n)+'<br>⏱️ '+ms(R.t)+' · 💀 '+fmt(R.k)+' · 👑 '+R.b+(R.r?' · 부활':''):'아직 기록 없음';frame('<div class="v15st"><img class="bg" src="assets/home_maps/map'+(S?mOf(S.n):1)+'.jpg" alt=""><div class="v15car" data-c="'+id+'"><div class="v15sh"></div></div><div class="v15nm">'+cname(c)+'</div><div class="v15sub">Lv '+cLv(id)+' · 맵 1→8 어려움<br>'+rec+'</div></div>'+(S?'<button class="v15y" id="eCont">이어하기 ('+sg(S.n)+')</button><button class="v15b g" id="eNew" style="display:block;width:100%;height:42px;margin-top:8px;font:800 15px system-ui;flex:0 0 auto">새로 시작</button>':'<button class="v15y" id="eStart">출동</button>'));const nw=()=>pickCar(()=>{delete SAVE.endS;saveS();location.search=U(SAVE.car,1,0);});if($('eStart'))$('eStart').onclick=nw;if($('eNew'))$('eNew').onclick=nw;if($('eCont'))$('eCont').onclick=()=>{location.search=U(S.car,S.n,1);};}
 window.V115={render,set:t=>{TAB=t;render();}};
 showMenu=function(){TAB='home';render();};
 showGarage=function(tab){TAB=tab===1?'up':'gar';render();};
@@ -6829,54 +6829,79 @@ window.TF20R={drawAt,units,list,AIMU,ON,tf20};
 try{if(ON[CAR])setTimeout(()=>{try{const u=units(CAR);u.exA.forEach(prep);u.exB.forEach(prep);}catch(e){}},800);}catch(e){}/* 미리 준비 (첫 변신 프레임 끊김 방지) */
 })();
 </script>
-<script>/* v229 (영태 OK 21:46, /workspace/specs/endless_plan_final.md): 무한모드 판. 맵 8 고정, 60초 웨이브(보스전 시간 별도), 5웨이브마다 맵 1→8 보스(그 맵 기술 그대로), 중간보스 없음.
- 적 체력 ×1.08/웨이브(11웨이브부터 ×1.15), 공격 ×1.03/웨이브, 생성 +4%p/웨이브(최대 1.4배), 속도·화면 상한 그대로. 보스 체력 = 맵 8 쉬움 보스 ×0.5 × 웨이브 체력 배율, 보스 처치 시 최대 체력 10% 회복.
- 10웨이브 완료 후 1회 버프 3택1. 보스당 골드 100 (하루 600, 결과 광고 +25%로 하루 최대 750, 모든 차량 합산, 한국 자정 초기화). 첫 기록 10·20·30웨이브 골드 200·300·300 (저장 전체 1회씩, 하루 상한 밖). 차량별 최고 기록 저장. */
+<script>/* v232 (영태 OK 2026-11-10 23:59, /workspace/specs/endless_plan_v2.md): 무한모드 = 맵1 어려움 → 맵2 어려움 → … → 맵8 어려움을 보통 판 그대로 이어서 (맵마다 그 맵 어려움 판을 새로 불러옴: 적·떼·중간보스·보스·배경·타임라인 0:00부터).
+ 첫 바퀴 맵 1만 적·정예·중간보스·보스 체력·공격 ×0.85. 맵 8 다음은 맵 1부터 다시(모양·패턴은 그 맵), 능력치 = 맵 8 어려움 같은 역할 기준, 체력 ×1.15^(n−8).
+ 보스 처치 = 최대 체력 10% 회복 후 다음 맵. 레벨·무기·진화·변신·각성·지금 체력 유지. 부활 한 판에 1번. 맵 1 클리어 후 버프 3택1 한 번.
+ 골드: 중간보스 50, 보스 150 (하루 600, 결과 광고 +25%로 하루 최대 750, 한국 자정 초기화). 다이아 없음, 보통 판 클리어 골드·첫 클리어 보너스 없음. 첫 기록: 맵 2·4·8칸 처음 클리어 200·300·300 (하루 상한 밖).
+ 맵 사이 저장(이어하기), 죽으면 삭제, 일시정지로 나가면 마지막으로 깬 맵에서 이어하기. */
 (function(){if(typeof ENDL==='undefined'||!ENDL||!PLAY)return;
 const KST=()=>new Date(Date.now()+9*36e5).toISOString().slice(0,10);
-const HPm=w=>Math.pow(1.08,Math.min(w,10)-1)*Math.pow(1.15,Math.max(0,w-10));
-const ATm=w=>Math.pow(1.03,w-1);
-const SPm=w=>Math.min(1.4,1+.04*(w-1));
-const B8=289000;/* 맵 8 쉬움 보스 최대 체력 (보통 판에서 잰 값) */
-const ES=window.__ES={w:1,wt:0,boss:0,bn:0,gold:0,fr:0,rev:0,buff:null,bp:0,lastEm:8,emT:-1,warn:0,ok:0,bT:0,nr:0,HPm,ATm,SPm};
 const day=()=>{const k=KST();if(!SAVE.endG||SAVE.endG.d!==k)SAVE.endG={d:k,g:0,a:0};return SAVE.endG;};window.__ESday=day;
-function rec(){SAVE.endR=SAVE.endR||{};const R=SAVE.endR[CAR],cw=ES.w-1;if(cw<1)return;if(!R||cw>R.w){SAVE.endR[CAR]={w:cw,t:Math.round(G.t),k:G.kills,b:ES.bn,r:ES.rev?1:0};ES.nr=1;saveS();}}
-function done(){const cw=ES.w;ES.w++;ES.wt=0;ES.warn=0;rec();
- if(cw===10||cw===20||cw===30){SAVE.endFR=SAVE.endFR||{};if(!SAVE.endFR[cw]){SAVE.endFR[cw]=1;const g=cw===10?200:300;SAVE.gold+=g;ES.fr+=g;saveS();BAN={s:'🎉 '+cw+'웨이브 첫 기록 💰+'+g,life:2.5,big:1};}}
- if(cw===10&&!ES.buff)ES.bp=1;}
-function spawnB(){const k=((ES.w/5-1)%8)+1;ES.boss=1;EMAP=k;ES.lastEm=k;G.bossSpawned=false;const c=MAPC;MAPC=k;ES.ok=1;try{spawnBoss();}finally{ES.ok=0;MAPC=c;}
- const b=G.boss;if(!b){ES.boss=0;EMAP=8;return;}b.em=k;try{const D=window.__V133D;if(D&&D[k]&&D[k].boss)b.name=D[k].boss[0];}catch(e){}ES.bT=B8*.5*HPm(ES.w);b.hp=b.max=ES.bT;}
-{const _sb=spawnBoss;spawnBoss=function(){if(!ES.ok)return;return _sb.apply(this,arguments);};}
-{const _se=spawnE;spawnE=function(){const e=_se.apply(this,arguments);if(e&&MAPC!==MAP0)e.em=MAPC;return e;};}/* 보스가 부른 적 = 그 보스 맵 표시 */
-for(const nm of['bossUpd','drawBoss','hit','goblin']){const f=window[nm];if(typeof f!=='function')continue;window[nm]=function(){const b=nm==='bossUpd'?G.boss:arguments[0];if(!b||!b.em)return f.apply(this,arguments);const c=MAPC;MAPC=b.em;try{return f.apply(this,arguments);}finally{MAPC=c;}};}
-bossDie=function(){const b=G.boss;if(!b)return;CHEST.push({x:b.x,y:b.y,boss:1,t:0});G.chests++;gainXp(40);dropPot(b.x,b.y,'hp');dropPot(b.x,b.y,'mag');G.bossDone=true;G.boss=null;G.stop=.3;G.gflash=.15;shk(25,1);ring(b.x,b.y,400,'#fff3a0',1);for(let i=0;i<40;i++)GEM.push({x:b.x+rnd(-120,120),y:b.y+rnd(-120,120),v:5,big:1});
- G.hp=Math.min(G.maxhp,G.hp+G.maxhp*.1);/* 보스 처치 = 최대 체력 10% 회복 */
- const D=day(),g=Math.min(100,Math.max(0,600-D.g));D.g+=g;SAVE.gold+=g;ES.gold+=g;saveS();
- ES.bn++;ES.boss=0;ES.emT=G.t+3;G.bossSpawned=false;done();};
-{const _h=hurt;hurt=function(d){arguments[0]=d*ATm(ES.w);return _h.apply(this,arguments);};}
-{const _d=director;director=function(dt){spawnAcc+=dt*(SPm(ES.w)-1);return _d.apply(this,arguments);};}
-{const _r=doRevive;doRevive=function(){ES.rev=1;return _r.apply(this,arguments);};}
+const PASS=['auto','speed','god'].filter(k=>Q.has(k)).map(k=>'&'+k+(Q.get(k)?'='+Q.get(k):'')).join('');/* 테스트용 주소 값만 그대로 넘김 (보통 플레이어 주소에는 없음) */
+const mOf=n=>((n-1)%8)+1,lpOf=n=>Math.ceil(n/8),segN=n=>'맵 '+mOf(n)+(lpOf(n)>1?' · '+lpOf(n)+'바퀴':'');
+const URLn=(car,n,cont)=>'?play=1&stage='+mOf(n)+'&diff=hard&endless=1&car='+car+(cont?'&cont=1':'')+DEVQ+PASS;
+const cont=Q.has('cont');let S=SAVE.endS||null;
+if(cont&&(!S||S.car!==CAR||mOf(S.n)!==MAP)){location.replace('?menu=1'+DEVQ);return;}
+if(!cont&&SAVE.endS){delete SAVE.endS;saveS();S=null;}/* 새로 시작 = 이어하기 지움 */
+const ES=window.__ES=cont?Object.assign({},S.I,{log:S.log.slice()}):{n:1,gold:0,fr:0,t:0,k:0,b:0,mb:0,rev:0,buff:null,log:[]};
+const n=ES.n,m=MAP;ES.m=m;ES.lp=lpOf(n);
+/* 맵 8 어려움 기준 (보통 판에서 잰 값): 적 종류별 체력 배수(ET 기본 체력 대비), 정예 배수, 맵 공격 배수 MAPK, 일반 적 몸통 공격 EA */
+const HB={grunt:[7.123,16.75,24.195,31.639,35.03,38.419,41.809,45.2],runner:[4.152,14.647,21.156,27.666,30.631,33.595,36.559,39.524],shield:[14.699,16.283,15.976,26.115,28.914,31.711,34.509,37.307],shaman:[8.692,16.351,23.619,30.886,34.196,37.504,40.814,44.123],brute:[4.887,13.279,19.181,25.083,27.772,30.458,33.146,35.834],swarm:[14.23,16.93,17.862,18.649,19.575,20.55,21.573,22.78]},
+ EF=[1.0016,1.125,1.1786,1.176,1.1765,1.176,1.1765,1.176],MK=[1.1392857,1.5407857,2.21375,2.6942143,2.9487857,3.2033571,3.4579286,3.7125],EA=[1,1.26,1.898,2.38,2.635,2.89,3.145,3.4],
+ MBf=k=>Math.round(18000*1.3*1.07**(k-1)/100)*100,BBf=k=>Math.round(180000*1.3*1.07**(k-1)/100)*100;
+const L2=n>=9,HL=L2?Math.pow(1.15,n-8):1,AK=n===1?.85:L2?MK[7]/MK[m-1]:1;
+function hpF(e){if(n===1)return .85;if(!L2)return 1;let r;if(e.mb)r=MBf(8)/MBf(m);else if(e===G.boss)r=BBf(8)/BBf(m);else{const t=HB[e.type]||HB.grunt;r=t[7]/t[m-1];if(e.elite)r*=EF[7]/EF[m-1];}return r*HL;}
+function setHP(e,f){if(f===1)return;const h=e.hp,T=h*f;let v=T;if(e._v166&&T<h&&window.V166K){const k=e===G.boss?V166K.KB:V166K.KM;if(k&&k!==1)v=h-(h-T)/k;}e.hp=v;if(e.max)e.max*=f;}
+function prep(e){if(e._e2)return;e._e2=1;setHP(e,hpF(e));if(L2&&!e.mb&&e!==G.boss&&e.dmg)e.dmg*=(EA[7]/EA[m-1])/AK;}
+/* 빌드 기록 (이어하기·다음 맵에서 그대로 다시 쌓음) */
+let RP=0;
+{const _ac=applyChoice;applyChoice=function(c){if(!RP&&c){const o={};for(const k in c){const v=c[k];if(v!=null&&typeof v!=='object'&&typeof v!=='function')o[k]=v;}ES.log.push({e:'c',lv:G.lv,c:o});}return _ac.apply(this,arguments);};}
+{const _ca=chestApply;chestApply=function(R0){if(!RP&&R0)ES.log.push({e:'h',lv:G.lv,r:{kind:R0.kind,k:R0.k,pk:R0.pk,v:R0.v}});return _ca.apply(this,arguments);};}
+{const _dv=doVeh;doVeh=function(){if(!RP)ES.log.push({e:'v',lv:G.lv});return _dv.apply(this,arguments);};}
+function buffApply(k){if(k==='dmg')P.dmgMul*=1.1;else if(k==='cd')P.cdMul=(P.cdMul||1)*.95;else{const a=Math.round(G.maxhp*.1);G.maxhp+=a;G.hp+=a;}}
+function snap(){return{lv:G.lv,xp:G.xp,need:G.need,hp:G.hp,maxhp:G.maxhp,veh:G.veh,MAXW,P:{dmgMul:P.dmgMul,cdMul:P.cdMul,spd:P.spd,magnet:P.magnet,armor:P.armor,regen:P.regen,r:P.r},f:{l20s:G.l20s||0,l20:G.l20||0,f20:G.f20||0,awk:G.awk||0},rev:G.revUsed?1:0};}
+function restore(){const sn=S.snap;RP=1;const lvTo=L=>{while(G.lv<L){G.lv++;lvHP();G.need=NEED(G.lv);}};
+ for(const ev of S.log){try{lvTo(ev.lv);if(ev.e==='c'){choices=null;applyChoice(Object.assign({},ev.c));}else if(ev.e==='h')chestApply(Object.assign({},ev.r));else if(ev.e==='v')doVeh();else if(ev.e==='b')buffApply(ev.k);}catch(err){console.error(err);}}lvTo(sn.lv);
+ RP=0;choices=null;pending=0;G.xp=sn.xp;G.need=sn.need;
+ const D={};for(const k in sn.P)if(Math.abs((P[k]||0)-(sn.P[k]||0))>1e-6)D[k]=[P[k],sn.P[k]];if(G.maxhp!==sn.maxhp)D.maxhp=[G.maxhp,sn.maxhp];if(G.veh!==sn.veh)D.veh=[G.veh,sn.veh];if(MAXW!==sn.MAXW)D.MAXW=[MAXW,sn.MAXW];window.__ESdiff=D;
+ G.maxhp=sn.maxhp;G.hp=Math.min(sn.hp,G.maxhp);G.revUsed=sn.rev;
+ if(sn.f.l20s){G.l20s=1;if(CAR==='flame')G.f20=1;else G.l20=1;G._bskWr=true;G.bskT=0;}if(sn.f.awk)G.awk=1;
+ BAN=null;FX.length=0;G.evA=null;G.evoQ=[];G.gflash=0;G.stop=0;G.spike=0;G.shake=0;G.flash=0;G.zoomPunch=0;P.inv=0;G.tb=null;}
+if(cont)restore();
 giveAch=function(){};/* 무한모드 = 목표(업적) 없음 */
-const hud=document.createElement('div');hud.id='eHUD';hud.style.cssText='position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 44px);transform:translateX(-50%);z-index:5;pointer-events:none;color:#fff;font:900 15px system-ui;text-shadow:0 2px 0 #000;white-space:nowrap';document.body.appendChild(hud);let hs='';
-function buffPick(){ES.bp=0;G.paused=true;const d=document.createElement('div');d.className='v15cf';d.style.zIndex='40';
- d.innerHTML='<div class="bx"><div class="q">10웨이브 돌파!<br>버프 하나 선택</div><div class="i">이번 판에만</div><div class="r" style="flex-direction:column">'+[['dmg','💥 공격 +10%'],['cd','⚡ 쿨타임 −5%'],['hp','❤️ 최대 체력 +10%']].map(([k,n])=>'<button class="v15b" data-b="'+k+'">'+n+'</button>').join('')+'</div></div>';
+function rec(reach){SAVE.endR2=SAVE.endR2||{};const R=SAVE.endR2[CAR];const T=Math.round(ES.t+(reach===n?G.t:0));if(!R||reach>R.n||(reach===R.n&&T>R.t)){SAVE.endR2[CAR]={n:reach,t:T,k:ES.k+(reach===n?G.kills:0),b:ES.b,r:ES.rev?1:0};ES.nr=1;saveS();}}
+rec(n);
+function addG(g){const D=day(),q=Math.min(g,Math.max(0,600-D.g));D.g+=q;SAVE.gold+=q;ES.gold+=q;saveS();return q;}
+function mkS(nn){return{car:CAR,n:nn,I:{n:nn,gold:ES.gold,fr:ES.fr,t:ES.t+G.t,k:ES.k+G.kills,b:ES.b,mb:ES.mb,rev:ES.rev,buff:ES.buff},log:ES.log.slice(),snap:snap(),at:Date.now()};}
+{const _k=kill;kill=function(e){const r=_k.apply(this,arguments);if(e&&e.mb&&e.dead&&!e._eg){e._eg=1;ES.mb++;addG(50);}return r;};}
+{const _bd=bossDie;bossDie=function(){const r=_bd.apply(this,arguments);if(ES.bd)return r;ES.bd=1;ES.b++;G.hp=Math.min(G.maxhp,G.hp+G.maxhp*.1);/* 보스 처치 = 최대 체력 10% 회복 */addG(150);
+ if((n===2||n===4||n===8)){SAVE.endFR2=SAVE.endFR2||{};if(!SAVE.endFR2[n]){SAVE.endFR2[n]=1;const g=n===2?200:300;SAVE.gold+=g;ES.fr+=g;saveS();BAN={s:'🎉 맵 '+n+'칸 첫 클리어 💰+'+g,life:2.5,big:1};}}
+ SAVE.endS=mkS(n+1);saveS();return r;};}
+{const _h=hurt;hurt=function(d){if(AK!==1)arguments[0]=d*AK;return _h.apply(this,arguments);};}
+{const _r=doRevive;doRevive=function(){ES.rev=1;return _r.apply(this,arguments);};}
+const hud=document.createElement('div');hud.id='eHUD';hud.style.cssText='position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 44px);transform:translateX(-50%);z-index:5;pointer-events:none;color:#fff;font:900 15px system-ui;text-shadow:0 2px 0 #000;white-space:nowrap';hud.textContent='♾️ '+segN(n)+' 어려움';document.body.appendChild(hud);
+{const _u=update;update=function(dt){const r=_u.apply(this,arguments);for(const e of EN)if(e._v153&&!e._e2)prep(e);const b=G.boss;if(b&&b._v153&&!b._e2)prep(b);hud.style.display=G.over?'none':'';return r;};}
+if(!G.t||G.t<1)BAN={s:'♾️ '+segN(n)+' 어려움',life:2.2,big:1};
+if(FRESH||Q.has('dev'))window.__endDev={mid(){if(!G.miniBoss)G.t=Math.max(G.t,180);},boss(){if(!G.bossSpawned)G.t=Math.max(G.t,357);},kill(){const b=G.boss;if(b){b.hp=0;bossDie();}},killMid(){for(const e of EN)if(e.mb&&!e.dead){e.hp=0;e.dead=1;kill(e);}}};/* 테스트 링크(fresh/dev)에서만, 화면에는 안 보임 */
+function buffPick(done){G.paused=true;const d=document.createElement('div');d.className='v15cf';d.style.zIndex='40';
+ d.innerHTML='<div class="bx"><div class="q">맵 1 클리어!<br>버프 하나 선택</div><div class="i">이번 판에만</div><div class="r" style="flex-direction:column">'+[['dmg','💥 공격 +10%'],['cd','⚡ 쿨타임 −5%'],['hp','❤️ 최대 체력 +10%']].map(([k,t])=>'<button class="v15b" data-b="'+k+'">'+t+'</button>').join('')+'</div></div>';
  ['pointerdown','pointerup','touchstart','touchend','mousedown','mouseup'].forEach(k=>d.addEventListener(k,e=>e.stopPropagation()));document.body.appendChild(d);
- const pick=k=>{if(ES.buff)return;ES.buff=k;if(k==='dmg')P.dmgMul*=1.1;else if(k==='cd')P.cdMul=(P.cdMul||1)*.95;else{const a=Math.round(G.maxhp*.1);G.maxhp+=a;G.hp+=a;}d.remove();G.paused=false;};
+ const pick=k=>{if(ES.buff)return;ES.buff=k;buffApply(k);ES.log.push({e:'b',lv:G.lv,k});d.remove();done();};
  d.querySelectorAll('[data-b]').forEach(b=>b.onclick=e=>{e.stopPropagation();pick(b.dataset.b);});if(AUTO)setTimeout(()=>pick('dmg'),300);}
-{const _u=update;update=function(dt){EMAP=G.boss&&G.boss.em?G.boss.em:(G.t<ES.emT?ES.lastEm:8);G.miniBoss=1;G.miniDead=1;G.bossWarn=G.bossWarn||1;
- const t0=G.t,r=_u.apply(this,arguments),d=G.t-t0;const hk=HPm(ES.w);
- for(const e of EN){if(e._ew)continue;e._ew=ES.w;if(e===G.boss||e.mb||hk===1)continue;e.hp*=hk;e.max*=hk;}
- const b=G.boss;if(b&&b.em&&ES.bT&&b.max!==ES.bT){b.hp=b.hp/b.max*ES.bT;b.max=ES.bT;}
- if(d>0&&!ES.boss&&!G.over){ES.wt+=d;if(ES.w%5===0){if(ES.wt>=57.5&&!ES.warn){ES.warn=1;BAN={s:'⚠ 보스 출현!',life:2.5,big:1};try{sndBoss();}catch(e){}}if(ES.wt>=60)spawnB();}else if(ES.wt>=60)done();}
- if(ES.bp&&!G.paused&&!G.upause&&!G.roul&&!G.over&&!G.tf&&!G.robo&&!document.querySelector('.v15cf'))buffPick();
- const s='웨이브 '+ES.w+(ES.boss?' · 👑 보스':'');if(s!==hs){hs=s;hud.textContent=s;}hud.style.display=G.over?'none':'';return r;};}
-showRes=function(){rec();const D=day(),mm=Math.floor(G.t/60),ss=String(Math.floor(G.t%60)).padStart(2,'0'),R=(SAVE.endR||{})[CAR],r=$('res');ACHQ.length=0;BAN=null;
- r.innerHTML='<h1>파괴됨</h1><div style="color:#aab">♾️ 무한모드 · 맵 8</div><div class="box"><div class="ln">🌊 완료한 웨이브<b>'+(ES.w-1)+'</b></div><div class="ln">⏱️ 버틴 시간<b>'+mm+':'+ss+'</b></div><div class="ln">💀 잡은 적<b>'+G.kills+'</b></div><div class="ln">👑 잡은 보스<b>'+ES.bn+'</b></div><div class="ln">⭐ 레벨<b>'+G.lv+'</b></div>'
+function nextMap(){const S2=mkS(n+1);SAVE.endS=S2;saveS();ES.n2=n+1;rec(n+1);
+ const o=document.createElement('div');o.id='eNext';o.style.cssText='position:fixed;inset:0;z-index:99998;display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;background:rgba(15,20,30,.55);color:#FFF2C9;font:900 24px system-ui;text-shadow:0 2px 0 #1A1410;text-align:center';
+ o.innerHTML='<div>'+segN(n)+' 클리어!</div><div style="font-size:18px">다음: '+segN(n+1)+' 어려움</div>';document.body.appendChild(o);
+ setTimeout(()=>location.replace(URLn(CAR,n+1,1)),1400);}
+const _sr=showRes;
+showRes=function(){if(G.win){if(n===1&&!ES.buff)buffPick(nextMap);else nextMap();return;}
+ if(SAVE.endS){delete SAVE.endS;}saveS();rec(n);/* 파괴 = 이어하기 삭제 */
+ const D=day(),T=ES.t+G.t,mm=Math.floor(T/60),ss=String(Math.floor(T%60)).padStart(2,'0'),R=(SAVE.endR2||{})[CAR],r=$('res');ACHQ.length=0;BAN=null;
+ r.innerHTML='<h1>파괴됨</h1><div style="color:#aab">♾️ 무한모드 · 어려움</div><div class="box"><div class="ln">🗺️ 도달한 맵<b>'+segN(n)+'</b></div><div class="ln">✅ 깬 맵<b>'+(n-1)+'개</b></div><div class="ln">⏱️ 버틴 시간<b>'+mm+':'+ss+'</b></div><div class="ln">💀 잡은 적<b>'+(ES.k+G.kills)+'</b></div><div class="ln">👑 잡은 보스<b>'+ES.b+'</b></div><div class="ln">⭐ 레벨<b>'+G.lv+'</b></div>'
   +'<div class="ln">💰 보스 골드 (오늘 '+D.g+'/600)<b style="color:#ffd24a">+'+ES.gold+'</b></div>'+(ES.fr?'<div class="ln">🎉 첫 기록 보상<b style="color:#ffd24a">+'+ES.fr+'</b></div>':'')+'<div class="ln" style="border-top:1px solid #665;padding-top:4px">💰 총 획득<b style="color:#ffe27a;font-size:20px">+'+(ES.gold+ES.fr)+'</b></div></div>'
-  +(R?'<div class="box"><div class="ln">🏆 '+(ES.nr?'새 최고 기록!':'최고 기록')+'<b>웨이브 '+R.w+'</b></div></div>':'')
+  +(R?'<div class="box"><div class="ln">🏆 '+(ES.nr?'새 최고 기록!':'최고 기록')+'<b>'+segN(R.n)+'</b></div></div>':'')
   +'<div class="gold">가진 골드 💰 '+SAVE.gold+'</div><button class="big" id="rRetry">🔁 다시 하기</button><button class="sm" id="rHome" style="height:52px;margin-top:6px">🏠 홈으로</button>';
- r.style.background='rgba(0,0,0,.85)';r.style.display='flex';$('rRetry').onclick=()=>location.reload();$('rHome').onclick=()=>{location.search='?menu=1'+DEVQ;};
- window.__res={wave:ES.w-1,t:G.t,kills:G.kills,boss:ES.bn,gold:ES.gold,fr:ES.fr,rev:ES.rev};
+ r.style.background='rgba(0,0,0,.85)';r.style.display='flex';$('rRetry').onclick=()=>{location.search=URLn(CAR,1,0);};$('rHome').onclick=()=>{location.search='?menu=1'+DEVQ;};
+ window.__res={n,cleared:n-1,t:T,kills:ES.k+G.kills,boss:ES.b,mid:ES.mb,gold:ES.gold,fr:ES.fr,rev:ES.rev,today:D.g};
  try{adRes222(0);}catch(err){console.error(err);}
  {const w=$('ad222r'),gb=r.querySelector('.gold'),g25=Math.min(Math.round(ES.gold*.25),Math.max(0,750-D.g-D.a));if(w&&gb&&ES.gold>0&&g25>0){const bs='height:46px;width:72vw;max-width:320px;border:2px solid #8a6516;border-radius:12px;background:linear-gradient(#3a3218,#2a2410);color:#ffe27a;font:900 16px system-ui;cursor:pointer';
   const bG=document.createElement('button');bG.id='adG229';bG.style.cssText=bs;bG.textContent='📺 광고 보고 골드 +25% (💰+'+g25+')';w.prepend(bG);const off=t=>{bG.disabled=true;bG.style.opacity='.55';bG.style.cursor='default';bG.textContent=t;};
