@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v234';
+const BUILD='v235';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -6897,7 +6897,7 @@ function buffPick(done){G.paused=true;const d=document.createElement('div');d.cl
  d.querySelectorAll('[data-b]').forEach(b=>b.onclick=e=>{e.stopPropagation();pick(b.dataset.b);});if(AUTO)setTimeout(()=>pick('dmg'),300);}
 function nextMap(){const S2=mkS(n+1);SAVE.endS=S2;saveS();ES.n2=n+1;rec(n+1);
 /* v233 (영태): 보물 상자 닫힌 뒤 '다음 스테이지 터치'만 보이고, 누르면 다음 맵 (맵 이름 없음) */
- const o=document.createElement('div');o.id='eNext';o.style.cssText='position:fixed;inset:0;z-index:99998;display:flex;align-items:center;justify-content:center;background:rgba(15,20,30,.55);color:#FFF2C9;font:900 24px system-ui;text-shadow:0 2px 0 #1A1410';o.textContent='다음 스테이지 터치';let gone=0;const go=e=>{if(e)e.stopPropagation();if(gone)return;gone=1;location.replace(URLn(CAR,n+1,1));};o.addEventListener('click',go);document.body.appendChild(o);if(AUTO)setTimeout(go,1400);/* 자동 테스트만 저절로 */}
+ const o=document.createElement('div');o.id='eNext';o.style.cssText='position:fixed;inset:0;z-index:99998;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7)';/* v235 (영태 B안): 두 줄 — 다음 스테이지 / 터치(빨간 테두리 상자, -5도) */o.innerHTML='<div style="position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:24px;pointer-events:none;font-family:system-ui,sans-serif"><div style="font-size:40px;font-weight:900;line-height:1;color:#FFF4E8;-webkit-text-stroke:3px #2C2020;paint-order:stroke fill;text-shadow:0 4px 0 #000;white-space:nowrap">다음 스테이지</div><div style="box-sizing:border-box;width:132px;height:76px;border:3px solid #FF5B6E;display:flex;align-items:center;justify-content:center;transform:rotate(-5deg);font-size:44px;font-weight:900;line-height:1;color:#FF5B6E">터치</div></div>';let gone=0;const go=e=>{if(e)e.stopPropagation();if(gone)return;gone=1;location.replace(URLn(CAR,n+1,1));};o.addEventListener('click',go);document.body.appendChild(o);if(AUTO)setTimeout(go,1400);/* 자동 테스트만 저절로 */}
 const _sr=showRes;
 showRes=function(){if(G.win){if(n===1&&!ES.buff)buffPick(nextMap);else nextMap();return;}
  if(SAVE.endS){delete SAVE.endS;}saveS();rec(n);/* 파괴 = 이어하기 삭제 */
