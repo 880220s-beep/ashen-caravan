@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v224';
+const BUILD='v225';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -5754,15 +5754,14 @@ function pickCar(){let sel=myCar();const d=document.createElement('div');d.class
   d.querySelectorAll('[data-c]').forEach(u=>draw(u.dataset.c,u));
   d.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{const k=b.dataset.pk;if(!SAVE.cars[k]){b.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:200});return;}sel=k;rd();});
   d.querySelector('[data-n]').onclick=()=>d.remove();d.querySelector('[data-y]').onclick=()=>{d.remove();SAVE.car=sel;saveS();goPlay();};};rd();}
-function garage(){if(!GSEL||!CARS.find(c=>c[0]===GSEL))GSEL=myCar();const id=GSEL,c=CARS.find(x=>x[0]===id),[,,ds,uc,udc]=c,own=!!SAVE.cars[id],L=cLv(id),mx=L>=CLMAX,use=own&&myCar()===id;
+function garage(){if(!GSEL||!CARS.find(c=>c[0]===GSEL))GSEL=myCar();const id=GSEL,c=CARS.find(x=>x[0]===id),[,,ds,uc,udc]=c,own=!!SAVE.cars[id],L=cLv(id),mx=L>=CLMAX;/* v225: 차고는 강화·해금만, 출동 때 차량 선택 */
  const sub=own?'Lv '+L+' · 공격력·체력 +'+(2*(L-1))+'%<br>어려움 +'+(3*(L-1))+'% · 지옥 +'+(4*(L-1))+'%':'🔒 '+ds.split('<br>')[0];
  let bt;if(!own)bt='<button class="v15b" data-ug'+(SAVE.gold<uc?' disabled':'')+'><small>골드로 해금</small>💰 '+fmt(uc)+'</button><button class="v15b c" data-ud'+(SAVE.dia<udc?' disabled':'')+'><small>다이아로 해금</small>💎 '+fmt(udc)+'</button>';
  else if(mx)bt='<button class="v15b g" disabled style="color:#C8D2E0">최대 레벨</button>';
  else bt='<button class="v15b" data-lg'+(SAVE.gold<LGC(L)?' disabled':'')+'><small>강화 Lv'+(L+1)+'</small>💰 '+fmt(LGC(L))+'</button><button class="v15b c" data-ld'+(SAVE.dia<LDC(L)?' disabled':'')+'><small>강화 Lv'+(L+1)+'</small>💎 '+fmt(LDC(L))+'</button>';
  const m=frame('<div class="v15st"><div class="v15car'+(own?'':' v15lk')+'" data-c="'+id+'"><div class="v15sh"></div></div><div class="v15nm">'+cname(c)+'</div><div class="v15sub">'+sub+'</div></div>'
- +'<div class="v15pk">'+CARS.map(x=>'<button class="v15p'+(x[0]===id?' on':'')+(SAVE.cars[x[0]]?'':' lk')+'" data-c="'+x[0]+'" data-pk="'+x[0]+'">'+(SAVE.cars[x[0]]?'<span class="u">'+(myCar()===x[0]?'✔':'')+'</span>':'<span class="k">🔒</span>')+'</button>').join('')+'</div>'+'<div class="v15bb">'+bt+'</div>'+(own?'<div class="v15bb"><button class="v15b'+(use?' g':' gr')+'" id="v15use"'+(use?' disabled style="color:#FFC93C;opacity:1;border-color:#C9A24A"':'')+'>'+(use?'✔ 사용 중':'이 차량 사용')+'</button></div>':''));
+ +'<div class="v15pk">'+CARS.map(x=>'<button class="v15p'+(x[0]===id?' on':'')+(SAVE.cars[x[0]]?'':' lk')+'" data-c="'+x[0]+'" data-pk="'+x[0]+'">'+(SAVE.cars[x[0]]?'<span class="u">'+(myCar()===x[0]?'✔':'')+'</span>':'<span class="k">🔒</span>')+'</button>').join('')+'</div>'+'<div class="v15bb">'+bt+'</div>');
  m.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{GSEL=b.dataset.pk;garage();});
- const u=$('v15use');if(u)u.onclick=()=>{SAVE.car=id;saveS();garage();};
  const ok=()=>{saveS();beep(880,.1,'triangle',.12);garage();};
  const ask=dia=>{const cost=dia?udc:uc,bal=dia?SAVE.dia:SAVE.gold,ic=dia?'💎':'💰';if(bal<cost)return;cfm((dia?'다이아':'골드')+'로 해금할까요?',cname(c)+'<br>'+ic+' '+fmt(cost)+' <span>(남는 '+ic+' '+fmt(bal-cost)+')</span>',()=>{if((dia?SAVE.dia:SAVE.gold)<cost)return;if(dia)SAVE.dia-=cost;else SAVE.gold-=cost;SAVE.cars[id]=1;saveS();beep(660,.2,'triangle',.15,1320);garage();},id);};
  const q=s=>m.querySelector(s);if(q('[data-ug]'))q('[data-ug]').onclick=()=>ask(0);if(q('[data-ud]'))q('[data-ud]').onclick=()=>ask(1);
