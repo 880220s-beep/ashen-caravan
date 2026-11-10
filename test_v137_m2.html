@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;text=%EB%B3%80%EC%8B%A0%20%EC%A4%80%EB%B9%84%EC%99%84%EB%A3%8C&amp;display=swap"><!-- v199: 변신 배너용 도현체(글자 7개만 받는 작은 글꼴) -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v230';
+const BUILD='v231';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>ASHEN CARAVAN proto2</title>
@@ -5752,13 +5752,13 @@ function home(){clrSync();SAVE.diff=mDiff(SAVE.stage);const s=STG[SAVE.stage-1]|
  {const el=$('v206map');let x0=null;el.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});el.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)go(dx<0?1:-1);});}
  m.querySelectorAll('.v15d [data-d]').forEach(b=>b.onclick=()=>{const d=+b.dataset.d;if(!dOpen(SAVE.stage,d))return;SAVE.mdiff[SAVE.stage]=d;SAVE.diff=d;saveS();home();});
  $('mPlay').onclick=()=>{if(!mapOpen(SAVE.stage-1))return;pickCar();};{const a=$('ad222');if(a)a.onclick=()=>{a.disabled=true;adDia222(home,()=>home());};}}
-function pickCar(){let sel=myCar();const d=document.createElement('div');d.className='v15cf';document.body.appendChild(d);
+function pickCar(go){let sel=myCar();/* v231: go = 출동 후 실행 (무한모드), 없으면 일반 맵 goPlay */const d=document.createElement('div');d.className='v15cf';document.body.appendChild(d);
  const rd=()=>{const c=CARS.find(x=>x[0]===sel);d.innerHTML='<div class="bx v206pk"><div class="q">출동할 차량 선택</div><div class="v206big" data-c="'+sel+'"></div><div class="i">'+cname(c)+' · Lv '+cLv(sel)+'</div>'
   +'<div class="v15pk">'+CARS.map(x=>'<button class="v15p'+(x[0]===sel?' on':'')+(SAVE.cars[x[0]]?'':' lk')+'" data-c="'+x[0]+'" data-pk="'+x[0]+'">'+(SAVE.cars[x[0]]?'':'<span class="k">🔒</span>')+'</button>').join('')+'</div>'
   +'<div class="r"><button class="v15b g" data-n>취소</button><button class="v15b" data-y>출동!</button></div></div>';
   d.querySelectorAll('[data-c]').forEach(u=>draw(u.dataset.c,u));
   d.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{const k=b.dataset.pk;if(!SAVE.cars[k]){b.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:200});return;}sel=k;rd();});
-  d.querySelector('[data-n]').onclick=()=>d.remove();d.querySelector('[data-y]').onclick=()=>{d.remove();SAVE.car=sel;saveS();goPlay();};};rd();}
+  d.querySelector('[data-n]').onclick=()=>d.remove();d.querySelector('[data-y]').onclick=()=>{d.remove();SAVE.car=sel;saveS();(go||goPlay)();};};rd();}
 function garage(){if(!GSEL||!CARS.find(c=>c[0]===GSEL))GSEL=myCar();const id=GSEL,c=CARS.find(x=>x[0]===id),[,,ds,uc,udc]=c,own=!!SAVE.cars[id],L=cLv(id),mx=L>=CLMAX;/* v225: 차고는 강화·해금만, 출동 때 차량 선택 */
  const sub=own?CLT(L):'🔒 '+ds.split('<br>')[0];
  let bt;if(!own)bt='<button class="v15b" data-ug'+(SAVE.gold<uc?' disabled':'')+'><small>골드로 해금</small>💰 '+fmt(uc)+'</button><button class="v15b c" data-ud'+(SAVE.dia<udc?' disabled':'')+'><small>다이아로 해금</small>💎 '+fmt(udc)+'</button>';
@@ -5785,7 +5785,7 @@ function upg(){const m=frame('<div class="v15h v15hU">⬆️ 영구 강화 · �
  const pn=k=>(PU.find(x=>x[0]===k)||[,''])[1];m.querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{const k=b.dataset.pg,v=SAVE.pu[k]||0,c=60*(v+1);if(v>=PUMAX||SAVE.gold<c)return;cfm('골드로 업그레이드 할까요?',pn(k)+' '+v+' → '+(v+1)+'<br>💰 '+fmt(c),()=>{if((SAVE.pu[k]||0)!==v||SAVE.gold<c)return;SAVE.gold-=c;SAVE.pu[k]=v+1;ok();});});
  m.querySelectorAll('[data-pd]').forEach(b=>b.onclick=()=>{const k=b.dataset.pd,v=SAVE.pu[k]||0,c=10*(v+1);if(v>=PUMAX||SAVE.dia<c)return;cfm('다이아로 업그레이드 할까요?',pn(k)+' '+v+' → '+(v+1)+'<br>💎 '+fmt(c),()=>{if((SAVE.pu[k]||0)!==v||SAVE.dia<c)return;SAVE.dia-=c;SAVE.pu[k]=v+1;ok();});});}
 function render(){if(TAB==='gar')garage();else if(TAB==='up')upg();else if(TAB==='inf'&&INF8())endless();else home();}
-/* v229 (영태 OK): 무한모드 화면 = 출동 차량(지금 고른 차) · 그 차의 최고 기록 · 출동 (맵 8 고정) */function endless(){const id=myCar(),c=CARS.find(x=>x[0]===id),R=(SAVE.endR||{})[id],ms=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');const rec=R?'최고 기록 · 웨이브 '+R.w+'<br>⏱️ '+ms(R.t)+' · 💀 '+fmt(R.k)+' · 👑 '+R.b+(R.r?' · 부활':''):'아직 기록 없음';frame('<div class="v15st"><img class="bg" src="assets/home_maps/map8.jpg" alt=""><div class="v15car" data-c="'+id+'"><div class="v15sh"></div></div><div class="v15nm">'+cname(c)+'</div><div class="v15sub">Lv '+cLv(id)+' · 맵 8<br>'+rec+'</div></div><button class="v15y" id="eStart">출동</button>');$('eStart').onclick=()=>{SAVE.car=id;saveS();location.search='?play=1&stage=8&endless=1&car='+id+DEVQ;};}
+/* v229 (영태 OK): 무한모드 화면 = 출동 차량(지금 고른 차) · 그 차의 최고 기록 · 출동 (맵 8 고정) */function endless(){const id=myCar(),c=CARS.find(x=>x[0]===id),R=(SAVE.endR||{})[id],ms=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');const rec=R?'최고 기록 · 웨이브 '+R.w+'<br>⏱️ '+ms(R.t)+' · 💀 '+fmt(R.k)+' · 👑 '+R.b+(R.r?' · 부활':''):'아직 기록 없음';frame('<div class="v15st"><img class="bg" src="assets/home_maps/map8.jpg" alt=""><div class="v15car" data-c="'+id+'"><div class="v15sh"></div></div><div class="v15nm">'+cname(c)+'</div><div class="v15sub">Lv '+cLv(id)+' · 맵 8<br>'+rec+'</div></div><button class="v15y" id="eStart">출동</button>');$('eStart').onclick=()=>pickCar(()=>{location.search='?play=1&stage=8&endless=1&car='+SAVE.car+DEVQ;});/* v231 (영태): 무한모드 출동도 일반 맵과 같은 차량 선택 창 */}
 window.V115={render,set:t=>{TAB=t;render();}};
 showMenu=function(){TAB='home';render();};
 showGarage=function(tab){TAB=tab===1?'up':'gar';render();};
