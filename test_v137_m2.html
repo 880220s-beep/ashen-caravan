@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><!-- v254: 도현체·Pretendard = 저장소 안 글꼴 파일 (오프라인) --><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&amp;text=%EB%8B%A4%EC%9D%8C%20%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%ED%84%B0%EC%B9%98&amp;display=swap"><!-- v237: 다음 스테이지/터치 화면용 주아체(쓰는 글자만) --><link rel="preload" href="assets/fonts/DoHyeon-254.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/PretendardVariable-254.woff2" as="font" type="font/woff2" crossorigin><style>@font-face{font-family:"Do Hyeon";src:url(assets/fonts/DoHyeon-254.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}@font-face{font-family:"Pretendard";src:url(assets/fonts/PretendardVariable-254.woff2) format("woff2-variations"),url(assets/fonts/PretendardVariable-254.woff2) format("woff2");font-weight:45 930;font-style:normal;font-display:block}</style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v263';
+const BUILD='v264';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>체인지탱크탱크</title>
@@ -5794,7 +5794,7 @@ EMOD(6);(function(){if(MAP!==6)return;const _d=drawBoss;drawBoss=function(b){if(
 const $=id=>document.getElementById(id),fmt=n=>n===Infinity?'∞':(+n).toLocaleString('en-US');
 let TAB='home',GSEL=null;
 /* v259 (영태 OK): 미션 64개 · 45,200골드. 창 = 시안 B(분류 칩 처치/맵·별/보스/차/승리), 받을 미션 위로, 받기 + 광고 보고 2배 받기(횟수 제한 없음), 받은 미션은 흐리게 '완료'. 처치 수는 이긴 판만 */
-const MS259={K:[[2500,200,1000],[8000,300,3000],[15000,400,5000],[30000,500,10000],/* v263 (영태 OK): 누적 처치 목표 올림, 보상 그대로, id(세 번째 숫자) 그대로 */[15000,600],[20000,650],[25000,700],[30000,750],[35000,800],[40000,850],[45000,900],[50000,1000],[55000,1100],[60000,1200],[65000,1300]],
+const MS259={K:[[2500,200,1000],[8000,300,3000],/* v263 (영태 OK): 누적 처치 목표 올림, 보상 그대로, id(세 번째 숫자) 그대로 *//* v264 (영태 OK): 겹치는 15,000(💰400)·30,000(💰500) 빼고 💰600·💰750만 남김 */[15000,600],[20000,650],[25000,700],[30000,750],[35000,800],[40000,850],[45000,900],[50000,1000],[55000,1100],[60000,1200],[65000,1300]],
  RUN:[[800,200,500],[2000,300,1000],[4000,500,2000],[7000,700,3000]]/* v263 (영태 OK): 한 판 처치 목표 올림, 보상 그대로, id 그대로 */,MAPG:[200,250,300,350,400,450,500,600],STARS:[[10,300],[20,400],[30,500],[40,600],[50,800],[60,1000],[70,1300],[72,1500]],
  BOSS:[[5,300],[10,400],[25,600],[50,800],[100,1100],[200,1500]],LVANY:[[5,200],[10,400],[15,600],[20,1000]],LV20N:[[2,1200],[3,1500],[4,1800],[5,2200]],OWN:[[2,300],[3,500],[4,700],[5,1000]],
  WINS:[[10,400],[25,600],[50,900],[100,1300],[200,1800]],CW:300,LVUP:200,CATS:['처치','맵·별','보스','차','승리']};
