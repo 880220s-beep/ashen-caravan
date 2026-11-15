@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><!-- v254: 도현체·Pretendard = 저장소 안 글꼴 파일 (오프라인) --><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&amp;text=%EB%8B%A4%EC%9D%8C%20%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%ED%84%B0%EC%B9%98&amp;display=swap"><!-- v237: 다음 스테이지/터치 화면용 주아체(쓰는 글자만) --><link rel="preload" href="assets/fonts/DoHyeon-254.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/PretendardVariable-254.woff2" as="font" type="font/woff2" crossorigin><style>@font-face{font-family:"Do Hyeon";src:url(assets/fonts/DoHyeon-254.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}@font-face{font-family:"Pretendard";src:url(assets/fonts/PretendardVariable-254.woff2) format("woff2-variations"),url(assets/fonts/PretendardVariable-254.woff2) format("woff2");font-weight:45 930;font-style:normal;font-display:block}</style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v270';
+const BUILD='v271';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>체인지탱크탱크</title>
@@ -5982,7 +5982,7 @@ const _u=update;update=function(dt){const t0=G.t;_u.apply(this,arguments);if(win
   if(o.t>=LIFE){for(const q of o.keys)if(COV.get(q)===o)COV.delete(q);L.splice(i,1);}}};
 const DK=(c,m)=>m?c.map((v,i)=>i<3?Math.round(v*.62):v):c,RG=c=>'rgba('+c[0]+','+c[1]+','+c[2]+','+c[3]+')',TAU=Math.PI*2;
 /* per map: base patch colour, detail fill, detail stroke */
-const STY={1:[[44,30,18,.55],[232,116,42,.95],[255,194,74,.95]],2:[[196,160,104,.5],[150,116,70,.0],[122,92,52,.9]],3:[[52,44,40,.72],[255,138,42,.95],[255,200,90,.9]],4:[[170,215,235,.42],[140,206,236,.95],[30,86,124,.9]],5:[[96,104,52,.6],[120,132,62,.75],[176,170,92,.95]],6:[[38,32,28,.58],[110,104,98,.95],[255,154,58,.95]],7:[[210,232,255,.16],[120,170,255,.6],[240,248,255,.95]],8:[[200,230,240,.28],[214,240,250,.85],[74,122,140,.95]]};
+const STY={1:[[44,30,18,.55],[232,116,42,.95],[255,194,74,.95]],2:[[196,160,104,.5],[150,116,70,.0],[122,92,52,.9]],3:[[52,44,40,.72],[255,138,42,.95],[255,200,90,.9]],4:[[150,50,30,.22],[226,98,52,.9],[100,32,16,.95]],5:[[96,104,52,.6],[120,132,62,.75],[176,170,92,.95]],6:[[38,32,28,.58],[110,104,98,.95],[255,154,58,.95]],7:[[70,22,14,.32],[240,140,50,.9],[80,30,10,.95]],8:[[70,22,14,.32],[236,122,58,.9],[84,28,14,.95]]};/* v271 (영태 OK, 시안 B): 맵4·7·8 공격 뒤 바닥 조각 = 주황 잔불 (다이아와 구분), 모양·시간·피해 그대로 */
 function dr(o){const st=STY[o.st]||STY[1],m=o.mid,sc=m?.75:1,k=o.t<1?1:Math.max(0,1-(o.t-1)/.3);if(k<=0)return;const b=DK(st[0],m),f=DK(st[1],m),s=DK(st[2],m),C=o.cells;cx.globalAlpha=k;
  cx.fillStyle=RG(b);cx.beginPath();if(o.st===3){for(const c of C)cx.rect(c[0]-13,c[1]-13,26,26);}else{for(const c of C){const r=(o.st===7?13:11)*sc;cx.moveTo(c[0]+r,c[1]);cx.arc(c[0],c[1],r,0,TAU);}}cx.fill();
  cx.beginPath();const T=o.st;for(const c of C){const x=c[0],y=c[1],a=c[2]*TAU,r=c[3];
@@ -7147,11 +7147,11 @@ body{font-family:Pretendard,system-ui,sans-serif}
  얇은 흰 원 대신 그림. 0.2초 커지며 등장, 풀릴 때 0.3초 동안 조각 최대 2개가 몸 가까이 떨어지고 사라짐. 지속 시간·피해는 그대로. */
 (function(){
   const OL='#142233';
-  const ICE_BASE='#9EDCEF';
-  const ICE_SH='#5BABC9';
-  const ICE_HI='#EAF8FF';
+  const ICE_BASE='#AFC0F4';
+  const ICE_SH='#6E84CC';
+  const ICE_HI='#F3F5FF';
   const TINTA='rgba(91,171,201,0.09)';
-  const TINTC='rgba(91,171,201,0.06)';
+  const TINTC='rgba(110,132,204,0.07)';/* v271 (영태 OK, 시안 B): 냉각 얼음 보랏빛 파랑 — 다이아(하늘색)와 구분 */
   const BUCKETS=[9,12,15,19,23,28,34,40,48];
   const NVAR=6;
   const BAKE=4; // device px per world px in the sprite
