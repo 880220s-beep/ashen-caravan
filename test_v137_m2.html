@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><!-- v254: 도현체·Pretendard = 저장소 안 글꼴 파일 (오프라인) --><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&amp;text=%EB%8B%A4%EC%9D%8C%20%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%ED%84%B0%EC%B9%98&amp;display=swap"><!-- v237: 다음 스테이지/터치 화면용 주아체(쓰는 글자만) --><link rel="preload" href="assets/fonts/DoHyeon-254.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/PretendardVariable-254.woff2" as="font" type="font/woff2" crossorigin><style>@font-face{font-family:"Do Hyeon";src:url(assets/fonts/DoHyeon-254.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}@font-face{font-family:"Pretendard";src:url(assets/fonts/PretendardVariable-254.woff2) format("woff2-variations"),url(assets/fonts/PretendardVariable-254.woff2) format("woff2");font-weight:45 930;font-style:normal;font-display:block}</style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v274';
+const BUILD='v275';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>체인지탱크탱크</title>
@@ -846,8 +846,8 @@ function options(){const own=Object.keys(WP);const W1=[],P1=[],S1=[];
  const CC=ccPool(),RC=G.awk?rcPool():[],NS=(CC.length||RC.length)?2:3;/* v108: 1 car card + 2 shared */let guard=0;while(pick.length<NS&&guard++<20){const r=Math.random()*100;let src=early?(r<60?W1:S1):(r<50?W1:r<75?P1:S1);if(!src.length)src=W1.length?W1:S1.length?S1:P1;if(!src.length)break;pick.push(src.shift());}
  let RP=null;if(own.length<MAXW&&!pick.some(x=>x.w&&!WP[x.k])){const nw=W1.find(x=>!WP[x.k]);if(nw)RP=nw;}/* v273 (영태 OK): 무기 칸이 비어 있으면 새 무기 카드 1장 (예전: 2분 안·무기 3개 미만일 때만) */
  const PK=RP?pick.slice(0,-1).concat(RP):pick;/* v274 (영태 OK): 마지막 칸은 딱 한 번만 바뀜 — 엔진 > 방패 > 새 무기 (v272와 같은 순서·확률, 카드 옮기기 없음, 겹침 없음) */
- if(SH.lv>0&&SH.lv<3&&!PK.some(x=>x.s)&&Math.random()<.4)RP={k:'shield',sh:1};
- if((PV.engine||0)<4&&P.spd<300&&!pick.some(x=>x.k==='engine')&&Math.random()<.25)RP={k:'engine',p:1};if(RP)pick[pick.length-1]=RP;/* c15 engine: any time, 25%, max 4 */
+ if(SH.lv>0&&SH.lv<3&&!PK.some(x=>x.s)&&Math.random()<.3/* v275 (영태 OK): 방어막 40→30% */)RP={k:'shield',sh:1};
+ if((PV.engine||0)<4&&P.spd<300&&!pick.some(x=>x.k==='engine')&&Math.random()<.2/* v275 (영태 OK): 엔진 25→20% */)RP={k:'engine',p:1};if(RP)pick[pick.length-1]=RP;/* c15 engine: any time, 25%, max 4 */
  pick.splice(NS);{const CP=CC.concat(RC);if(CP.length)pick.unshift(CP[Math.random()*CP.length|0]);}
  G.cards=(G.cards||0)+1;return pick;}
 /* v224: 다시 뽑기 = 진짜 저장 다이아(SAVE.dia) 사용, 무료 2번 뒤 💎10·20·40·40·40. 무제한은 ?dev=1(dev 저장 999999)에서만 */const RR_FREE=3/* v245 (영태): 무료 3번 */,RR_COST=[10,20,40,40,40]/* 다이아 5번 */;G.rr=0;
