@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"><!-- v276 (영태): viewport-fit=cover = 안드로이드 15 화면 끝까지 그릴 때 상태표시줄 높이(safe-area) 읽기 --><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><!-- v254: 도현체·Pretendard = 저장소 안 글꼴 파일 (오프라인) --><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&amp;text=%EB%8B%A4%EC%9D%8C%20%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%ED%84%B0%EC%B9%98&amp;display=swap"><!-- v237: 다음 스테이지/터치 화면용 주아체(쓰는 글자만) --><link rel="preload" href="assets/fonts/DoHyeon-254.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/PretendardVariable-254.woff2" as="font" type="font/woff2" crossorigin><style>@font-face{font-family:"Do Hyeon";src:url(assets/fonts/DoHyeon-254.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}@font-face{font-family:"Pretendard";src:url(assets/fonts/PretendardVariable-254.woff2) format("woff2-variations"),url(assets/fonts/PretendardVariable-254.woff2) format("woff2");font-weight:45 930;font-style:normal;font-display:block}</style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 <script>/* v52: stale-cache guard — if the server has a newer build than this cached page, reload it */
-const BUILD='v287';
+const BUILD='v288';
 (function(){try{fetch(location.pathname+'?nc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/const BUILD='(v\d+)'/);if(m&&+m[1].slice(1)>+BUILD.slice(1)&&sessionStorage.getItem('ac_rl_'+m[1])!==location.href){sessionStorage.setItem('ac_rl_'+m[1],location.href);const u=new URL(location.href);u.searchParams.set('v',m[1].slice(1));location.replace(u.toString());}}).catch(()=>{});}catch(e){}
 addEventListener('pageshow',e=>{if(e.persisted)location.reload();});})();</script>
 <title>체인지탱크탱크</title>
@@ -488,7 +488,7 @@ const PAL=STAGE===1?{g1:'#8fd36a',g2:'#7cc65a',g3:'#a6e07e',path:'#e8d79a',tree:
 const DEC=[];for(let i=0;i<229;i++)/* c16: 520 x .44 */{const t=R();DEC.push({x:R()*WORLD,y:R()*WORLD,k:t<.18?'tree':t<.28?'rock':t<.4?'patch':t<.75?'tuft':'flower',s:.7+R()*.8,c:(R()*3)|0});}
 // ---------- state
 const G={t:0,lv:1,xp:0,need:5,hp:120,maxhp:120,veh:0,vehT:[],over:false,win:false,paused:false,stop:0,shake:0,flash:0,zoomPunch:0,
- swarmsDone:[],mini:[],chests:0,chestsOpened:0,chestLog:[],swarmLeft:0,boss:null,bossSpawned:false,bossDone:false,kills:0,vis:0,stats:{minE:999,maxE:0,sum:0,samples:0,maxAll:0},evo:{},log:[]};
+ swarmsDone:[],mini:[],chests:0,chestsOpened:0,chestLog:[],swarmLeft:0,boss:null,bossSpawned:false,bossDone:false,kills:0,mbKills:0,vis:0,stats:{minE:999,maxE:0,sum:0,samples:0,maxAll:0},evo:{},log:[]};/* v288: 이긴 판 중간보스·보스 처치 임시 집계 */
 const P={x:WORLD/2,y:WORLD/2,vx:0,vy:0,ang:-Math.PI/2,r:22,inv:0,armor:0,spd:210,magnet:90,dmgMul:1,regen:0,cdMul:1.4};
 const CHEST=[],CH_MAX=3,CH_ELITE=Q.has('chest')?+Q.get('chest'):.03;
 const ITEM=[],POPS=[],CRK=[];const EN=[],BUL=[],EB=[],GEM=[],FX=[],NUM=[],POOL=[],SHELL=[];
@@ -497,7 +497,7 @@ const WD={
  mg:{n:'기관총',e:'다연장 포탑',ed:'6명 동시 사격 · 공격 속도 증가'/* v108: matches code (6 targets, faster fire) */,d:'가까운 적에게 사격'},
  molo:{n:'화염병',e:'화염 폭풍',ed:'차 주위 사방으로 화염탄',d:'화염병을 던져 불바다'},
  drone:{n:'드론',e:'비행 벽포대',ed:'드론 5대 · 공격 속도 크게 증가',d:'차 주위를 돌며 사격'},
- ram:{n:'방패 범퍼',e:'회전 드릴 범퍼',d:'앞에서 오는 총알을 막아요 +1 (쿨타임 2초) (보스 총알 제외)'/* v287 (영태) *//* v263 (영태 OK) */,ed:'앞에서 오는 총알을 10발 막으면 레이저를 쏴요<br>보스 총알은 못 막아요'/* v276 (영태) */},
+ ram:{n:'방패 범퍼',e:'회전 드릴 범퍼',d:'앞에서 오는 총알을 막아요 +1 (쿨타임 3초) (보스 총알 제외)'/* v288 (영태) *//* v287 (영태) *//* v263 (영태 OK) */,ed:'앞에서 오는 총알을 10발 막으면 레이저를 쏴요<br>보스 총알은 못 막아요'/* v276 (영태) */},
  coil:{n:'번개 코일',e:'폭풍 코어',ed:'번개가 12명에게 연쇄',d:'번개가 2명에게 연쇄'},
  mortar:{n:'박격포',e:'멸망 탄두',ed:'포탄 6발 · 더 큰 폭발',d:'적 무리에 포탄 낙하'},
  laser:{n:'룬 레이저',e:'심판 광선',ed:'회전하는 관통 광선',d:'적을 뚫는 광선'},
@@ -685,12 +685,12 @@ function dropPot(x,y,k){if(ITEM.some(i=>i.k===k))return;const it={x:x+rnd(-14,14
 function potPick(it){beep(700,.08,'triangle',.12,1400);if(it.k==='hp'){G.hp=Math.min(G.maxhp,G.hp+G.maxhp*(HELL?.20:.25));/* v117 hell heal 20% */ring(P.x,P.y,P.r*2.5,'#56D364',.35);}else{for(const g of GEM)g.pull=1;ring(P.x,P.y,P.r*3,'#9B5CFF',.4);}}
 window.__pot=(k,dx)=>dropPot(P.x+(dx||60),P.y,k);window.__items=()=>ITEM.map(i=>i.k);
 function kill(e){if(bcNoDie()&&e!==undefined){e.dead=0;e.hp=Math.max(e.hp,1);return;}G.kills++;sndKill();{const PR=e.mb?[.08,.25]:e.type==='shield'?[.0075,.005]:(e.type==='brute'||e.type==='shaman')?[.01,.006]:null;if(PR){if(Math.random()<PR[0])dropPot(e.x,e.y,'hp');if(Math.random()<PR[1])dropPot(e.x,e.y,'mag');}}{const TK=(e.type==='shield'||e.type==='brute')&&!e.mb;/* v137m: 영태 — tank enemies (shield/brute, incl. elites; not mid-boss) drop gold gems worth 1.5x */GEM.push({x:e.x,y:e.y,v:e.xp*(G.t>=240?XPK.late:1)*(TK?1.5:1)*(CAR==='tank'&&Math.hypot(P.x-e.x,P.y-e.y)<MAGK()+P.r?1.15:1)/* v156: tank +15% XP for kills inside pickup radius */,big:e.xp>=3,gold:TK?1:0});}
- if(e.mb){G.miniDead=1;ring(e.x,e.y,300,'#ffd36b',.7);ring(e.x,e.y,180,'#ff9a2a',.5);gainXp(40);if(G.chests<CH_MAX){G.chests++;CHEST.push({x:e.x,y:e.y,boss:0,t:0,mb:1/* v96: mid-boss chest 1.8x */});}}
+ if(e.mb){if(!e._mbC288){e._mbC288=1;G.mbKills=(G.mbKills||0)+1;}/* v288: 이긴 뒤에만 s.b에 합산 */G.miniDead=1;ring(e.x,e.y,300,'#ffd36b',.7);ring(e.x,e.y,180,'#ff9a2a',.5);gainXp(40);if(G.chests<CH_MAX){G.chests++;CHEST.push({x:e.x,y:e.y,boss:0,t:0,mb:1/* v96: mid-boss chest 1.8x */});}}
  else if((e.type==='shield'||e.type==='brute')&&G.chests<CH_MAX-(G.miniDead?0:1)-(G.bossDone?0:1)&&Math.random()<CH_ELITE){G.chests++;CHEST.push({x:e.x,y:e.y,boss:0,t:0});}const EL=e.type==='brute'||e.type==='shield';FX.push({k:'pop',x:e.x,y:e.y,life:.25,max:.25,r:e.r,c:e.col});
  const nc=Math.min(3,40-CHIPS());for(let i=0;i<nc;i++)FX.push({k:'chip',x:e.x,y:e.y,vx:rnd(-160,160),vy:rnd(-200,50),life:.25,max:.25,c:i%2?e.col:'#fff6c0'});
  if(EL)ring(e.x,e.y,e.r*2,e.type==='brute'?'#ffb347':'#ffe27a',.3);
  if(e.type==='brute'){G.stop=Math.max(G.stop,.06);}if(e.sw){G.swarmLeft--;swarmCheck();}}
-function bossDie(){if(G.bossKT==null)G.bossKT=+G.t.toFixed(1);/* v213 */const b=G.boss;const NC263=!Q.has('endless');/* v263 (영태 OK): 마지막 보스 = 상자·룰렛 없이 바로 승리 화면 (무한 모드는 그대로) */if(!NC263){CHEST.push({x:b.x,y:b.y,boss:1,t:0});G.chests++;}gainXp(40);dropPot(b.x,b.y,'hp');dropPot(b.x,b.y,'mag');G.bossDone=true;G.boss=null;G.stop=.3;G.gflash=.15;shk(25,1);ring(b.x,b.y,400,'#fff3a0',1);for(let i=0;i<40;i++)GEM.push({x:b.x+rnd(-120,120),y:b.y+rnd(-120,120),v:5,big:1});
+function bossDie(){if(G.bossKT==null){G.bossKT=+G.t.toFixed(1);G.mbKills=(G.mbKills||0)+1;}/* v288: 이긴 뒤에만 s.b에 합산 *//* v213 */const b=G.boss;const NC263=!Q.has('endless');/* v263 (영태 OK): 마지막 보스 = 상자·룰렛 없이 바로 승리 화면 (무한 모드는 그대로) */if(!NC263){CHEST.push({x:b.x,y:b.y,boss:1,t:0});G.chests++;}gainXp(40);dropPot(b.x,b.y,'hp');dropPot(b.x,b.y,'mag');G.bossDone=true;G.boss=null;G.stop=.3;G.gflash=.15;shk(25,1);ring(b.x,b.y,400,'#fff3a0',1);for(let i=0;i<40;i++)GEM.push({x:b.x+rnd(-120,120),y:b.y+rnd(-120,120),v:5,big:1});
  for(const e of EN)if(!e.dead){e.dead=1;kill(e);}G.win=true;
  if(!NC263&&G.chests<CH_MAX){G.chests++;G.endAfter=1;openChest(1);}else setTimeout(()=>G.over=true,2500/SPEED);}
 const SH={lv:0,ch:[]};/* v263 (영태 OK): 냉기 모양 = 시안 C 얼음 파편 폭발 (specs/frost_look_mock/mock.js drawC 그대로). 빙결 폭풍은 한 바퀴 원 */
@@ -917,7 +917,7 @@ function wUpd(dt){const cd=P.cdMul;if((BC.on||BAR.on)&&TUNE.bull.stopWeapons)ret
    for(let i=0;i<n;i++){let tx,ty;if(ts[i]){tx=ts[i].x+rnd(-10,10);ty=ts[i].y+rnd(-10,10);}else{const a=a0+i/n*TAU,rr=rnd(TUNE.molo.fallMin,TUNE.molo.fallMax);tx=P.x+Math.cos(a)*rr;ty=P.y+Math.sin(a)*rr;}SHELL.push({x:P.x+Math.cos(P.ang)*20/Math.max(.3,zoom()),y:P.y+Math.sin(P.ang)*20/Math.max(.3,zoom()),tx,ty,t:0,T:.45,k:'molo',evo:0,r:R,dur,d,imp,src:'molo'});}}}
   if(k==='drone'){const n=E?5:L;w.a+=dt*(E?1.2:2.4);w.pos=[];for(let i=0;i<n;i++){const a=w.a+i/n*TAU,rr=E?(P.r+70)*TUNE.drone.evo.orbit:P.r+48;w.pos.push({x:P.x+Math.cos(a)*rr,y:P.y+Math.sin(a)*rr});}if(G.awk&&!G.robo){const k=UK(),b=UBASE();w.pos=w.pos.map((_,i)=>{const sd=i%2?1:-1,row=i>>1;return{x:b.x+sd*(42+row*14)*k,y:b.y+(-44-row*12+Math.sin(G.t*3+i)*2)*k};});}
    if(w.cd<=0){w.cd=(E?.22:.7-L*.05)*cd/1.25;const tg=nearest(12,300).sort((x,y)=>(y.max||0)-(x.max||0)).slice(0,w.pos.length);let si=0;for(const p of w.pos){const best=tg[si%Math.max(1,tg.length)];if(best){si++;const a=Math.atan2(best.y-p.y,best.x-p.x);BUL.push({x:p.x,y:p.y,vx:Math.cos(a)*620,vy:Math.sin(a)*620,d:((E?14:8)+L*2)*1.25,tg:best,home:1,pierce:E?1:0,life:.8,r:(E?5:3.5)*SZB()*GS('drone'),c:E?TUNE.drone.colEvo:TUNE.drone.col,ev:E?1:0,src:'drone'});}}}}
-  if(k==='ram'){const ak=G.awk&&!G.robo;const arc=(ak?160:E?140:100+5*(L-1))*Math.PI/180,mx=ak?5:E?4:[1,2,3,4,4][L-1]/* v195: 방패 점 Lv1~4 = 1~4 (Lv5는 드릴 진화, 진화 대기 중 Lv5는 4) */,rf=E||ak?1.0:[2.0,1.8,1.6,1.4,1.2][L-1];w.mx=mx;if(w.ch==null)w.ch=mx;
+  if(k==='ram'){const ak=G.awk&&!G.robo;const arc=(ak?160:E?140:100+5*(L-1))*Math.PI/180,mx=ak?5:E?4:[1,2,3,4,4][L-1]/* v195: 방패 점 Lv1~4 = 1~4 (Lv5는 드릴 진화, 진화 대기 중 Lv5는 4) */,rf=E||ak?1.0:3.0;/* v288 (영태): 기본 범퍼 재생 모든 레벨 3초 고정. 진화·각성은 그대로 1초 */w.mx=mx;if(w.ch==null)w.ch=mx;
    if(w.ch<mx){w.rf=(w.rf||0)+dt;if(w.rf>=rf){w.rf=0;w.ch++;}}else w.rf=0;
    if(E){drillTick(w,dt,ak);}else if(w.ch>0){const br=P.r*1.6+18;for(const b of EB){if(b.bt===2||b.life<=0||w.ch<=0)continue;const dx=b.x-P.x,dy=b.y-P.y;if(dx*dx+dy*dy>br*br)continue;let da=Math.atan2(dy,dx)-ramAng();da=Math.atan2(Math.sin(da),Math.cos(da));if(Math.abs(da)>arc/2)continue;
     b.life=0;w.ch--;w.blk=(w.blk||0)+1;G.ramBlk=(G.ramBlk||0)+1;FX.push({k:'spark',x:b.x,y:b.y,life:.15,max:.15});
@@ -2885,7 +2885,7 @@ const PLAY0=PLAY&&!AUTO;
 {const o=spawnE;spawnE=function(t,x,y){const e=o(t,x,y);if(e&&DIFF){e.hp*=DHP;if(e.max)e.max*=DHP;}if(e&&HELL){if(e.xp)e.xp*=HELLK.xp;}return e;};const ob=spawnBoss;spawnBoss=function(){ob();if(DIFF&&G.boss){G.boss.hp*=DBHP;G.boss.max*=DBHP;}};const om=spawnMini0;spawnMini0=function(){const r=om();if(DIFF){const m=EN.find(e=>e.mb&&!e._hk);if(m){m._hk=1;m.hp*=DHP;m.max*=DHP;}}return r;};}/* v116 difficulty: HP x1/1.85/2.6 (boss 1/1.7/2.0), dmg x1/1.4/1.85 */
 {const L=Math.min(20,(SAVE.clv&&SAVE.clv[CAR])||1),u=SAVE.pu||{},cb=.06*(L-1);/* v259 (영태 OK): 차 Lv 효과 모든 난이도 6% *//* v230: 차량 Lv당 4/6/8%, 최대 Lv20 *//* v210: 지옥 차량 1.25%->4%/lv *//* v133: Easy 2%/lv *//* v113: Hard car level 3%/lv */G.maxhp=Math.round(G.maxhp*(1+cb+.03*(u.hp||0)));G.hp=G.maxhp;P.dmgMul*=(1+cb+.02*(u.dmg||0))*1.15;P._cd0=P.cdMul||1;P.cdMul=(P.cdMul||1)/(1+.01*(u.as||0));P.spd*=1+.01*(u.spd||0);P.magnet*=1+.02*(u.mag||0);if(CAR==='flame'){G.maxhp=Math.round(G.maxhp*1.1);G.hp=G.maxhp;}/* v71 flame HP x1.1 */}
 const WLV={mg:{tank:{2:'2명 동시 · 공격 속도 증가<br>+1 총알 관통',3:'3명 동시 · 공격 속도 증가<br>+1 총알 관통',4:'4명 동시 · 공격 속도 증가<br>+1 총알 관통',5:'5명 동시 · 공격 속도 증가<br>+1 총알 관통'},raven:{2:'깃털이 더 빨리 날아감',3:'깃털이 더 빨리 돌아옴',4:'1초간 적 속도 -20%<br>보스 제외',5:'돌아오는 깃털 피해 ×1.8'},mammoth:{2:'코 개틀링 공격 속도 증가',3:'코 개틀링 공격 속도 증가',4:'코 개틀링 공격 속도 증가',5:'코 개틀링 공격 속도 증가'},croc:'+10% 이빨 피해',flame:'+10% 불길 피해'},
- molo:'+1 화염병 · 공격 속도 증가<br>불바다 더 넓고 오래',drone:'+1 드론 · 공격 속도 증가',ram:{2:'앞에서 오는 총알을 막아요 +1 (쿨타임 1.8초)',3:'앞에서 오는 총알을 막아요 +1 (쿨타임 1.6초)',4:'앞에서 오는 총알을 막아요 +1 (쿨타임 1.4초)',5:'앞에서 오는 총알을 막아요 (쿨타임 1.2초)'}/* v263 (영태 OK): +N = 그 레벨에 늘어나는 막는 수, 쿨타임 = 재충전 초. Lv5는 막는 수가 안 늘어서 +N 없음 */,coil:'+2명 번개 연쇄<br>더 멀리 · 공격 속도 증가',mortar:'+1 포탄 · 공격 속도 증가<br>폭발 더 넓게',laser:{2:'광선 더 굵게 · 공격 속도 증가',3:'+1 광선 · 더 굵게 · 공격 속도 증가',4:'광선 더 굵게 · 공격 속도 증가',5:'+1 광선 · 더 굵게 · 공격 속도 증가'},saw:'+1 톱날',frost:'더 멀리 · 더 넓게<br>공격 속도 증가'};
+ molo:'+1 화염병 · 공격 속도 증가<br>불바다 더 넓고 오래',drone:'+1 드론 · 공격 속도 증가',ram:{2:'앞에서 오는 총알을 막아요 +1 (쿨타임 3초)',3:'앞에서 오는 총알을 막아요 +1 (쿨타임 3초)',4:'앞에서 오는 총알을 막아요 +1 (쿨타임 3초)',5:'앞에서 오는 총알을 막아요 (쿨타임 3초)'}/* v288 (영태): 쿨타임 모든 레벨 3초. +N = 그 레벨에 늘어나는 막는 수. Lv5는 막는 수가 안 늘어서 +N 없음 */,coil:'+2명 번개 연쇄<br>더 멀리 · 공격 속도 증가',mortar:'+1 포탄 · 공격 속도 증가<br>폭발 더 넓게',laser:{2:'광선 더 굵게 · 공격 속도 증가',3:'+1 광선 · 더 굵게 · 공격 속도 증가',4:'광선 더 굵게 · 공격 속도 증가',5:'+1 광선 · 더 굵게 · 공격 속도 증가'},saw:'+1 톱날',frost:'더 멀리 · 더 넓게<br>공격 속도 증가'};
 function WLT(k,l){let v=WLV[k];if(!v||l<2)return null;if(k==='mg'){v=v[CAR]||v.tank;}return typeof v==='string'?v:v[l]||null;}
 if(CAR==='flame')WD.mg={n:'화염방사기',e:'지옥불 분사기',ed:'불길 더 세게'/* v283 (영태) */,d:'앞쪽 적을 불길로 태워요'};{const BN={raven:['깃털 부메랑','던지면 돌아오는 깃털'],mammoth:['코 개틀링','코 개틀링 사격'],croc:['이빨 던지기','이빨이 적 사이를 튀어요']}[CAR];if(BN){WD.mg.n=BN[0];WD.mg.d=BN[1];const EV={raven:['폭풍 깃털','깃털 더 세게 · 적 더 느리게'],mammoth:['폭주 코 개틀링','공격 속도 증가 · 피해 조금 증가'],croc:['강철 이빨','이빨 2개로 나눠 던짐 · +18% 이빨 피해']}[CAR];WD.mg.e=EV[0];WD.mg.ed=EV[1];}if(CAR==='croc')SD.big={n:'대형 공격',d:SD.big.d};if(CAR==='flame')SD.big={n:'대형 공격',d:'+15% 공격 크기'};}/* v108: basic-attack card named per car */
 
@@ -3052,12 +3052,12 @@ function showRes0(){giveAchNow();let stars=star213();const ds=DIFF===2?'x':DIFF?
  r.style.background='rgba(0,0,0,.85)';r.style.display='flex';$('rRetry').onclick=()=>location.reload();$('rGar').onclick=()=>{location.search='?garage=1'+DEVQ;};$('rHome').onclick=()=>{location.search='?menu=1'+DEVQ;};window.__res={stars,gold,first:fb,ach:ag,total:gold+fb+ag,got:got.map(a=>a.id)};try{adRes222(gold);}catch(err){console.error(err);}}
 function giveAchNow(){}/* v259: 옛 목표 끝 */
 /* v116 home screen */
-const PRICE116={flame:[4000,300],raven:[4000,300],mammoth:[4000,300],croc:[4000,300]};/* v230 (영태): 골드 해금 네 대 모두 4,000, 순서 제한 없음 *//* v224: 다이아 해금 네 대 모두 300 (골드 그대로) */
+const PRICE116={flame:[8000,300],raven:[8000,300],mammoth:[8000,300],croc:[8000,300]};/* v288 (영태): 골드 해금 네 대 모두 8,000, 다이아 300 유지 *//* v230 (영태): 골드 해금 네 대 모두 4,000, 순서 제한 없음 *//* v224: 다이아 해금 네 대 모두 300 (골드 그대로) */
 CARS.forEach(c=>{if(PRICE116[c[0]]){c[3]=PRICE116[c[0]][0];c[4]=PRICE116[c[0]][1];}});
 const CLMAX=20/* v230: 40->20 */,PUMAX=20,PU=[['dmg','💥 무기 공격력','+2%씩'],['hp','❤️ 최대 체력','+3%씩'],['as','⚡ 공격 속도','+1%씩'],['mag','🧲 줍는 범위','+2%씩'],['spd','💨 이동 속도','+1%씩']];
 {if(!SAVE._v116){SAVE._v116=1;const u=SAVE.up||{};let T=0;for(const k in u)T+=u[k]||0;const L=Math.min(CLMAX,1+2*T);SAVE.clv=SAVE.clv||{};for(const c of CARS)SAVE.clv[c[0]]=Math.max(SAVE.clv[c[0]]||1,L);SAVE.pu=SAVE.pu||{};if(SAVE.sfx==null)SAVE.sfx=SAVE.mute?0:100;SAVE.mute=0;saveS();}
  SAVE.clv=SAVE.clv||{};SAVE.pu=SAVE.pu||{};if(!SAVE.cars[SAVE.car])SAVE.car='tank';{let ch=0;for(const k in SAVE.clv)if(SAVE.clv[k]>CLMAX){SAVE.clv[k]=CLMAX;ch=1;}if(ch)saveS();}/* v230: 차량 Lv 20 넘는 저장은 20으로 */cu259();/* v259 */}
-const cLv=id=>SAVE.clv[id]||1;const LGC=L=>60*Math.ceil(1.5*L)/* v230: 60*ceil(1.5L) */,LDC=L=>8*Math.ceil(1.5*L)/* v230: 8*ceil(1.5L) */;const CLP=L=>6*(L-1)/* v259: 6% 통일 */,CLT=L=>'Lv '+L+'/'+CLMAX+' · 공격력·체력 +'+CLP(L)+'%';/* v260 (영태 OK): 차고 (쉬움) 글자 지움 *//* v230: 차량 Lv당 쉬움 4% / 어려움 6% / 지옥 8%, 출동 화면에서 마지막으로 고른 난이도 기준 하나만 표시 */
+const cLv=id=>SAVE.clv[id]||1;const LGC=L=>120*Math.ceil(1.5*L)/* v288 (영태): 2배, 120*ceil(1.5L) *//* v230: 60*ceil(1.5L) */,LDC=L=>8*Math.ceil(1.5*L)/* v230: 8*ceil(1.5L) */;const CLP=L=>6*(L-1)/* v259: 6% 통일 */,CLT=L=>'Lv '+L+'/'+CLMAX+' · 공격력·체력 +'+CLP(L)+'%';/* v260 (영태 OK): 차고 (쉬움) 글자 지움 *//* v230: 차량 Lv당 쉬움 4% / 어려움 6% / 지옥 8%, 출동 화면에서 마지막으로 고른 난이도 기준 하나만 표시 */
 {try{if(!Q.has('dev')&&!FRESH&&!START&&localStorage.getItem('ac_save_pre116')==null)localStorage.setItem('ac_save_pre116',localStorage.getItem('ac_save')||'{}');}catch(e){}}
 const DN=['쉬움','어려움','지옥'];
 function clrSync(){SAVE.clr=SAVE.clr||{};const W=SAVE._clr116?{}:(SAVE.wins||{});SAVE._clr116=1;for(let m=1;m<=8;m++){const c=SAVE.clr[m]=SAVE.clr[m]||{e:0,h:0,x:0};if(W[m+'x'])c.x=c.h=c.e=1;if(W[m+'h'])c.h=c.e=1;if(W[m+'n'])c.e=1;if(c.x)c.h=1;if(c.h)c.e=1;}
@@ -5828,45 +5828,77 @@ EMOD(6);(function(){if(MAP!==6)return;const _d=drawBoss;drawBoss=function(b){if(
 `;document.head.appendChild(st);
 const $=id=>document.getElementById(id),fmt=n=>n===Infinity?'∞':(+n).toLocaleString('en-US');
 let TAB='home',GSEL=null,GTAB281=0;/* v281 (영태): 차고 차량/강화 탭, 열 때마다 차량부터 */
-/* v259 (영태 OK): 미션 64개 · 45,200골드. 창 = 시안 B(분류 칩 처치/맵·별/보스/차/승리), 받을 미션 위로, 받기 + 광고 보고 2배 받기(횟수 제한 없음), 받은 미션은 흐리게 '완료'. 처치 수는 이긴 판만 */
-const MS259={K:[[2500,200,1000],[8000,300,3000],/* v263 (영태 OK): 누적 처치 목표 올림, 보상 그대로, id(세 번째 숫자) 그대로 *//* v264 (영태 OK): 겹치는 15,000(💰400)·30,000(💰500) 빼고 💰600·💰750만 남김 */[15000,600],[20000,650],[25000,700],[30000,750],[35000,800],[40000,850],[45000,900],[50000,1000],[55000,1100],[60000,1200],[65000,1300]],
- RUN:[[800,200,500],[2000,300,1000],[4000,500,2000],[7000,700,3000]]/* v263 (영태 OK): 한 판 처치 목표 올림, 보상 그대로, id 그대로 */,MAPG:[200,250,300,350,400,450,500,600],STARS:[[10,300],[20,400],[30,500],[40,600],[50,800],[60,1000],[70,1300],[72,1500]],
- BOSS:[[5,300],[10,400],[25,600],[50,800],[100,1100],[200,1500]],LVANY:[[5,200],[10,400],[15,600],[20,1000]],LV20N:[[2,1200],[3,1500],[4,1800],[5,2200]],OWN:[[2,300],[3,500],[4,700],[5,1000]],
- WINS:[[10,400],[25,600],[50,900],[100,1300],[200,1800]],CW:300,LVUP:200,CATS:['처치','맵·별','보스','차','승리']};
-let MSCAT='처치';
+/* v288 (영태): 일회성 69개 · 기본 44,300골드. 탭 = 일일/주간/처치/맵·별/보스/차/승리. 받기 + 광고 보고 2배 받기(횟수 제한 없음, 다이아는 배수 없음). 받은 미션은 흐리게 '완료'. 진 판·무한모드는 미션에 안 셈 */
+const MS259={K:[[4000,200,1000],[8000,300,3000],[15000,350],[20000,400],[25000,450],[30000,500],[35000,550],[40000,600],[45000,650],[50000,700],[55000,800],[60000,850],[65000,1000]],
+ RUN:[[1200,200,500],[2000,300,1000],[4000,500,2000],[4500,700,3000]],MAPG:[200,250,300,350,400,450,500,600],STARS:[[10,300],[20,400],[30,500],[40,600],[50,800],[60,1000],[70,1300],[72,1500]],
+ BOSS:[[10,300],[30,400],[60,600],[120,800],[240,1100],[400,1500]],LVANY:[[5,200],[10,400],[15,600],[20,1000]],LV20N:[[2,1200],[3,1500],[4,1800],[5,2200]],OWN:[[2,300],[3,500],[4,700],[5,1000]],
+ WINS:[[10,400],[25,600],[50,900],[100,1300],[200,1800]],CW:300,LVUP:200,CATS:['일일','주간','처치','맵·별','보스','차','승리']};
+let MSCAT='일일';
+function msKst288(){return new Date(Date.now()+9*36e5).toISOString().slice(0,10);}
+function msMon288(){const t=new Date(Date.now()+9*36e5),d=t.getUTCDay();t.setUTCDate(t.getUTCDate()-((d+6)%7));return t.toISOString().slice(0,10);}
+function msPay288(m){SAVE.gold=(SAVE.gold||0)+(m.gold||0);if(m.dia)SAVE.dia=(SAVE.dia||0)+m.dia;}
+function msPeriod288(s){
+  const dk=msKst288(),wk=msMon288();
+  if(s.daily&&s.daily.d!==dk){const g=s.daily.got||{},D=s.daily,defs=[{id:'d_star',gold:200,need:1,have:D.star||0},{id:'d_kill',gold:200,need:1500,have:D.kill||0},{id:'d_win',gold:200,need:1,have:D.win||0}];for(const m of defs)if(m.have>=m.need&&!g[m.id])msPay288(m);}
+  if(!s.daily||s.daily.d!==dk)s.daily={d:dk,star:0,kill:0,win:0,got:{}};
+  if(s.weekly&&s.weekly.d!==wk){const g=s.weekly.got||{},W=s.weekly,defs=[{id:'w_map',gold:600,need:3,have:Object.keys(W.maps||{}).length},{id:'w_win',gold:800,need:8,have:W.win||0},{id:'w_kill',gold:1000,dia:10,need:20000,have:W.kill||0}];for(const m of defs)if(m.have>=m.need&&!g[m.id])msPay288(m);}
+  if(!s.weekly||s.weekly.d!==wk)s.weekly={d:wk,maps:{},win:0,kill:0,got:{}};
+}
 function ms259(){let s=SAVE.ms;if(!s||typeof s!=='object'){s=SAVE.ms={k:0,br:0,b:0,w:0,cw:{},lv20:0,got:{}};
-  /* 예전 저장: 이긴 맵·난이도 수만큼 승리·보스를 먼저 채움(최소값), 옛 목표로 이미 받은 건 같은 미션을 '완료'로 (두 번 안 줌) */
+  /* 예전 저장: 이긴 맵·난이도 수만큼 승리를 먼저 채움(최소값), 옛 목표로 이미 받은 건 같은 미션을 '완료'로 (두 번 안 줌) */
   const W=SAVE.wins||{};const nw=Object.keys(W).filter(k=>W[k]&&/^[1-8][nhx]$/.test(k)).length;s.w=nw;s.b=nw;
   const A=SAVE.ach||{};if(A.win1)s.got.m1=1;if(A.kill500){s.got.r500=1;s.br=Math.max(s.br,500);}if(A.lv18){s.got.lvup20=1;s.lv20=1;s.blv=20;}saveS();}
- s.cw=s.cw||{};s.got=s.got||{};return s;}
-function msRun259(){const s=ms259();s.blv=Math.max(s.blv||0,G.lv|0);if(G.lv>=20)s.lv20=1;if(G.win){const k=G.kills|0;s.k=(s.k||0)+k;s.br=Math.max(s.br||0,k);s.w=(s.w||0)+1;s.b=(s.b||0)+1;s.cw[CAR]=1;}saveS();}
+ s.cw=s.cw||{};s.got=s.got||{};
+ if(!s._mb288){s._mb288=1;[['b5','mb10'],['b10','mb30'],['b25','mb60'],['b50','mb120'],['b100','mb240'],['b200','mb400']].forEach(([o,n])=>{if(s.got[o]&&!s.got[n])s.got[n]=s.got[o];});s.b=0;}/* v288: 보스 미션 id 이관, 처치 수는 0부터 */
+ msPeriod288(s);return s;}
+function msRun259(){const s=ms259();if(Q.has('endless')||!G.win){saveS();return;}const k=G.kills|0;s.k=(s.k||0)+k;s.br=Math.max(s.br||0,k);s.w=(s.w||0)+1;s.b=(s.b||0)+(G.mbKills|0);s.cw[CAR]=1;s.blv=Math.max(s.blv||0,G.lv|0);if(G.lv>=20)s.lv20=1;
+ const D=s.daily;if(star213()>=2)D.star=1;D.kill=(D.kill||0)+k;D.win=(D.win||0)+1;
+ const Wk=s.weekly,mp=Math.min(8,Math.max(1,MAP|0));Wk.maps=Wk.maps||{};Wk.maps[mp]=1;Wk.win=(Wk.win||0)+1;Wk.kill=(Wk.kill||0)+k;
+ if(DIFF===2){const dt=(G.bossKT!=null?G.bossKT:G.t)-(G.bossT!=null?G.bossT:G.t);if(dt<=90)s.hx90=1;}
+ let ev=0;for(const key in WD)if((WP[key]&&WP[key].evo)||(G.evo&&G.evo[key]))ev++;if(ev>=3)s.ev3=1;
+ saveS();}
 function msList259(){const s=ms259(),M=MS259,L=[];
- const st=(id,have,need)=>s.got[id]?'done':have>=need?'claim':'prog';
- const P=(id,cat,ic,n,have,need,gold,sub)=>L.push({id,cat,ic,n,have,need,gold,sub,state:st(id,have,need)});
+ const st=(id,have,need,got)=>got[id]?'done':have>=need?'claim':'prog';
+ const P=(id,cat,ic,n,have,need,gold,sub,dia,got)=>{got=got||s.got;L.push({id,cat,ic,n,have,need,gold,dia:dia||0,sub,state:st(id,have,need,got),period:got===s.got?null:(s.daily&&got===s.daily.got?'daily':(s.weekly&&got===s.weekly.got?'weekly':null))});};
  const own=CARS.filter(c=>SAVE.cars[c[0]]).map(c=>c[0]),lv=id=>Math.min(CLMAX,(SAVE.clv||{})[id]||1);
  const maxLv=own.length?Math.max(...own.map(lv)):1,n20=own.filter(id=>lv(id)>=20).length;
  let stars=0;const S=SAVE.stars||{};for(const k in S)if(/^[1-8][ehx]$/.test(k))stars+=Math.max(0,Math.min(3,S[k]|0));
  const clrE=m=>!!((SAVE.clr&&SAVE.clr[m]&&SAVE.clr[m].e)||(SAVE.fc213&&SAVE.fc213[m+'e']));
+ const nH=()=>{let n=0;for(let m=1;m<=8;m++)if(SAVE.clr&&SAVE.clr[m]&&SAVE.clr[m].h)n++;return n;},nX=()=>{let n=0;for(let m=1;m<=8;m++)if(SAVE.clr&&SAVE.clr[m]&&SAVE.clr[m].x)n++;return n;},md3=()=>{for(let m=1;m<=8;m++){const c=SAVE.clr&&SAVE.clr[m];if(c&&c.e&&c.h&&c.x)return 1;}return 0;},nCw=Object.keys(s.cw).filter(k=>s.cw[k]).length;
+ const Dg=s.daily.got||{},Wg=s.weekly.got||{};
+ P('d_star','일일','⭐','오늘 이긴 판에서 별 2개 이상 1회',s.daily.star||0,1,200,'',0,Dg);
+ P('d_kill','일일','💀','오늘 이긴 판 적 '+fmt(1500)+'마리 처치',s.daily.kill||0,1500,200,'',0,Dg);
+ P('d_win','일일','🏁','오늘 일반모드 1승',s.daily.win||0,1,200,'',0,Dg);
+ P('w_map','주간','🗺️','이번 주 서로 다른 맵 3곳에서 승리',Object.keys(s.weekly.maps||{}).length,3,600,'',0,Wg);
+ P('w_win','주간','🔥','이번 주 일반모드 8승',s.weekly.win||0,8,800,'',0,Wg);
+ P('w_kill','주간','💀','이번 주 이긴 판 적 '+fmt(20000)+'마리 처치',s.weekly.kill||0,20000,1000,'',10,Wg);
  M.K.forEach(([n,g,id])=>P('k'+(id||n),'처치','💀','누적 적 '+fmt(n)+'마리 처치 (승리 시)'/* v287 (영태) */,s.k||0,n,g));
  M.RUN.forEach(([n,g,id])=>P('r'+(id||n),'처치','⚔️','한 판에 적 '+fmt(n)+'마리',s.br||0,n,g));
  M.MAPG.forEach((g,i)=>P('m'+(i+1),'맵·별','🗺️','쉬움 맵 '+(i+1)+' 첫 클리어',clrE(i+1)?1:0,1,g,(STG[i]||{}).n));
  M.STARS.forEach(([n,g])=>P('s'+n,'맵·별','⭐','별 '+n+'개 모으기',stars,n,g));
- M.BOSS.forEach(([n,g])=>P('b'+n,'보스','👑','보스 '+n+'마리 처치',s.b||0,n,g));
+ P('hd8','맵·별','🏅','어려움 맵 8곳 클리어',nH(),8,300);
+ P('hx4','맵·별','🔥','지옥 맵 4곳 클리어',nX(),4,300);
+ P('hx8','맵·별','☠️','지옥 맵 8곳 클리어',nX(),8,800);
+ P('md3','맵·별','🎯','한 맵을 세 난이도로 클리어',md3(),1,200);
+ M.BOSS.forEach(([n,g])=>P('mb'+n,'보스','👑','중간보스·보스 '+n+'마리 처치',s.b||0,n,g));
+ P('hx90','보스','⏱️','지옥에서 보스 등장 후 90초 이내 승리',s.hx90?1:0,1,700);
  M.LVANY.forEach(([n,g])=>P('cl'+n,'차','🔧','아무 차 Lv.'+n,maxLv,n,g));
  M.LV20N.forEach(([n,g])=>P('c20n'+n,'차','🚙','차 '+n+'대 Lv.20',n20,n,g));
  M.OWN.forEach(([n,g])=>P('own'+n,'차','🚗','차 '+n+'대 보유',own.length,n,g));
  CARS.forEach(c=>P('cw_'+c[0],'차','🥇',cname(c)+'로 첫 승리',s.cw[c[0]]?1:0,1,M.CW));
+ P('cw_all','차','🏆','차 5대로 각각 1승',nCw,5,200);
  M.WINS.forEach(([n,g])=>P('w'+n,'승리','🔥','총 '+n+'번 승리',s.w||0,n,g));
  P('lvup20','승리','🆙','레벨 20 되기',Math.max(s.lv20?20:0,s.blv||0),20,M.LVUP);
+ P('ev3','승리','✨','한 판에서 공용 무기 3종 진화 후 승리',s.ev3?1:0,1,500);
  return L;}
 function msAny259(){try{return msList259().some(x=>x.state==='claim');}catch(e){return false;}}
 function msAd259(cb,fail){const d=document.createElement('div');d.className='v15cf';d.style.zIndex='60';d.innerHTML='<div class="bx"><div class="q">📺 광고 시청 중…</div><div class="i">잠시만 기다려 주세요</div></div>';['pointerdown','pointerup','touchstart','touchend','mousedown','mouseup','click'].forEach(k=>d.addEventListener(k,e=>e.stopPropagation()));document.body.appendChild(d);PLAYAD276(()=>{d.remove();cb();},()=>{d.remove();fail&&fail();});}/* v276 (영태) *//* 앱: 진짜 광고 */ /* 기존 보상형 광고 화면과 같음(웹 테스트 = 2초 대기). 미션 2배는 횟수 제한 없음 → 하루 광고 횟수에 안 셈 */
-function msClaim259(id,x2){const m=msList259().find(x=>x.id===id);if(!m||m.state!=='claim')return false;const s=ms259();s.got[id]=x2?2:1;SAVE.gold+=m.gold*(x2?2:1);saveS();try{beep(880,.1,'triangle',.12);}catch(_){}return true;}
-function missions259(){const all=msList259(),rank=x=>x.state==='claim'?0:x.state==='prog'?1:2;if(!MS259.CATS.includes(MSCAT))MSCAT='처치';
+function msClaim259(id,x2){const m=msList259().find(x=>x.id===id);if(!m||m.state!=='claim')return false;const s=ms259();if(m.period==='daily')s.daily.got[id]=x2?2:1;else if(m.period==='weekly')s.weekly.got[id]=x2?2:1;else s.got[id]=x2?2:1;SAVE.gold+=m.gold*(x2?2:1);if(m.dia)SAVE.dia=(SAVE.dia||0)+m.dia;saveS();try{beep(880,.1,'triangle',.12);}catch(_){}return true;}
+function missions259(){const all=msList259(),rank=x=>x.state==='claim'?0:x.state==='prog'?1:2;if(!MS259.CATS.includes(MSCAT))MSCAT='일일';
  const list=all.filter(x=>x.cat===MSCAT).sort((a,b)=>rank(a)-rank(b));
  const has=c=>all.some(x=>x.cat===c&&x.state==='claim'),badge='<b class="ms-badge" aria-hidden="true"></b>';
  const chips=MS259.CATS.map(n=>'<button type="button" data-mc="'+n+'" class="'+(n===MSCAT?'on':'')+'">'+(has(n)?'<span class="ms-chip-lab">'+n+badge+'</span>':n)+'</button>').join('');
- const row=m=>{const pct=Math.min(100,Math.round(100*(m.have/m.need))),prog=fmt(Math.min(m.have,m.need))+' / '+fmt(m.need)/* v276 (영태) */+(m.sub?' · '+m.sub:''),gold='💰 '+fmt(m.gold);
+ const row=m=>{const pct=Math.min(100,Math.round(100*(m.have/m.need))),prog=fmt(Math.min(m.have,m.need))+' / '+fmt(m.need)/* v276 (영태) */+(m.sub?' · '+m.sub:''),gold='💰 '+fmt(m.gold)+(m.dia?' + 💎 '+fmt(m.dia):'');
   if(m.state==='claim')return '<div class="ms-row claim"><div class="ic">'+m.ic+'</div><div class="tx"><b>'+m.n+'</b><span>'+prog+'</span><div class="bar"><i style="width:100%"></i></div></div><div class="ms-gold">'+gold+'</div><div class="ms-btns"><button class="v15b" type="button" data-mg="'+m.id+'">받기</button><button class="ms-ad" type="button" data-ma="'+m.id+'">광고 보고 2배 받기</button></div></div>';
   if(m.state==='done')return '<div class="ms-row done"><div class="ic">'+m.ic+'</div><div class="tx"><b>'+m.n+'</b><span>'+prog+'</span><div class="bar"><i class="done" style="width:100%"></i></div></div><div class="ms-got">완료</div></div>';
   return '<div class="ms-row"><div class="ic">'+m.ic+'</div><div class="tx"><b>'+m.n+'</b><span>'+prog+'</span><div class="bar"><i style="width:'+pct+'%"></i></div></div><div class="ms-gold">'+gold+'</div></div>';};
@@ -5876,7 +5908,7 @@ function missions259(){const all=msList259(),rank=x=>x.state==='claim'?0:x.state
  mm.querySelectorAll('[data-mg]').forEach(b=>b.onclick=()=>{if(b.disabled)return;b.disabled=true;msClaim259(b.dataset.mg,0);again();});
  mm.querySelectorAll('[data-ma]').forEach(b=>b.onclick=()=>{if(b.disabled)return;b.disabled=true;const id=b.dataset.ma;msAd259(()=>{msClaim259(id,1);if(TAB==='mis'&&$('msRoot'))again();},()=>{b.disabled=false;});});
  return mm;}
-window.MS259=MS259;window.msList259=msList259;window.msClaim259=msClaim259;window.msRun259=msRun259;
+window.MS259=MS259;window.msList259=msList259;window.msClaim259=msClaim259;window.msRun259=msRun259;window.ms259=ms259;window.msPeriod288=msPeriod288;window.missions259=missions259;window.msKst288=msKst288;window.msMon288=msMon288;
 (function(){const css=`
 #msRoot{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 #msRoot .v15h{flex:0 0 auto;font:400 22px "Do Hyeon",Pretendard,system-ui;margin:2px 0 8px;color:#FFC93C}
@@ -5886,7 +5918,7 @@ window.MS259=MS259;window.msList259=msList259;window.msClaim259=msClaim259;windo
 .ms-row.done{opacity:.72}
 .ms-row .ic{flex:0 0 44px;height:44px;border-radius:12px;background:#0A0D12;display:flex;align-items:center;justify-content:center;font-size:24px}
 .ms-row .tx{flex:1;min-width:0}
-.ms-row .tx b{display:block;font:800 16px Pretendard,system-ui;color:#fff;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ms-row .tx b{display:block;font:800 16px Pretendard,system-ui;color:#fff;line-height:1.25;overflow:hidden}
 .ms-row .tx span{display:block;font:700 13px Pretendard,system-ui;color:#A3AEBF;margin-top:2px}
 .ms-row .tx .bar{height:8px;border-radius:4px;background:#0A0D12;margin-top:6px;overflow:hidden}
 .ms-row .tx .bar i{display:block;height:100%;background:#FFC93C;border-radius:4px}
@@ -5897,7 +5929,7 @@ window.MS259=MS259;window.msList259=msList259;window.msClaim259=msClaim259;windo
 .ms-btns .v15b{flex:0 0 96px;min-height:44px;height:44px;border-width:2px;border-radius:12px;font:900 15px Pretendard,system-ui;box-shadow:0 3px 0 #A86400;padding:0 8px}
 .ms-btns .ms-ad{flex:1;min-height:44px;height:44px;border-radius:12px;border:1px solid #30A7A1;background:#3ED6CF;color:#0A0D12;font:600 14px Pretendard,system-ui;box-shadow:none;line-height:1.2;padding:0 8px}
 .ms-chips{flex:0 0 auto;display:flex;height:44px;background:#0A0D12;border-radius:14px;margin:0 0 8px;overflow:hidden}
-.ms-chips button{flex:1;border:0;background:transparent;color:#A3AEBF;font:800 13px Pretendard,system-ui;padding:0 2px;position:relative}
+.ms-chips button{flex:1;min-width:0;border:0;background:transparent;color:#A3AEBF;font:800 12px Pretendard,system-ui;padding:0 1px;position:relative}
 .ms-chips button.on{color:#FFC93C;background:#2A3445}
 .ms-chips .ms-chip-lab{position:relative;display:inline-block}
 .ms-chips .ms-badge{top:-6px;right:-14px}
@@ -6045,7 +6077,7 @@ const _u=update;update=function(dt){scan();for(const e of EN){if(!e.mb||e.dead||
   cx.save();cx.translate(W/2+ca*t,H/2+sa*t);cx.rotate(a);cx.beginPath();cx.moveTo(12,0);cx.lineTo(-8,-9);cx.lineTo(-4,0);cx.lineTo(-8,9);cx.closePath();cx.fillStyle=c;cx.fill();cx.lineWidth=2.5;cx.strokeStyle='#1A1410';cx.stroke();cx.restore();}
  cx.restore();}catch(_){}return r;};}
 })();</script>
-<script>/* v180: bumper arc dots drawn on top (same spot): ready light blue, used light gray, dark outline */(function(){const FL=()=>{const q=window.PIPQ180||[];for(const o of q){const g=o.C;g.save();g.setTransform(o.T);g.globalAlpha=1;g.filter='none';g.shadowBlur=0;g.lineWidth=1.5;g.strokeStyle='#1a2633';for(const p of o.pts){g.fillStyle=p[2]?'#FFB6D9':'#C9CED4';/* v227 (영태): 범퍼 막기 칸 = 연분홍 (바닥 경험치 보석 하늘색·쓴 칸 회색과 구분) */g.beginPath();g.arc(p[0],p[1],4.5,0,TAU);g.fill();g.stroke();}g.restore();}window.PIPQ180=[];};const _d=draw;draw=function(){window.PIPQ180=[];const r=_d.apply(this,arguments);FL();return r;};const _b=rbBumper;rbBumper=function(){const r=_b.apply(this,arguments);FL();return r;};/* robots: flush right after their bumper */})();</script>
+<script>/* v180: bumper arc dots drawn on top (same spot): ready light blue, used light gray, dark outline */(function(){const FL=()=>{const q=window.PIPQ180||[];for(const o of q){const g=o.C;g.save();g.setTransform(o.T);g.globalAlpha=1;g.filter='none';g.shadowBlur=0;g.lineWidth=1.5;g.strokeStyle='#1a2633';for(const p of o.pts){g.fillStyle=p[2]?'#FFFFFF':'#C9CED4';/* v288 (영태): 범퍼 막기 칸 = 흰색 *//* v227 (영태): 범퍼 막기 칸 = 연분홍 (바닥 경험치 보석 하늘색·쓴 칸 회색과 구분) */g.beginPath();g.arc(p[0],p[1],4.5,0,TAU);g.fill();g.stroke();}g.restore();}window.PIPQ180=[];};const _d=draw;draw=function(){window.PIPQ180=[];const r=_d.apply(this,arguments);FL();return r;};const _b=rbBumper;rbBumper=function(){const r=_b.apply(this,arguments);FL();return r;};/* robots: flush right after their bumper */})();</script>
 <script>/* v181: regular enemy HP x1.3 (after every other HP layer; mid-boss/boss excluded) */(function(){const _u=update;update=function(dt){_u(dt);for(const e of EN){if(e.dead||e._v181)continue;e._v181=1;if(e.mb||e.boss||e===G.boss)continue;e.hp*=1.3;if(e.max)e.max*=1.3;}};})();</script>
 <script>/* v218 (영태 OK 02:26): 필살기 버튼 차별 아이콘 (GPT 안, /workspace/c18/ult_art/btn_mock.js 그대로) */
 /* 필살기 버튼 아이콘 목업 (GPT follow-up 안, 2026-11-09). 게임 코드에는 아직 안 들어감.
